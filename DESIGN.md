@@ -1,19 +1,18 @@
 ---
 name: Ricardo Cruz-Correia
-description: An academic profile set as a patent front page — research filed, companies as titulares.
+description: An academic profile set as the first page of a scientific article; the sub-pages are its supplementary material.
 colors:
+  desk: "#e9eaeb"
   paper: "#ffffff"
-  ink: "#12151b"
-  ink-2: "#414857"
-  rule: "#c4cad6"
-  rule-2: "#e3e7ee"
-  ink-blue: "#1b2f8f"
-  ink-blue-on: "#ffffff"
-  blue-soft: "#eef1fb"
+  ink: "#16181c"
+  ink-2: "#454b55"
+  rule: "#c9ccd2"
+  rule-2: "#e6e7ea"
+  journal-teal: "#0b5e5e"
+  journal-teal-soft: "#e6f1f0"
+  selection: "#cfe6e4"
   stamp: "#6a2bb0"
   stamp-soft: "#f3ecfb"
-  focus: "#1b2f8f"
-  selection: "#d6defa"
   area-1-interop: "#1b2f8f"
   area-2-quality: "#0d6b77"
   area-3-security: "#4a5568"
@@ -21,76 +20,94 @@ colors:
   area-5-education: "#2f6b2a"
   area-6-devices: "#a3203a"
   area-7-other: "#8f96a3"
-  cyanotype-paper: "#0b1a42"
-  cyanotype-ink: "#eef2ff"
-  cyanotype-ink-2: "#bcc6e8"
-  cyanotype-rule: "#3d5296"
-  cyanotype-rule-2: "#22356f"
-  cyanotype-band: "#08133a"
-  cyanotype-blue-soft: "#132a66"
-  cyanotype-stamp: "#d9bcff"
-  cyanotype-stamp-soft: "#2a2366"
-  cyanotype-focus: "#9fb6ff"
-  cyanotype-selection: "#2b4596"
-  cyanotype-area-1: "#7f9cff"
-  cyanotype-area-2: "#3fc1cf"
-  cyanotype-area-3: "#8c99ad"
-  cyanotype-area-4: "#f0c46a"
-  cyanotype-area-5: "#9fdb8f"
-  cyanotype-area-6: "#ff9fb1"
-  cyanotype-area-7: "#a9b2c8"
+  night-desk: "#0d0f12"
+  night-paper: "#16191e"
+  night-ink: "#e8eaee"
+  night-ink-2: "#aab1bd"
+  night-rule: "#3d444f"
+  night-rule-2: "#272c34"
+  night-journal-teal: "#5cc8c4"
+  night-journal-teal-soft: "#14302f"
+  night-selection: "#1f4a48"
+  night-stamp: "#d9bcff"
+  night-stamp-soft: "#2a2366"
+  night-area-1: "#8ea8ff"
+  night-area-2: "#3fc1cf"
+  night-area-3: "#9aa6b8"
+  night-area-4: "#f0c46a"
+  night-area-5: "#9fdb8f"
+  night-area-6: "#ff9fb1"
+  night-area-7: "#a9b2c8"
 typography:
-  display:
+  article-title:
+    fontFamily: "'Source Serif 4', Georgia, serif"
+    fontSize: "clamp(1.9rem, 4.3vw, 2.9rem)"
+    fontWeight: 600
+    lineHeight: 1.12
+    letterSpacing: "-0.01em"
+  supplement-title:
+    fontFamily: "'Source Serif 4', Georgia, serif"
+    fontSize: "clamp(2rem, 4.6vw, 3.1rem)"
+    fontWeight: 600
+    lineHeight: 1.1
+    letterSpacing: "-0.01em"
+  author:
     fontFamily: "Archivo, system-ui, sans-serif"
-    fontSize: "clamp(2.4rem, 6.4vw, 4.6rem)"
-    fontWeight: 800
-    lineHeight: 0.98
-    letterSpacing: "-0.02em"
-    fontVariation: "'wdth' 78"
-  figure-stat:
-    fontFamily: "Archivo, system-ui, sans-serif"
-    fontSize: "2rem"
-    fontWeight: 800
-    lineHeight: 1
-    fontVariation: "'wdth' 80"
+    fontSize: "clamp(1.25rem, 2.4vw, 1.55rem)"
+    fontWeight: 700
+    lineHeight: 1.2
   headline:
     fontFamily: "Archivo, system-ui, sans-serif"
     fontSize: "clamp(1.15rem, 2.2vw, 1.45rem)"
     fontWeight: 750
     lineHeight: 1.2
-  subtitle:
+  section-head:
     fontFamily: "Archivo, system-ui, sans-serif"
-    fontSize: "clamp(1rem, 1.6vw, 1.2rem)"
-    fontWeight: 500
-    lineHeight: 1.4
-  field-heading:
+    fontSize: "1.02rem"
+    fontWeight: 700
+    lineHeight: 1.2
+  section-label:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "0.82rem"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "0.12em"
+  supplement-head:
     fontFamily: "Archivo, system-ui, sans-serif"
     fontSize: "0.95rem"
     fontWeight: 700
     lineHeight: 1.3
     letterSpacing: "0.06em"
-  title:
-    fontFamily: "Archivo, system-ui, sans-serif"
-    fontSize: "1rem"
-    fontWeight: 600
-    lineHeight: 1.3
   body:
     fontFamily: "'Source Serif 4', Georgia, serif"
-    fontSize: "1.0625rem"
-    fontWeight: 400
-    lineHeight: 1.6
-    fontFeature: "'lnum' 1"
-  abstract:
-    fontFamily: "'Source Serif 4', Georgia, serif"
-    fontSize: "1.18rem"
+    fontSize: "1.02rem"
     fontWeight: 400
     lineHeight: 1.62
-  field-code:
+  caption:
+    fontFamily: "'Source Serif 4', Georgia, serif"
+    fontSize: "0.92rem"
+    fontWeight: 400
+    lineHeight: 1.45
+  table:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "0.92rem"
+    fontWeight: 400
+    lineHeight: 1.35
+  running-head:
+    fontFamily: "Archivo, system-ui, sans-serif"
+    fontSize: "0.8rem"
+    fontWeight: 500
+    lineHeight: 1.3
+  label-mono:
     fontFamily: "'JetBrains Mono', ui-monospace, monospace"
     fontSize: "0.78rem"
-    fontWeight: 500
+    fontWeight: 600
     lineHeight: 1
-    letterSpacing: "0"
+  reference-number:
+    fontFamily: "'JetBrains Mono', ui-monospace, monospace"
+    fontSize: "0.82rem"
+    fontWeight: 600
+    lineHeight: 1.6
   stamp:
     fontFamily: "Archivo, system-ui, sans-serif"
     fontSize: "0.68rem"
@@ -102,28 +119,32 @@ rounded:
   control: "3px"
   numeral: "50%"
 spacing:
-  xs: "4px"
-  sm: "8px"
-  md: "12px"
   gutter: "16px"
-  lg: "24px"
-  section: "28px"
-  column: "32px"
+  page-top: "30px"
+  page-side: "clamp(16px, 5vw, 64px)"
+  page-bottom: "44px"
+  column-gap: "44px"
+  abstract: "18px 22px 16px"
+  tap: "44px"
 components:
-  masthead-band:
-    backgroundColor: "{colors.ink-blue}"
-    textColor: "{colors.ink-blue-on}"
-    height: "56px"
-    padding: "0 16px"
-  band-control:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink-blue-on}"
+  journal-page:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    padding: "30px clamp(16px, 5vw, 64px) 44px"
+    width: "1040px"
+  running-head:
+    textColor: "{colors.ink-2}"
+    typography: "{typography.running-head}"
+  abstract-panel:
+    backgroundColor: "{colors.journal-teal-soft}"
+    textColor: "{colors.ink}"
+    padding: "{spacing.abstract}"
+  control-button:
+    textColor: "{colors.ink}"
     rounded: "{rounded.control}"
     height: "44px"
-    width: "44px"
     padding: "0 10px"
   filter-button:
-    backgroundColor: "transparent"
     textColor: "{colors.ink}"
     rounded: "{rounded.control}"
     height: "44px"
@@ -132,8 +153,6 @@ components:
     backgroundColor: "{colors.ink}"
     textColor: "{colors.paper}"
     rounded: "{rounded.control}"
-    height: "44px"
-    padding: "0 16px"
   stamp-ongoing:
     textColor: "{colors.stamp}"
     typography: "{typography.stamp}"
@@ -141,184 +160,188 @@ components:
     padding: "4px 6px 3px"
   role-tag:
     textColor: "{colors.ink}"
-    typography: "{typography.field-code}"
+    typography: "{typography.label-mono}"
     rounded: "{rounded.hairline}"
     padding: "4px 6px 3px"
-  numeral-reference:
+  conflict-box:
+    backgroundColor: "{colors.rule-2}"
+    textColor: "{colors.ink}"
+    padding: "10px 12px"
+  reference-numeral:
     textColor: "{colors.ink}"
     rounded: "{rounded.numeral}"
     size: "26px"
-  more-link:
-    textColor: "{colors.ink}"
-    height: "44px"
-  more-link-hover:
-    textColor: "{colors.ink-blue}"
 ---
 
 # Design System: Ricardo Cruz-Correia
 
 ## Overview
 
-**Creative North Star: "The Technology-Transfer Dossier"**
+**Creative North Star: "The First Page of the Article"**
 
-The site is set as the front page of a patent document. A white sheet sits under an ink-blue bibliographic band; the sheet is divided by hairline rules into fields, and each field is numbered with a bracketed INID-style code in mono: (11) the name, (72) the researcher, (73) the companies as titulares, (57) the abstract, (74) the profiles. The codes are wayfinding, not a claim to patents. Below the fields, Fig. 1 is a line drawing of the 2005–2026 trajectory with numeral circles on leader lines that hand the reader into the period register, exactly as a patent figure's reference numerals lead into the description.
+The profile is typeset as the opening page of a scientific paper: running head, serif title, author line with affiliation superscripts, a structured abstract, a two-column body with one figure and one table, a conflict-of-interest box, and numbered references. The sub-pages are the paper's supplementary material, labelled S1 (trajectory register), S2 (talks) and S3 (story), and every table inside them is numbered as a supplementary table ("Tabela S1" / "Table S1"). The reader is an academic peer; the page wins their trust by behaving exactly like the documents they already judge for a living.
 
-The density is that of a printed document: compact rows, tight ruled lists, a reading column that never exceeds about 62–80ch. Nothing floats or lifts. Hierarchy comes from type width and weight (condensed heavy Archivo for names and titles), from rule weight (2px ink rules open a sheet or a period; 1px rules divide fields; lighter 1px rules divide rows), and from the one reserved colour, the violet date-stamp, which marks only what is ongoing. The dark theme is a cyanotype: the same sheet printed in blue, not an inverted UI.
+The homepage sits as a white journal page on a grey desk, the only object with a shadow. Ink is near-black; one journal teal marks the apparatus (running head, labels, superscripts, the abstract panel, reference numbers and links in the references); violet appears only for something still live. Density is that of a printed page: serif reading text in two columns at 320px minimum, Archivo for every heading, label and table, mono only where a printer would set figures (reference numbers, codes, years). Rules, not boxes, separate content; tables are booktabs. The dark theme is the same page read at night: every token is redefined and nothing else changes.
 
-The world refuses the academic template of photo plus bio plus cards. The photo exists, but as an 88×110 greyscale plate inside field (72), framed by a 1px ink line like an inventor's mark.
+S1 and S2 drop the desk and are set as full-width sheets under a ruled running head carrying their S-label. S3 (historia.html) is a sanctioned exception: a dark, full-screen, continuous-background presentation with its own palette, still labelled S3 and still using the site's three faces.
 
 **Key Characteristics:**
-- Ink-blue band masthead carrying (19) institution and the PT/EN and theme controls.
-- Bracketed mono field codes inline at the start of headings, never as separate eyebrows.
-- Hairline-ruled fields and registers; no cards, no drop shadows.
-- Condensed Archivo display, Source Serif reading text, JetBrains Mono for codes, refs, years and data.
-- Violet stamp reserved for live / ongoing state.
-- Line-drawn figures with numeral circles and leader lines into registers; partial data dashed and labelled.
+- Grey desk, one white journal page; the page sheet is the only shadow.
+- One teal for the article apparatus; black ink for everything read.
+- Serif title and two-column serif body; Archivo for heads, labels and tables; mono for numbers that a typesetter would set apart.
+- Booktabs tables (1.5px ink above and below, 1px ink under the header, hairline rows).
+- Supplementary labels S1/S2/S3 and "Tabela/Table S1, S2"; figures as "Figura/Figure 1".
+- Violet only for live state; partial data drawn dashed and labelled.
+- Every control and link row at least 44px tall; PT and EN carry identical content.
 
 ## Colors
 
-A near-monochrome ink-on-white sheet with one structural blue, one reserved violet and a muted seven-colour area key for data.
+A cool grey-and-ink print palette with a single journal teal for apparatus, a violet reserved for live state, and seven area colours that exist only inside data.
 
 ### Primary
-- **Bibliographic Ink Blue** (#1b2f8f): the masthead band background, the focus ring, the base hue of the Fig. 2 heat cells (mixed into the sheet at 6–40%), and the hover colour of the "more" link. It is the colour of the printed document's header, not an accent sprinkled on controls.
+- **Journal Teal** (journal-teal): the running-head kind ("PERFIL DE INVESTIGAÇÃO"), the S-labels and figure/table codes, affiliation superscripts, the abstract heading and its 3px top rule, keyword label, numbered section prefixes ("1."), bracketed reference numbers, links inside the reference list and the contact line, and the focus ring.
+- **Abstract Wash** (journal-teal-soft): the ground of the abstract panel only; it is also the hover fill of Fig. 1 numerals and the flat wash behind a targeted period heading on S1.
+- **Selection Teal** (selection): text selection.
 
 ### Secondary
-- **Date-Stamp Violet** (#6a2bb0; cyanotype #d9bcff): the ongoing stamp on register rows and the project-start ticks in Fig. 1 that are still running. Its soft tint (#f3ecfb) is defined for the same state.
+- **Live Violet** (stamp): ongoing projects (stamp in the S1 register, ticks in Fig. 1) and the next upcoming talk in the homepage references. Nothing else.
+- **Violet Tint** (stamp-soft): reserved tint paired with the stamp.
 
-### Tertiary (data key)
-- **Area colours** (area-1 … area-7): Interoperability, Quality, Security, AI, Education, Devices, Other — in that order, matching `TL_AREAS`. They appear only as the stroke of a small hollow square marker beside an area name (interest list, heat-table row headers). Other (area-7) is a grey and its row is set in secondary ink.
+### Tertiary (data only)
+- **Area colours** (area-1-interop through area-7-other): research-area swatches in the Fig. 2 publications table on S1. The heat ramp is area-1 mixed into paper at 6–40% (`color-mix(in srgb, var(--a1) n%, var(--sheet))`). Area 7 ("other") also greys the row text.
 
 ### Neutral
-- **Sheet White** (#ffffff): page and sheet background (`--paper`, `--sheet`).
-- **Press Ink** (#12151b): body text, 2px opening rules, pressed filter buttons, the line and axes of figures.
-- **Secondary Ink** (#414857): field codes, captions, meta lines, descriptions under list items.
-- **Field Rule** (#c4cad6): 1px rules between fields and sections, link underlines at rest, control borders.
-- **Row Rule** (#e3e7ee): 1px rules between rows in lists, registers and table cells.
-- **Blue Wash** (#eef1fb): the hover/focus fill of Fig. 1 numerals and the highlight behind a targeted period heading.
-- **Selection** (#d6defa): text selection.
+- **Desk Grey** (desk): the homepage ground around the journal page.
+- **Page White** (paper): the journal page and the S1/S2 sheets (`--sheet` is an alias).
+- **Press Ink** (ink): all reading text, rules that open or close (running head underline, booktabs, period openers), pressed filter fill.
+- **Secondary Ink** (ink-2): captions, affiliations, metadata, descriptions.
+- **Section Rule** (rule): link underline colour at rest, control borders, section dividers.
+- **Row Rule** (rule-2): hairlines between rows; ground of the conflict-of-interest box.
 
-### Cyanotype (dark theme)
-Activated by `prefers-color-scheme: dark` unless `data-theme="light"`, or by `data-theme="dark"`. Paper becomes deep cyanotype blue (#0b1a42), the band darkens further (#08133a), ink becomes a pale blue-white (#eef2ff), rules become blue (#3d5296 / #22356f), and area colours lighten. Every token is redefined; no component carries its own dark-mode colours except the "more" link hover.
+### Night (dark theme)
+The night-* tokens redefine the same roles under `@media (prefers-color-scheme: dark)` (guarded by `:root:not([data-theme="light"])`) and `:root[data-theme="dark"]`: near-black desk, charcoal page, light teal apparatus, lilac stamp, lightened area colours.
 
 ### Named Rules
-**The Live Stamp Rule.** Violet means "ongoing" and nothing else. It is never used for links, hover, emphasis, headings or decoration; if a thing is not currently running, it is not violet.
+**The Apparatus Teal Rule.** Teal marks the article's apparatus (running head, labels, superscripts, abstract panel, reference numbers, reference and contact links) and never the reading text, body links, headings' words or decoration.
 
-**The One Band Rule.** Ink blue as a filled surface appears only in the masthead band. Elsewhere blue is a line, a wash or a data tint.
+**The Live Violet Rule.** Violet means "still happening": an ongoing project or the next talk. A closed item is ink; if nothing is live, no violet appears.
 
-**The Key Square Rule.** Area colours are applied only as the 2px stroke of a hollow square marker (11–14px) next to the area's name; they never fill text, rows or backgrounds.
+**The Data-Only Area Rule.** Area colours appear only on data marks (swatches and the heat ramp). They never colour headings, links or chrome.
 
 ## Typography
 
-**Display Font:** Archivo (variable, weight 100–900, width 62–125%), fallback system-ui, sans-serif
-**Body Font:** Source Serif 4 (roman and italic, variable weight), fallback Georgia, serif
-**Label/Mono Font:** JetBrains Mono (variable weight), fallback ui-monospace, monospace
+**Display / Body Font:** Source Serif 4 (with Georgia, serif), roman and italic, variable 200–900
+**Label / Table Font:** Archivo (with system-ui, sans-serif), variable weight 100–900, width 62–125
+**Mono Font:** JetBrains Mono (with ui-monospace, monospace), variable 100–800
 
-All three are OFL-1.1 and self-hosted from `/fonts`; Archivo and Source Serif roman are preloaded.
+All three are OFL-1.1 and self-hosted from `/fonts` as woff2 with `font-display: swap`. Body numerals are lining (`font-variant-numeric: lining-nums`); tables of counts use tabular figures.
 
-**Character:** A condensed, heavy grotesque does the job of a patent office's set name and title; a calm book serif carries the abstract and descriptions; a mono sets everything that is a code or a number to be checked.
+**Character:** A journal's own pairing: a sturdy text serif for the title and the argument, a neutral grotesque for the apparatus a reader scans (authors, heads, tables), and a typewriter mono only for the numbers a typesetter would set apart.
 
 ### Hierarchy
-- **Display** (800, clamp(2.4rem, 6.4vw, 4.6rem), 0.98, width 78%, −0.02em, balanced wrap): the (11) name on the profile and the (54) title on the trajectory page. One per page.
-- **Figure stat** (800, 2rem, 1, width 80%): the bibliographic figures (21)–(24) on the trajectory page.
-- **Headline** (750, clamp(1.15rem, 2.2vw, 1.45rem), 1.2): period headings in the register, preceded by the period in mono.
-- **Subtitle** (500, clamp(1rem, 1.6vw, 1.2rem), 1.4, max 60ch, secondary ink): the role / claim line under the display.
-- **Field heading** (700, 0.95rem, 1.3, 0.06em, uppercase): every h2; the code inside it stays mono, not uppercase, no tracking.
-- **Title** (600–700, ~1rem, 1.3): names in lists (companies, affiliations, projects, references, related documents).
-- **Body** (400, 1.0625rem, 1.6, lining numerals): reading text, descriptions, captions (0.9–0.95rem).
-- **Abstract** (400, 1.18rem, 1.62, max 62ch): the (57) abstract only.
-- **Field code** (mono 500, 0.78rem, 1): INID codes, Fig. labels, references, years, periods, counts in filter buttons, role tags.
-- **Stamp** (700, 0.68rem, 0.12em, uppercase): the ongoing stamp only.
+- **Article title** (600, clamp(1.9rem, 4.3vw, 2.9rem), 1.12, max 26ch, balanced): the homepage h1 only.
+- **Supplement title** (600, clamp(2rem, 4.6vw, 3.1rem), 1.1): S1/S2 h1, preceded inline by its teal mono S-label.
+- **Author** (Archivo 700, clamp(1.25rem, 2.4vw, 1.55rem)): the author line, with teal superscripts at .62em.
+- **Headline** (Archivo 750, clamp(1.15rem, 2.2vw, 1.45rem)): S1 period headings, period years in mono before the words. S2 year heads use Archivo 800 at 1.4rem, width 80%.
+- **Section head** (Archivo 700, 1.02rem, sentence case): numbered body sections ("1. Introdução"), number in teal.
+- **Section label** (Archivo 700, .82rem, .12em, uppercase, teal): the abstract heading.
+- **Supplement head** (Archivo 700, .95rem, .06em, uppercase): S1/S2 section heads, with the mono figure/table code inline on the same baseline ("Fig. 1", "Tabela S1").
+- **Body** (Source Serif 400, 1.02rem, 1.62): article body in two columns; the global base is 1.0625rem / 1.6.
+- **Caption** (Source Serif 400, .92rem, 1.45, ink-2): figure and table captions, led by a bold Archivo "Figura 1." / "Tabela 1.".
+- **Table** (Archivo 400, .92rem, 1.35): booktabs table cells; first column 600.
+- **Running head** (Archivo 500, .8rem): page header; its kind in 700 uppercase teal at .06em.
+- **Label mono** (JetBrains Mono 600, .78rem): S-labels, figure/table codes, years, counts in filters, role tags.
+- **Reference number** (JetBrains Mono 600, .82rem, teal): bracketed "[n]" in the reference list.
+- **Stamp** (Archivo 700, .68rem, .1–.12em, uppercase): the live stamp only.
 
 ### Named Rules
-**The Inline Code Rule.** A field code sits inside its heading, on the same baseline, before the heading text: `(73) Titulares — empresas co-fundadas`, `Fig. 1 Trajetória 2005–2026`. It is never a standalone line above a heading.
+**The Typesetter's Mono Rule.** Mono is for reference numbers, codes (S1, Fig. 1, Tabela S1, ORCID iDs) and years or counts. It never sets prose, names or headings.
 
-**The Mono Is Data Rule.** JetBrains Mono is used only for codes, references, years, periods, counts and figure values. Prose, names and headings are never set in mono.
-
-**The Condensed Name Rule.** The narrow width axis (78–80%) is reserved for the display name/title and the bibliographic figures; everything else is set at normal width.
+**The Serif Argument Rule.** The title, the abstract and the body are serif; anything the reader scans rather than reads (authors, heads, tables, controls) is Archivo.
 
 ## Layout
 
-A single sheet, max 1120px wide, centred, with a 16px side gutter at every width; the band and footer share the same measure. The sheet opens with a meta line closed by a 2px ink rule, then the title block (display + subtitle, with the ORCID document number right-aligned as a mono "doc no." on the profile), then the fields.
+The homepage is a single journal page (max 1040px) centred on the desk, 20px from the top, padded 30px / clamp(16px, 5vw, 64px) / 44px. Under 640px the page meets the screen edge and loses its shadow; the running head shrinks to .75rem.
 
-On the profile the fields are a two-column grid at 5fr : 7fr, separated by a 1px vertical rule with 32px padding either side: bibliographic fields (72)(73)(71) on the left, abstract and areas (57)(51)(74) on the right. Below, Fig. 1 runs full width, followed by its numeral reference register in auto-fit columns (min 300px, 32px column gap), then related documents (62).
+First viewport: running head (kind · university, date, PT/EN, theme) on a 1px ink rule; the serif title; author line; affiliation list with superscripts; contact links; then the abstract panel begins on screen. The body below runs in CSS columns (`columns: 2 320px`, 44px gap), so it falls to one column on its own; headings avoid breaking after themselves, and tables, the CoI box, the bio and the supplementary list avoid breaking inside. Figure 1 spans both columns.
 
-The trajectory page uses a four-up bibliographic figure strip with 1px vertical rules, then Fig. 1, Fig. 2 (the heat table in a horizontal scroll region with a sticky first column, min-width 760px), then the (56) project register: each period opens with a 2px ink rule and a numeral; each project row is a three-column grid (description / year / state) divided by row rules.
+S1 and S2 use the sheet layout: a ruled running head (min-height 56px) with the S-label, short name and controls, then a 1120px sheet with a 16px gutter; a meta line (back link, date) closed by a 2px ink rule; the title block; sections padded 22–28px. Registers open each group with a 2px ink rule. At 720px register rows restack to one column and S1's area table shows short names.
 
-Rhythm: sections pad 24–28px top; field blocks are 26px apart; list rows are 7–14px tall in padding. Steps used: 4, 8, 12, 16, 24, 28, 32px.
+Fig. 1 is drawn by `assets/site.js`: horizontal (1000×300 viewBox, line plus project ticks) at 761px and wider, vertical (360-wide, one 74px row per period, bar plus ticks) at 760px and narrower, redrawn on breakpoint change. Wide tables scroll inside their region and fade at the right edge until scrolled to the end (760px and below).
 
-Responsive:
-- **≤820px:** fields stack into one column with a horizontal rule between groups; the title block stacks and the doc number left-aligns; the band drops the "· FMUP / MEDCIDS" suffix.
-- **≤760px:** Fig. 1 redraws vertically — one row per period: numeral, period label, publication bar, project-start ticks (width 360 viewBox). Above 760px it is horizontal: a publication line with points, numerals on leader lines above, ticks on the baseline.
-- **≤720px (trajectory):** figure strip goes two-up; register rows reflow so the description spans the full width with year and stamps beneath; heat-table row headers switch to short area names.
+Every link row, control and filter is at least 44px tall.
 
 ## Elevation & Depth
 
-Flat. There are no drop shadows, no elevated surfaces and no layered panels. Depth is conveyed by rule weight (2px ink to open, 1px field rule to divide, 1px row rule within) and by the single filled band. `box-shadow` appears only in two flat, zero-blur uses: a 1px hairline on the sticky heat-table column (`1px 0 0 var(--rule-2)`) and a 6px side bleed of the blue wash behind a targeted period heading.
+Flat print. Depth exists exactly once: the journal page lifts off the desk. Everything else is separated by rules and, in one case (the abstract), a tinted ground.
+
+### Shadow Vocabulary
+- **Page on desk** (`box-shadow: 0 2px 14px rgba(0,0,0,.08)`): the homepage journal page only; removed at 640px and below.
+- Two zero-blur offsets that are not elevation: a 1px row-rule hairline on the sticky first column of the S1 table, and a ±6px abstract-wash bleed behind a targeted period heading.
 
 ### Named Rules
-**The Printed Sheet Rule.** Nothing lifts off the sheet. If something needs separation, give it a rule; if it needs emphasis, give it weight or the band; never a shadow or a card.
+**The One Sheet Rule.** Only the page on the desk casts a shadow. Panels, figures, tables and lists stay flat.
 
 ## Shapes
 
-Square by default. Corners are 2px on hairline objects (stamp, role tag, heat cells, focus outline) and 3px on 44px controls (band buttons, filter buttons). The only round shape is the numeral circle (Fig. 1 r=14 in the SVG; 26px in the reference register; 30px in period headings), drawn as a 1.25px ink outline. Area markers are hollow squares with a 2px stroke. The portrait plate is a hard-edged rectangle with a 1px ink frame. Figures are line drawings: 2px round-joined publication line, 1.25px axes, 1px dashed vertical gridlines, 4.5px hollow points.
+Square print geometry. Corners are 2px on stamps, tags and the focus ring, 3px on buttons; the photo and the abstract panel are square. The only round forms are the outlined reference numerals (26–30px circles, 1.25px stroke) in Fig. 1's legend and S1's period heads, and the Fig. 1 numerals themselves. Rules come in three weights: 2px ink to open a sheet or group (and the 3px teal abstract rule), 1.5px/1px ink for booktabs and the running head, 1px rule/rule-2 hairlines between sections and rows.
 
 ## Components
 
-### Masthead band
-- **Character:** the bibliographic header of the document.
-- **Style:** ink-blue fill, white text, min-height 56px, content on the 1120px measure. A (19) code in mono at 80% opacity, the institution / owner in Archivo 600 0.9rem, then the controls.
-- **Controls:** PT/EN and theme buttons, 44×44 minimum, transparent with a 1px white-35% border, 3px corners; hover adds a white-12% fill; focus ring turns white. Theme icon is an inline 18px stroked SVG (moon / sun).
+### Running head
+- **Style:** Archivo .8rem ink-2 above a 1px ink rule; the kind in bold uppercase teal, then "· Universidade do Porto"; date and controls at the right. On S1/S2 it becomes a 56px band with the teal mono S-label first.
+- **Controls:** 44×44px minimum, transparent, 1px rule border, 3px corners; border turns ink on hover. Language toggle shows the other language ("EN"/"PT"); theme toggle is an inline 18px stroke icon.
 
-### Field headings and field lists
-- **Heading:** uppercase Archivo 700 with the mono code inline before it.
-- **List rows:** name in Archivo 600 left, description in serif secondary ink right, divided by row rules; the whole row is the link, the name carries the underline (rule colour at rest, current colour on hover).
+### Abstract panel
+- **Style:** abstract wash ground, 3px teal top rule, 18px 22px 16px padding. Heading as the teal section label; four structured paragraphs led by bold Archivo run-in heads ("Contexto.", "Abordagem.", "Resultados.", "Conclusão."); keywords last, label in teal uppercase.
 
-### Buttons (filter)
-- **Shape:** 3px corners, 44px min-height, 0 16px padding, 1px field-rule border.
-- **Default:** transparent, ink text, count in mono after the label.
-- **Pressed:** ink fill, sheet-colour text (`aria-pressed="true"`).
-- **Hover:** border darkens to ink.
+### Tables (booktabs)
+- **Style:** full width, Archivo .92rem; 1.5px ink rule above the header and below the last row, 1px ink rule under the header, rule-2 hairlines between rows; no vertical rules, no fills. Caption above, serif, led by bold "Tabela 1." / "Tabela S1".
+- **Pending cells:** an em dash in ink-2 italic with an accessible label ("sem descrição").
 
-### Stamp (ongoing)
-- **Style:** Archivo 700 0.68rem uppercase, 0.12em tracking, violet text and 1.5px violet border, 2px corners, 4px 6px 3px padding. The only filled-meaning violet object on the page.
+### References
+- **Style:** grid of a 34px mono teal "[n]" column and serif text at .95rem; links teal. The next talk carries the violet stamp ("Próxima"/"Upcoming") before its entry.
+- **Figure legend references:** a ruled grid of outlined numerals (1–7) with period in mono and title in Archivo; each opens that period in S1.
 
-### Role tag
-- **Style:** mono 600 0.72rem, 1px field-rule border, 2px corners, ink text. Marks IR / Co-IR (PI / Co-PI) on register rows. Neutral, never violet.
+### Figure 1
+- **Style:** ink line (2px, round joins) on a 1.25px axis, dashed 1px rule grid, hollow points; teal-wash fill on numeral hover/focus (.25s, only without reduced motion). Project ticks: ongoing in 2px violet, closed in ink at 55%.
+- **Partial data:** the last period (2024–26) is drawn dashed and labelled "parcial"/"partial" in both orientations.
 
-### Numeral references
-- **Fig. 1 numerals:** circles on leader lines above each period; links into the trajectory register (`#p0…#p6`). Hover / focus fills the circle with the blue wash (0.25s, `cubic-bezier(.16,1,.3,1)`, only without reduced motion).
-- **Reference register:** each entry is a 26px outlined numeral, period in mono, period title in Archivo 650, key projects in secondary ink; the row is the link.
-- **Period headings:** a 30px outlined numeral repeats the same number so the figure and the register read as one system.
+### Supplementary material list
+- **Style:** ruled rows, 44px label column with the teal mono S-label, underlined Archivo name, one-line serif description in ink-2.
 
-### Fig. 1 trajectory drawing
-- **Horizontal (≥761px):** viewBox 1000×300; publication totals as a line with hollow points and mono values; the last (partial) period's segment dashed (5 4) and its value labelled "· parcial / partial"; project starts as ticks on the baseline, violet if ongoing, ink at 55% if closed.
-- **Vertical (≤760px):** viewBox 360 wide, 74px per period; publications as a 6px bar, the partial period dashed (4 3) and labelled in the period text.
+### Filter buttons (S1, S2)
+- **Style:** 44px tall, 0 14–16px, transparent, 1px rule border, 3px corners, Archivo 600; mono count after the label. Pressed: solid ink with paper text. Hover (unpressed): ink border.
 
-### Fig. 2 heat table
-- Cells are tinted `color-mix(in srgb, area-1 N%, sheet)` with N from 6 to 40 by publication count; zero cells transparent with secondary ink. Mono column heads over a 2px ink rule; 2px ink rule above the totals row. The scroll region is focusable and labelled.
+### Live stamp and role tag
+- **Stamp:** violet text and 1.5px border, 2px corners, Archivo .68rem uppercase. Only for ongoing/upcoming.
+- **Role tag:** mono .72rem, 1px rule border, 2px corners, ink text (IR / Co-IR).
 
-### "More" link
-- Archivo 700 1rem, 44px min-height, 2px ink bottom rule instead of an underline; hover turns text and rule ink blue.
+### Conflict-of-interest box
+- **Style:** row-rule ground, 10px 12px padding, serif .96rem; the only tinted box besides the abstract.
 
-### Navigation
-- There is no nav bar. Wayfinding is the band (back to the profile on the trajectory page), the (62) related documents, the "back" link in the meta line (44px), the numerals and the footer links (44px min-height). Footer: owner line left, "Contacto: LinkedIn · ORCID" right.
+### Links
+- **Style:** inherit ink; 1px underline in the rule colour at .2em offset, turning to currentColor on hover. Reference and contact links are teal. Focus: 2px teal outline, 3px offset, 2px corners.
+
+### S3 Story (sanctioned exception)
+historia.html keeps its own world: a fixed full-screen background that interpolates two deep blues and a glow per period (`@property` colour transitions, 1.1–1.4s, off under reduced motion), light ink (#eef2ff / #bcc6e8), condensed heavy Archivo period titles (800, width 74%), white bars, fixed dot navigation and a full-screen index. It still uses the three faces, the S3 label, the violet (night-stamp) for ongoing projects, dashed "parcial" marks, and 44px controls. Do not port its palette or motion to the article pages.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** number every top-level field with a bracketed mono code placed inline at the start of its heading.
-- **Do** separate with rules: 2px ink to open a sheet or period, 1px field rule between fields, 1px row rule between rows.
-- **Do** reserve the stamp violet for ongoing / live state only (stamp and ongoing ticks).
-- **Do** set names and titles in condensed heavy Archivo, reading text in Source Serif 4, and codes, refs, years and data in JetBrains Mono.
-- **Do** link a figure to its register with outlined numeral circles on leader lines, repeating the same numeral at the register entry.
-- **Do** draw partial or incomplete data dashed and label it in words ("parcial" / "partial").
-- **Do** give every interactive target at least 44px in its smallest dimension.
-- **Do** redefine every colour token for the cyanotype theme rather than styling components per theme.
+- **Do** set new top-level pages as supplementary material: teal mono S-label in the running head and before the title, tables numbered "Tabela S<n>" / "Table S<n>".
+- **Do** keep teal to the apparatus: running head kind, labels, superscripts, the abstract panel (teal-soft ground, 3px teal top rule), reference numbers and reference/contact links.
+- **Do** set titles and running text in Source Serif 4, heads, labels and tables in Archivo, and only reference numbers, codes and years in JetBrains Mono.
+- **Do** draw tables as booktabs: 1.5px ink above and below, 1px ink under the header, rule-2 row hairlines, caption above.
+- **Do** draw partial data dashed and label it "parcial" / "partial".
+- **Do** give every link row, button and filter a 44px minimum tap target.
+- **Do** ship every string in PT and EN with the same content, and redefine every colour token for the night theme.
 
 ### Don't:
-- **Don't** place a field code or label as a standalone eyebrow line above a heading.
-- **Don't** use cards, boxed panels or drop shadows; `box-shadow` is allowed only as a zero-blur hairline or flat highlight bleed.
-- **Don't** use violet for links, hover, emphasis or decoration.
-- **Don't** fill surfaces with ink blue outside the masthead band.
-- **Don't** set prose, names or headings in mono.
-- **Don't** fill text or rows with area colours; use them only as hollow-square key markers.
+- **Don't** use cards, rounded panels or drop shadows; the journal page on the desk is the only shadow.
+- **Don't** use violet for anything but live state (ongoing project, next talk).
+- **Don't** colour headings, links or chrome with the area colours; they are for data marks only.
+- **Don't** put eyebrow labels or kickers above headings; codes sit inline on the heading's baseline.
+- **Don't** put Unicode arrow glyphs in links or buttons; arrows appear only as keyboard hints inside kbd (S3).
+- **Don't** set prose or names in mono, or headings in the serif below the title.
+- **Don't** bring S3's dark gradient world, glow or scroll motion onto the article pages.
