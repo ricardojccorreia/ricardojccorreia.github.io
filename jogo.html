@@ -74,7 +74,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}
   <button class="ctlb" id="pause" type="button">II</button>
   <button class="ctlb" id="lang" type="button"></button>
 </header>
-<button class="fire" id="fire" type="button" hidden><i id="fireIcon" class="c" aria-hidden="true">C</i><span>Fire GenAI</span></button>
+<button class="fire" id="fire" type="button" hidden><i id="fireIcon" class="c" aria-hidden="true"></i><span>Fire GenAI</span></button>
 <div class="banner" id="banner" aria-hidden="true"></div>
 <div class="ticker" id="ticker" aria-hidden="true"></div>
 <p class="sr" id="live" aria-live="polite"></p>
@@ -262,7 +262,7 @@ const GENAI_YEAR = 2023;
 let startYear = +(store.get("jogo_ano") || T0); if (!(startYear >= T0 && startYear <= 2026)) startYear = T0;
 let x, vy, hy, playing = false, paused = false, last = 0, step = 0, slow = 0, trip = 0, score, nClear, nHit, nSaved, maxKg, nextPaper, cIdx, rIdx, lastT;
 function reset(){
-  shotKind = 0; shots = []; burns = []; fireCd = 0; nFired = 0; genaiOn = false; $("fire").hidden = true;
+  shotKind = 0; paintFireIcon(); shots = []; burns = []; fireCd = 0; nFired = 0; genaiOn = false; $("fire").hidden = true;
   x = 0; vy = 0; hy = 0; step = 0; slow = 0; trip = 0; score = 0; nClear = 0; nHit = 0; nSaved = 0; maxKg = 0; nextPaper = 0; lastT = T0;
   papers.forEach(p => p.state = 0); helpers.forEach(h => { h.lastBlock = -9; h.announced = false; });
   companies.forEach(c => c.shown = c.t !== null && c.t < T0); roles.forEach(r => r.shown = r.from < T0 + .01);
@@ -283,12 +283,29 @@ function jump(){
   if (!playing || paused) return;
   if (hy === 0 && trip <= 0) { const w = weightAt(xToT(x)); vy = 930 * jumpFactor(w.kg); }
 }
+/* Emblemas próprios (não são os logótipos oficiais): uma faísca de raios
+   irregulares para o "Claude" e um hexágono com três raios para o "ChatGPT". */
+const EMBLEM_C_D = (() => { let d = ""; const n = 10;
+  const p = (ang, rad) => `${(Math.cos(ang) * rad).toFixed(2)} ${(Math.sin(ang) * rad).toFixed(2)}`;
+  for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2 + (i % 3) * .05, r = i % 2 ? 6.4 : 9.8, w = .34;
+    d += `M${p(a - w, 2.4)} L${p(a, r)} L${p(a + w, 2.4)} Z `; }
+  d += "M" + [...Array(16)].map((_, k) => p(k / 16 * Math.PI * 2, 3.2)).join(" L") + " Z";
+  return d; })();
+const EMBLEM_G_D = (() => { const v = [...Array(6)].map((_, i) => { const a = Math.PI / 6 + i * Math.PI / 3; return [Math.cos(a) * 8, Math.sin(a) * 8]; });
+  return "M" + v.map(q => q.map(n => n.toFixed(2)).join(" ")).join(" L") + " Z " + [0, 2, 4].map(i => `M0 0 L${v[i][0].toFixed(2)} ${v[i][1].toFixed(2)}`).join(" "); })();
+const EMBLEM_C = new Path2D(EMBLEM_C_D), EMBLEM_G = new Path2D(EMBLEM_G_D);
+function paintFireIcon(){
+  const ic = $("fireIcon"); ic.className = shotKind ? "g" : "c";
+  ic.innerHTML = shotKind
+    ? `<svg viewBox="-12 -12 24 24" width="18" height="18"><path d="${EMBLEM_G_D}" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/></svg>`
+    : `<svg viewBox="-12 -12 24 24" width="18" height="18"><path d="${EMBLEM_C_D}" fill="#fff"/></svg>`;
+}
 // GenAI: um disparo de cada vez, que segue à frente e queima o primeiro paper que encontra
 function fire(){
   if (!playing || paused || !genaiOn || fireCd > 0) return;
   shots.push({x: x + 30, y: hy + 40, d: 0, k: shotKind}); fireCd = 1;
   shotKind = 1 - shotKind;                      // alterna: Claude, ChatGPT, Claude…
-  const ic = $("fireIcon"); ic.className = shotKind ? "g" : "c"; ic.textContent = shotKind ? "G" : "C";
+  paintFireIcon();
 }
 const jumpFactor = kg => Math.max(.56, Math.min(1, 1 - (kg - 72) / 110));
 
@@ -370,7 +387,7 @@ function draw(){
     ctx.save(); ctx.translate(sx, sy); ctx.rotate(sh.d / 40);
     ctx.fillStyle = sh.k ? "#10a37f" : "#c96442"; ctx.beginPath(); ctx.arc(0, 0, 15, 0, 7); ctx.fill();
     ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
-    ctx.fillStyle = "#fff"; ctx.font = "800 15px Archivo, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(sh.k ? "G" : "C", 0, 1);
+    ctx.scale(15 / 12, 15 / 12); if (sh.k) { ctx.strokeStyle = "#fff"; ctx.lineWidth = 2.2; ctx.lineJoin = "round"; ctx.stroke(EMBLEM_G); } else { ctx.fillStyle = "#fff"; ctx.fill(EMBLEM_C); }
     ctx.restore(); ctx.textBaseline = "alphabetic"; });
   burns.forEach(b => { const sx = b.x - x + hx, k = b.t / .6;
     ctx.globalAlpha = 1 - k; ctx.fillStyle = "#ff7a1a";
