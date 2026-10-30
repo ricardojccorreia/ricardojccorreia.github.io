@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trajetória de I&amp;D</title>
+<meta name="description" content="Ricardo Cruz-Correia — projetos de I&D e publicações ao longo do tempo, por área e por período.">
+<style>
+:root{--navy:#0D2D52;--cyan:#0891B2;--ink:#16324f;--muted:#5b7089;--line:#dbe4ee;--bg:#f4f7fb;--card:#fff;--chip:#e8f4f8;--radius:14px;--shadow:0 6px 24px rgba(13,45,82,.08);--heat:8,145,178}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e3ebf4;--muted:#93a6bc;--line:#22344a;--bg:#0b1624;--card:#112236;--chip:#0f3040;--cyan:#38bdf8;--shadow:none;--heat:56,189,248}}
+:root[data-theme="dark"]{--ink:#e3ebf4;--muted:#93a6bc;--line:#22344a;--bg:#0b1624;--card:#112236;--chip:#0f3040;--cyan:#38bdf8;--shadow:none;--heat:56,189,248}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--cyan)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+header{background:linear-gradient(135deg,var(--navy) 0%,#123a66 100%);color:#fff;padding:28px 0 30px}
+header .wrap{position:relative}
+header a.back{color:#bfe6f2;text-decoration:none;font-size:.9rem}
+header h1{margin:10px 0 6px;font-size:1.7rem;line-height:1.2}
+header p{margin:0;opacity:.9;max-width:680px}
+.controls{position:absolute;top:0;right:16px;display:flex;gap:6px}
+.controls button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#cfe8f2;font:700 .78rem/1 inherit;padding:6px 9px;border-radius:8px;cursor:pointer}
+main.wrap{padding:32px 16px 56px}
+section{margin-bottom:44px}
+h2{font-size:1.15rem;margin:0 0 4px}
+.note{color:var(--muted);margin:0 0 18px;font-size:.93rem}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.kpis div{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--cyan);border-radius:12px;padding:14px 16px}
+.kpis b{display:block;font-size:1.8rem;color:var(--cyan);line-height:1.1}
+.kpis span{font-size:.88rem;color:var(--muted)}
+
+.tlx{list-style:none;margin:0;padding:0 0 6px;display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));position:relative;overflow-x:auto}
+.tlx::before{content:"";position:absolute;left:0;right:0;top:9px;height:2px;background:var(--line)}
+.tlx li{position:relative;padding:28px 14px 0 0}
+.tlx li::before{content:"";position:absolute;left:0;top:3px;width:14px;height:14px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 4px var(--chip)}
+.tlx a{text-decoration:none;color:var(--ink);display:block}
+.tlx .ty{display:block;font-weight:800;color:var(--cyan)}
+.tlx strong{display:block;font-size:.93rem;line-height:1.25;margin:4px 0 8px}
+.mb{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);margin:3px 0;line-height:1.1}
+.mb i{display:block;height:7px;border-radius:3px;flex:none}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.82rem;color:var(--muted);margin-top:14px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+
+.tscroll{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:8px}
+table.heat{border-collapse:separate;border-spacing:4px;width:100%;font-size:.86rem;min-width:720px}
+.heat th{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px;white-space:nowrap}
+.heat th:first-child,.heat td.area{text-align:left}
+.heat td{text-align:center;font-variant-numeric:tabular-nums}
+.heat td.area{font-weight:600;padding-right:10px}
+.heat td.area i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+.heat .cell{display:block;border-radius:7px;padding:7px 2px}
+.heat .pj{color:var(--cyan);font-weight:800}
+.heat tr.tot td{border-top:1px solid var(--line);padding-top:8px;font-weight:700}
+
+.filter{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.filter button{background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:5px 14px;font:inherit;font-size:.88rem;cursor:pointer}
+.filter button[aria-pressed="true"]{border-color:var(--cyan);color:var(--cyan);font-weight:600}
+.period{scroll-margin-top:16px;margin-bottom:26px}
+.period h3{margin:0 0 10px;font-size:1rem;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.period h3 span{color:var(--cyan);font-weight:800}
+.period:target h3{background:var(--chip);border-radius:8px;padding:4px 8px;margin-left:-8px}
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.proj{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.proj b{font-size:.95rem}
+.proj p{margin:2px 0 6px;font-size:.88rem;color:var(--muted)}
+.proj small{font-size:.76rem;color:var(--muted)}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:1px}
+.badge.on{background:#dcfce7;color:#166534}
+.badge.role{background:var(--chip);color:var(--cyan)}
+.empty{color:var(--muted);font-size:.9rem}
+.src{font-size:.8rem;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:20px 0 40px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="back" href="./" id="back"></a>
+    <h1 data-i18n="title"></h1>
+    <p data-i18n="lead"></p>
+    <div class="controls">
+      <button id="lang" type="button"></button>
+      <button id="theme" type="button" aria-label="Tema / Theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section><div class="kpis" id="kpis"></div></section>
+
+  <section>
+    <h2 data-i18n="tl_h"></h2>
+    <p class="note" data-i18n="tl_note"></p>
+    <ol class="tlx" id="tl"></ol>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="heat_h"></h2>
+    <p class="note" data-i18n-html="heat_note"></p>
+    <div class="tscroll"><table class="heat" id="heat"></table></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="proj_h"></h2>
+    <p class="note" data-i18n="proj_note"></p>
+    <div class="filter" id="filter"></div>
+    <div id="periods"></div>
+  </section>
+
+  <p class="src" data-i18n="src"></p>
+</main>
+
+<footer><div class="wrap">Ricardo João Cruz Correia · FMUP / MEDCIDS · Universidade do Porto</div></footer>
+
+<script src="data/trajetoria.js"></script>
+<script>
+const UI = {
+  pt:{back:"← Ricardo Correia", title:"Trajetória de I&D", lang:"EN",
+      lead:"Da integração de dados hospitalares à IA generativa — a interoperabilidade e a segurança da informação atravessam todo o percurso.",
+      tl_h:"Onde esteve o foco", tl_note:"Barras: as 3 áreas com mais publicações em cada período. Clique num período para ver os projetos.",
+      heat_h:"Publicações e projetos por área",
+      heat_note:"Cada célula: n.º de publicações · <span class=\"pj\">n.º de projetos</span> iniciados no período. Cor proporcional ao n.º de publicações.",
+      area:"Área", total:"Total", pubtot:"Publicações no período",
+      proj_h:"Projetos por período", proj_note:"Projetos de I&D por data de início.",
+      all:"Todos", ongoing:"Em curso", lead_r:"IR", none:"Sem projetos registados neste período.",
+      src:"Fontes: Ciência Vitae, ORCID e Universidade do Porto (set. 2026). O período 2024–26 está incompleto."},
+  en:{back:"← Ricardo Correia", title:"R&D trajectory", lang:"PT",
+      lead:"From hospital data integration to generative AI — interoperability and information security run through the whole path.",
+      tl_h:"Where the focus has been", tl_note:"Bars: the 3 areas with most publications in each period. Click a period to see its projects.",
+      heat_h:"Publications and projects by area",
+      heat_note:"Each cell: no. of publications · <span class=\"pj\">no. of projects</span> started in the period. Colour proportional to the number of publications.",
+      area:"Area", total:"Total", pubtot:"Publications in the period",
+      proj_h:"Projects by period", proj_note:"R&D projects by start date.",
+      all:"All", ongoing:"Ongoing", lead_r:"PI", none:"No projects recorded in this period.",
+      src:"Sources: Ciência Vitae, ORCID and University of Porto (Sep. 2026). The 2024–26 period is incomplete."}
+};
+
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const q=new URLSearchParams(location.search).get("lang");
+let lang=(q==="pt"||q==="en")?q:(store.get("site_lang")||((navigator.language||"").toLowerCase().startsWith("pt")?"pt":"en"));
+let onlyOngoing=false;
+
+const ROLE={pt:{"IR":"IR","Co-IR":"Co-IR"},en:{"IR":"PI","Co-IR":"Co-PI"}};
+
+function render(){
+  const t=UI[lang];
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t[el.dataset.i18n]);
+  document.querySelectorAll("[data-i18n-html]").forEach(el=>el.innerHTML=t[el.dataset.i18nHtml]);
+  document.getElementById("lang").textContent=t.lang;
+  document.getElementById("back").textContent=t.back;
+  document.getElementById("back").href="./?lang="+lang;
+
+  document.getElementById("kpis").innerHTML=TL_KPIS.map(k=>`<div><b>${k.v}</b><span>${k[lang]}</span></div>`).join("");
+
+  const areas=TL_AREAS.filter(a=>!a.other);
+  const maxN=Math.max(...areas.flatMap(a=>a.v.map(x=>x[0])));
+  document.getElementById("tl").innerHTML=TL_PERIODS.map((p,i)=>{
+    const top=areas.map(a=>({s:a.s[lang],c:a.c,n:a.v[i][0]})).filter(x=>x.n).sort((x,y)=>y.n-x.n).slice(0,3);
+    return `<li><a href="#p${i}"><span class="ty">${p}</span><strong>${TL_TITLE[lang][i]}</strong>`+
+      top.map(x=>`<div class="mb"><i style="width:${Math.round(8+x.n/maxN*44)}px;background:${x.c}"></i><span><b>${x.n}</b> ${x.s}</span></div>`).join("")+`</a></li>`;
+  }).join("");
+  document.getElementById("legend").innerHTML=areas.map(a=>`<span><i style="background:${a.c}"></i>${a[lang]}</span>`).join("");
+
+  const maxAll=Math.max(...TL_AREAS.flatMap(a=>a.v.map(x=>x[0])));
+  let h=`<tr><th>${t.area}</th>`+TL_PERIODS.map(p=>`<th>${p}</th>`).join("")+`<th>${t.total}</th></tr>`;
+  for(const a of TL_AREAS){
+    let tp=0,tj=0;
+    h+=`<tr><td class="area"><i style="background:${a.c}"></i>${a[lang]}</td>`;
+    for(const [n,j] of a.v){
+      tp+=n;tj+=j;
+      const bg=n?`rgba(var(--heat),${(0.08+n/maxAll*0.55).toFixed(2)})`:"transparent";
+      h+=`<td><span class="cell" style="background:${bg}"><b>${n||"·"}</b>${j?` · <span class="pj">${j}</span>`:""}</span></td>`;
+    }
+    h+=`<td><b>${tp}</b>${tj?` · <span class="pj">${tj}</span>`:""}</td></tr>`;
+  }
+  h+=`<tr class="tot"><td class="area">${t.pubtot}</td>`+TL_PUB_TOTAL.map(x=>`<td>${x}</td>`).join("")+`<td>${TL_PUB_TOTAL.reduce((a,b)=>a+b,0)}</td></tr>`;
+  document.getElementById("heat").innerHTML=h;
+
+  document.getElementById("filter").innerHTML=[[false,t.all],[true,t.ongoing]].map(([v,l])=>`<button data-v="${v}" aria-pressed="${v===onlyOngoing}">${l}</button>`).join("");
+  document.getElementById("periods").innerHTML=TL_PERIODS.map((p,i)=>{
+    const list=TL_PROJECTS.filter(x=>tlPeriodOf(+x.start.slice(0,4))===i && (!onlyOngoing||x.state==="Em curso"));
+    const cards=list.map(x=>`<div class="proj"><b>${x.short}</b>`+
+      (x.state==="Em curso"?`<span class="badge on">${t.ongoing}</span>`:"")+
+      (x.role?`<span class="badge role">${ROLE[lang][x.role]||x.role}</span>`:"")+
+      `<p>${x.title}</p><small>${x.start.slice(0,4)} · ${x.ref}</small></div>`).join("");
+    return `<div class="period" id="p${i}"><h3><span>${p}</span>${TL_TITLE[lang][i]}</h3>`+
+      (cards?`<div class="plist">${cards}</div>`:`<p class="empty">${t.none}</p>`)+`</div>`;
+  }).join("");
+}
+
+document.getElementById("filter").addEventListener("click",e=>{
+  if(e.target.dataset.v){onlyOngoing=e.target.dataset.v==="true";render();}
+});
+document.getElementById("lang").addEventListener("click",()=>{lang=lang==="pt"?"en":"pt";store.set("site_lang",lang);render()});
+document.getElementById("theme").addEventListener("click",()=>{
+  const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");
+  const next=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=next;store.set("theme",next);
+});
+const th=store.get("theme");if(th)document.documentElement.dataset.theme=th;
+render();
+if(location.hash){const el=document.querySelector(location.hash);if(el)el.scrollIntoView();}
+</script>
+</body>
+</html>
