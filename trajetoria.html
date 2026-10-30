@@ -121,6 +121,7 @@ section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
     <p class="sr" id="live" aria-live="polite"></p>
     <div id="periods"></div>
     <p class="src" data-i18n="src"></p>
+    <p class="src"><a id="story" href="historia.html" data-i18n="story"></a></p>
   </section>
 </main>
 
@@ -143,7 +144,7 @@ const UI = {
       shown:(n, f) => f ? `A mostrar ${n} projetos em curso.` : `A mostrar os ${n} projetos.`,
       roles:{"IR":"IR","Co-IR":"Co-IR"},
       src:"Fontes: Ciência Vitae, ORCID e Universidade do Porto (setembro de 2026). O período 2024–26 está incompleto. IR = investigador responsável. As traduções inglesas dos títulos são indicativas.",
-      contact:"Contacto:"},
+      contact:"Contacto:", story:"Ver a mesma trajetória contada período a período (História) →"},
   en:{back:"← Ricardo Cruz-Correia's profile", updated:"Updated October 2026 · data from September 2026", title:"R&D trajectory",
       claim:"Interoperability runs through all seven periods; AI and education are the areas that have grown most since 2018.",
       f1:"Publications and project starts", f1cap:"Line: 170 dated publications (Ciência Vitae and the 50 most recent ORCID works; ORCID lists 283 in total); 2024–26 is partial. Marks: start of each project; violet marks are ongoing. Numerals 1–7 lead to each period's register.",
@@ -154,7 +155,7 @@ const UI = {
       shown:(n, f) => f ? `Showing ${n} ongoing projects.` : `Showing all ${n} projects.`,
       roles:{"IR":"PI","Co-IR":"Co-PI"},
       src:"Sources: Ciência Vitae, ORCID and University of Porto (September 2026). The 2024–26 period is incomplete. PI = principal investigator. English project titles are indicative translations.",
-      contact:"Contact:"}
+      contact:"Contact:", story:"See the same trajectory told period by period (Story) →"}
 };
 
 let onlyOngoing = false;
@@ -163,6 +164,7 @@ function render(L) {
   const t = UI[L];
   document.documentElement.lang = L;
   document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
+  document.getElementById("story").href = "historia.html?lang=" + L;
   const back = document.getElementById("back"); back.textContent = t.back; back.href = "./?lang=" + L;
 
   document.getElementById("biblio").innerHTML = TL_KPIS.map((k, i) => {
