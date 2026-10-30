@@ -2,7 +2,15 @@
    JOGO — dados do percurso (rascunho; confirmar o que está marcado "?")
    Fontes: CV SIGARRA FMUP (jun. 2025), certidões permanentes no Drive,
    registos da Salut.ia no Drive. Alunos sem nomes: só tipo e anos.
-   Regras: mestrado = ajudante (escudo) durante 1 ano; doutoramento = 4 anos.
+   Regras decididas com o autor (30 out. 2026):
+   - género corredor de um só botão; página nova jogo.html (o filme fica);
+   - obstáculos = publicações reais com título (Google Scholar, ficheiro no Drive
+     "Publicacoes_Scholar_Cruz-Correia (antes CV 2026-09-28).md", id 1TdzUDdfWzd8WmyS7eqwZCvSbLO3ymeLW);
+   - peso = idade + empresas + cargos + projetos de I&D em curso; mais peso = salta mais baixo
+     e a personagem engorda visivelmente;
+   - ajudantes = escudo (absorvem um choque): mestrado 1 ano, doutoramento 4 anos;
+   - choque sem escudo = tropeça e perde pontos (sem fim de jogo);
+   - o jogo começa em 2000 (Assistente na FMUP), aos 26 anos.
    ========================================================================== */
 
 const GAME_START = 2000;      // início da vida académica (Assistente, FMUP)
@@ -13,10 +21,10 @@ const G_COMPANIES = [
   {name:"VirtualCare",      date:"2012-10-01", src:"certidão"},
   {name:"HealthySystems",   date:"2013-02-05", src:"certidão"},
   {name:"PharmaDataHub",    date:"2023-12-27", src:"certidão (PDH, Lda)"},
-  {name:"Opvance",          date:"2024-01",    src:"? NIPC próximo do da PDH; confirmar data"},
+  {name:"Opvance",          date:"2024-01-05", src:"confirmado pelo autor"},
   {name:"Nexalyse",         date:"2025-03-07", src:"certidão"},
   {name:"Salut.ia",         date:"2026-03",    src:"abertura da empresa (Brasil)"},
-  {name:"Ciência e Letras", date:null,         src:"? data por confirmar"}
+  {name:"Ciência e Letras", date:"1996",       src:"confirmado pelo autor"}
 ];
 
 // Cargos (início–fim; null = em curso)
@@ -28,8 +36,8 @@ const G_ROLES = [
   {name:"Diretor do Mestrado em Informática Médica", from:"2020-09", to:"2024-02"},
   {name:"Codiretor do Mestrado em Informática Médica", from:"2024-02", to:"2024-11"},
   {name:"Presidente das comissões do MIM",    from:"2020-09", to:"2024-10"},
-  {name:"Presidente da e-MAIS",               from:null,      to:null},   // ? datas
-  {name:"HL7 Portugal",                       from:null,      to:null}    // ? cargo e datas
+  {name:"Presidente da e-MAIS",               from:"2014-03-21", to:null},  // confirmado pelo autor
+  {name:"HL7 Portugal",                       from:"2016",    to:null}     // confirmado pelo autor (cargo por indicar)
 ];
 
 // Orientações (tipo, ano de conclusão; em curso = ano de início). Extraído do CV
