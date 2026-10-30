@@ -141,7 +141,7 @@ const UI = {
              ["Limites","O período 2024–26 está incompleto. Os nomes dos projetos não são expandidos aqui; ver o registo"],
              ["Versão","1.0 · 30 de outubro de 2026"]],
       pubs:"publicações", partial:"parcial", top:"Áreas com mais publicações", proj:"Projetos-chave", ongoing:"Em curso",
-      go:"Ver os projetos deste período →",
+      go:"Ver os projetos deste período",
       endH:"Uma trajetória, de investigação a produto",
       endP:"A interoperabilidade atravessa os sete períodos; a IA e a educação são as áreas que mais cresceram desde 2018. Os detalhes estão no registo de projetos e nos perfis académicos.",
       reg:"Registo de projetos", prof:"Perfil", sections:"Secções", cover:"Início", end:"Fim"},
@@ -157,7 +157,7 @@ const UI = {
              ["Limits","The 2024–26 period is incomplete. Project names are not expanded here; see the register"],
              ["Version","1.0 · 30 October 2026"]],
       pubs:"publications", partial:"partial", top:"Areas with most publications", proj:"Key projects", ongoing:"Ongoing",
-      go:"See this period's projects →",
+      go:"See this period's projects",
       endH:"One trajectory, from research to product",
       endP:"Interoperability runs through all seven periods; AI and education are the areas that have grown most since 2018. The details are in the project register and the academic profiles.",
       reg:"Project register", prof:"Profile", sections:"Sections", cover:"Start", end:"End"}
@@ -209,7 +209,7 @@ function render(){
        `<a class="go" href="trajetoria.html?lang=${lang}#p${i}">${t.go}</a></div></div></section>`;
   });
   h+=`<section class="sc end" id="s${TL_PERIODS.length+2}"><div class="in lift"><h2>${t.endH}</h2><p>${t.endP}</p>`+
-     `<nav><a class="go" href="trajetoria.html?lang=${lang}">${t.reg} →</a><a class="go" href="./?lang=${lang}">${t.prof} →</a><a class="go" href="https://orcid.org/0000-0002-3764-5158">ORCID →</a></nav></div></section>`;
+     `<nav><a class="go" href="trajetoria.html?lang=${lang}">${t.reg}</a><a class="go" href="./?lang=${lang}">${t.prof}</a><a class="go" href="https://orcid.org/0000-0002-3764-5158">ORCID</a></nav></div></section>`;
   document.getElementById("main").innerHTML=h;
 
   const labels=[t.cover,t.fichaH,...TL_PERIODS.map((p,i)=>`${p} · ${TL_TITLE[lang][i]}`),t.end];

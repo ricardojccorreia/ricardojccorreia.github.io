@@ -11,6 +11,7 @@
 <style>
 .back{display:inline-flex;align-items:center;min-height:44px;font:600 .9rem/1 var(--sans);text-decoration:none}
 .back:hover{text-decoration:underline}
+.kp{margin:0;padding:16px 0;border-bottom:1px solid var(--rule);font:400 1.05rem/1.55 var(--serif);color:var(--ink-2);max-width:80ch}
 .biblio{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-bottom:1px solid var(--rule);margin:0}
 .biblio div{padding:18px 16px 18px 0;border-right:1px solid var(--rule-2)}
 .biblio div+div{padding-left:16px}
@@ -63,7 +64,8 @@ table.heat{border-collapse:collapse;width:100%;min-width:760px;font:500 .9rem/1.
 section.blk{padding:28px 0 8px}
 section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
 @media (max-width:720px){
-  .biblio{grid-template-columns:1fr 1fr}
+  .kp{margin:0;padding:16px 0;border-bottom:1px solid var(--rule);font:400 1.05rem/1.55 var(--serif);color:var(--ink-2);max-width:80ch}
+.biblio{grid-template-columns:1fr 1fr}
   .biblio div{border-right:0;border-bottom:1px solid var(--rule-2);padding-left:0 !important}
   .biblio div:nth-child(odd){padding-right:12px;border-right:1px solid var(--rule-2)}
   .biblio div:nth-child(even){padding-left:12px !important}
@@ -99,7 +101,7 @@ section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
     </div>
   </div>
 
-  <dl class="biblio" id="biblio"></dl>
+  <p class="kp" id="biblio"></p>
 
   <section class="fig blk" aria-labelledby="f1">
     <h2 id="f1"><span class="c">Fig. 1</span><span data-i18n="f1"></span></h2>
@@ -116,7 +118,7 @@ section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
   </section>
 
   <section class="blk" aria-labelledby="reg">
-    <h2 id="reg"><span class="c">Tabela S1</span><span data-i18n="reg"></span></h2>
+    <h2 id="reg"><span class="c" data-i18n="tabS"></span><span data-i18n="reg"></span></h2>
     <div class="filter" id="filter" role="group"></div>
     <p class="sr" id="live" aria-live="polite"></p>
     <div id="periods"></div>
@@ -134,7 +136,7 @@ section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
 <script src="assets/site.js"></script>
 <script>
 const UI = {
-  pt:{back:"← Artigo principal: perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026 · dados de setembro de 2026", title:"Material suplementar — Trajetória de I&D",
+  pt:{tabS:"Tabela S1", back:"Artigo principal: perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026 · dados de setembro de 2026", title:"Material suplementar — Trajetória de I&D",
       claim:"A interoperabilidade atravessa os sete períodos; a IA e a educação são as áreas que mais cresceram desde 2018.",
       f1:"Publicações e início de projetos", f1cap:"Linha: 170 publicações com data (Ciência Vitae e as 50 obras mais recentes do ORCID, que lista 283 no total); 2024–26 é parcial. Marcas: início de cada projeto; a violeta, os que estão em curso. Os números 1–7 levam ao registo de cada período.",
       f2:"Publicações e projetos por área", f2note:"Cada célula: número de publicações e, por baixo, projetos iniciados nesse período. Quanto mais escura a célula, mais publicações.",
@@ -144,8 +146,8 @@ const UI = {
       shown:(n, f) => f ? `A mostrar ${n} projetos em curso.` : `A mostrar os ${n} projetos.`,
       roles:{"IR":"IR","Co-IR":"Co-IR"},
       src:"Fontes: Ciência Vitae, ORCID e Universidade do Porto (setembro de 2026). O período 2024–26 está incompleto. IR = investigador responsável. As traduções inglesas dos títulos são indicativas.",
-      contact:"Contacto:", story:"Ver a mesma trajetória contada período a período (História) →"},
-  en:{back:"← Main article: Ricardo Cruz-Correia's profile", updated:"Updated October 2026 · data from September 2026", title:"Supplementary material — R&D trajectory",
+      contact:"Contacto:", story:"Ver a mesma trajetória contada período a período (História)"},
+  en:{tabS:"Table S1", back:"Main article: Ricardo Cruz-Correia's profile", updated:"Updated October 2026 · data from September 2026", title:"Supplementary material — R&D trajectory",
       claim:"Interoperability runs through all seven periods; AI and education are the areas that have grown most since 2018.",
       f1:"Publications and project starts", f1cap:"Line: 170 dated publications (Ciência Vitae and the 50 most recent ORCID works; ORCID lists 283 in total); 2024–26 is partial. Marks: start of each project; violet marks are ongoing. Numerals 1–7 lead to each period's register.",
       f2:"Publications and projects by area", f2note:"Each cell: number of publications and, below, projects started in that period. The darker the cell, the more publications.",
@@ -155,7 +157,7 @@ const UI = {
       shown:(n, f) => f ? `Showing ${n} ongoing projects.` : `Showing all ${n} projects.`,
       roles:{"IR":"PI","Co-IR":"Co-PI"},
       src:"Sources: Ciência Vitae, ORCID and University of Porto (September 2026). The 2024–26 period is incomplete. PI = principal investigator. English project titles are indicative translations.",
-      contact:"Contact:", story:"See the same trajectory told period by period (Story) →"}
+      contact:"Contact:", story:"See the same trajectory told period by period (Story)"}
 };
 
 let onlyOngoing = false;
@@ -167,10 +169,7 @@ function render(L) {
   document.getElementById("story").href = "historia.html?lang=" + L;
   const back = document.getElementById("back"); back.textContent = t.back; back.href = "./?lang=" + L;
 
-  document.getElementById("biblio").innerHTML = TL_KPIS.map((k, i) => {
-    const [main, extra] = k[L].split(" (");
-    return `<div><dt>${main}</dt><dd>${k.v}${extra ? `<small>(${extra}</small>` : ""}</dd></div>`;
-  }).join("");
+  document.getElementById("biblio").textContent = TL_KPIS.map(k => `${k.v} ${k[L]}`).join(" · ") + ".";
 
   Site.figure(document.getElementById("fig"), L, {local: true});
 

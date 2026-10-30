@@ -13,6 +13,7 @@ body{background:var(--desk)}
 .page{max-width:1040px;margin:20px auto 0;background:var(--paper);box-shadow:0 2px 14px rgba(0,0,0,.08);padding:30px clamp(16px,5vw,64px) 44px}
 .run{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;border-bottom:1px solid var(--ink);padding-bottom:8px;font:500 .8rem/1.3 var(--sans);color:var(--ink-2)}
 .run b{color:var(--j);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.run .ctl{align-items:center}
 .run .ctl button{height:44px}
 h1{margin:26px 0 0;font:600 clamp(1.9rem,4.3vw,2.9rem)/1.12 var(--serif);font-stretch:100%;letter-spacing:-.01em;max-width:26ch;text-wrap:balance}
 .au{margin:20px 0 6px;font:700 clamp(1.25rem,2.4vw,1.55rem)/1.2 var(--sans)}
@@ -31,7 +32,7 @@ h1{margin:26px 0 0;font:600 clamp(1.9rem,4.3vw,2.9rem)/1.12 var(--serif);font-st
 .body h2{color:var(--ink);letter-spacing:0;text-transform:none;font-size:1.02rem;margin:22px 0 6px;break-after:avoid}
 .body h2:first-child{margin-top:0}
 .body h2 .n{color:var(--j);margin-right:8px}
-.body p{margin:0 0 10px;hyphens:auto}
+.body p{margin:0 0 10px;orphans:3;widows:3}
 .wide{column-span:all;margin:14px 0 18px}
 .wide figcaption{margin-top:10px;font:400 .92rem/1.45 var(--serif);color:var(--ink-2);max-width:none}
 .wide figcaption b{font:700 .92rem/1 var(--sans);color:var(--ink);margin-right:6px}
@@ -137,13 +138,25 @@ footer{max-width:1040px}
    ========================================================================== */
 
 const COMPANIES = [
-  {name:"HealthySystems", url:"https://www.hltsys.pt/", pt:"Interoperabilidade e integração clínica", en:"Clinical interoperability and integration"},
-  {name:"VirtualCare", url:"https://www.virtualcare.pt/", pt:"Saúde digital", en:"Digital health"},
-  {name:"PharmaDataHub", url:"https://www.pharmadatahub.com/", pt:"Dados de medicamentos e farmacovigilância", en:"Medicines data and pharmacovigilance"},
-  {name:"Ciência e Letras", url:"https://www.ciencia-letras.pt/", pt:"Formação em Health IT e IA", en:"Health IT and AI training"},
-  {name:"Opvance", url:"https://www.opvance.com/", pt:"", en:""},
-  {name:"Nexalyse", url:"", pt:"", en:""},
-  {name:"Salut.ia", url:"", pt:"", en:""}
+  {name:"HealthySystems", url:"https://www.hltsys.pt/",
+   pt:"Spin-off da U.Porto (CINTESIS): integração e interoperabilidade de sistemas hospitalares, cibersegurança e proteção de dados; hoje uma empresa Glintt Life",
+   en:"University of Porto spin-off (CINTESIS): hospital systems integration and interoperability, cybersecurity and data protection; now a Glintt Life company"},
+  {name:"VirtualCare", url:"https://www.virtualcare.pt/",
+   pt:"Spin-off da U.Porto em saúde digital: monitorização personalizada de doentes, continuidade de cuidados e I&D com hospitais",
+   en:"University of Porto digital health spin-off: personalised patient monitoring, continuity of care and R&D with hospitals"},
+  {name:"PharmaDataHub", url:"https://www.pharmadatahub.com/",
+   pt:"Dados de medicamentos: informação estruturada (HL7 FHIR ePI) e deteção de sinais de farmacovigilância",
+   en:"Medicines data: structured product information (HL7 FHIR ePI) and pharmacovigilance signal detection"},
+  {name:"Ciência e Letras", url:"https://www.ciencia-letras.pt/",
+   pt:"Formação especializada em Health IT, HL7 FHIR e IA generativa aplicada",
+   en:"Specialised training in Health IT, HL7 FHIR and applied generative AI"},
+  {name:"Opvance", url:"https://www.opvance.com/",
+   pt:"Gestão segura de dados clínicos sensíveis e execução de IA nos hospitais, alinhada com o Espaço Europeu de Dados de Saúde",
+   en:"Secure management of sensitive clinical data and AI execution in hospitals, aligned with the European Health Data Space"},
+  {name:"Salut.ia", url:"",
+   pt:"Inovação e tecnologia em saúde no Brasil: consultoria e formação",
+   en:"Health innovation and technology in Brazil: consulting and training"},
+  {name:"Nexalyse", url:"", pt:"", en:""}
 ];
 
 const AFFILIATIONS = {
@@ -232,7 +245,7 @@ function render(L) {
   document.getElementById("refs").innerHTML = TL_PERIODS.map((p, i) =>
     `<li><a href="trajetoria.html?lang=${L}#p${i}"><span class="n">${i + 1}</span><strong><em>${p}</em>${TL_TITLE[L][i]}</strong><span>${TL_KEY[i]}</span></a></li>`).join("");
   document.getElementById("companies").innerHTML = COMPANIES.map(c =>
-    `<tr><td>${c.url ? `<a href="${c.url}">${c.name}</a>` : c.name}</td><td>${c[L] || `<span class="pend">${t.pend}</span>`}</td></tr>`).join("");
+    `<tr><td>${c.url ? `<a href="${c.url}">${c.name}</a>` : c.name}</td><td>${c[L] || `<span class="pend" aria-label="${L === "en" ? "no description" : "sem descrição"}">—</span>`}</td></tr>`).join("");
 
   const today = new Date().toISOString().slice(0, 10);
   const tf = (p, k) => (L === "en" && p[k + "_en"]) || p[k] || "";

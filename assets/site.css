@@ -11,7 +11,7 @@
 @font-face{font-family:"JetBrains Mono";src:url("../fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-display:swap}
 
 :root{
-  --desk:#eceae4; --paper:#ffffff; --sheet:#ffffff; --ink:#16181c; --ink-2:#454b55; --rule:#c9ccd2; --rule-2:#e6e7ea;
+  --desk:#e9eaeb; --paper:#ffffff; --sheet:#ffffff; --ink:#16181c; --ink-2:#454b55; --rule:#c9ccd2; --rule-2:#e6e7ea;
   --j:#0b5e5e; --j-soft:#e6f1f0; --blue:#0b5e5e; --blue-soft:#e6f1f0; --stamp:#6a2bb0; --stamp-soft:#f3ecfb;
   --focus:#0b5e5e; --sel:#cfe6e4;
   --a1:#1b2f8f; --a2:#0d6b77; --a3:#4a5568; --a4:#8a5a00; --a5:#2f6b2a; --a6:#a3203a; --a7:#8f96a3;

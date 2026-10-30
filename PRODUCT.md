@@ -45,7 +45,8 @@ The bridge between academia and the market: research in health information syste
 - Trajectory data from the presentation "Pesquisa e Colaboração UFG–U.Porto" (Sept. 2026): 283 works on ORCID, 33 R&D projects (36 entries listed incl. institutional funding), 5 U.Porto spin-offs co-founded, 20 years in the MSc in Medical Informatics; publications per area × period; 36 projects with references.
 - Academic profiles: ORCID 0000-0002-3764-5158, Ciência Vitae 7F17-9F23-61E9, Authenticus R-000-FBK, ResearchGate, ResearcherID A-2756-2009, Lattes, LinkedIn.
 - Affiliations: FMUP / MEDCIDS, RISE-Health (Entrepreneurship for Innovative Health Solutions), e-MAIS (president), HL7 Portugal, EFMI WG EDU.
-- Absent, do not fabricate: publication list, testimonials, project funding values, company descriptions for Opvance / Nexalyse / Salut.ia, which project became which company (ask before claiming links).
+- Company descriptions: written from public sources and the owner's Drive (Opvance mission document; Salut.ia records); Nexalyse intentionally without description.
+- Absent, do not fabricate: publication list, testimonials, project funding values, which project became which company (ask before claiming links).
 
 ## Product Principles
 

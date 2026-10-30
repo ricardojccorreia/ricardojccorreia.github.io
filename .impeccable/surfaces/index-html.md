@@ -2,27 +2,27 @@
 version: 1
 slug: "index-html"
 primary_target: "index.html"
-related_targets: ["trajetoria.html"]
+related_targets: ["trajetoria.html","intervencoes/index.html","historia.html"]
 ---
 
-# Surface brief: personal site (index.html + trajetoria.html)
+# Surface brief: personal site (index.html + trajetoria.html + intervencoes/ + historia.html)
 
-Scope: homepage and R&D trajectory page. Mode: read. Audience: academic peers judging scope, continuity and transfer to practice. Action: understand the 20-year arc, verify via profiles, contact via LinkedIn/ORCID (no email).
+Scope: homepage (main article) and supplementary pages S1 trajectory, S2 talks, S3 story. Mode: read. Audience: academic peers judging scope, continuity and transfer to practice. Action: read the abstract, verify via references (profiles), open supplementary material, contact via LinkedIn/ORCID (no email).
 
 ## Direction contract
 
-THESIS: The academic profile set as a patent front page — research filed, companies as titulares — refusing the photo-plus-bio-plus-cards academic template.
+THESIS: The academic profile set as the first page of a scientific article — authors, structured abstract, figure, table, conflict of interest, references — refusing the photo-plus-bio-plus-cards template; sub-pages are its supplementary material.
 
-OWN-WORLD: White sheet, ink-blue (deep) bibliographic band and hairline rules, black body text; violet date-stamp only for live/ongoing state. Bracketed INID-style field codes (72), (73), (57) in mono as the numbering scheme; a calm sans reading column; line-drawn figures with numeral leaders.
+OWN-WORLD: Grey desk around a white journal page; black ink, one journal teal (#0b5e5e) for running head, labels, superscripts and the abstract panel (teal-soft ground with a 3px teal top rule); Source Serif title and body in two columns, Archivo for section heads, tables and labels, mono for reference numbers and years; booktabs tables (thick-thin rules); violet only for ongoing state. Dark: the same page read at night.
 
-STORY: A peer sees, in one sheet, who he is (72), where research went to market (73 titulares), the abstract (57), and Fig. 1 — the 2005–2026 trajectory — then follows a numeral into the period's project register.
+STORY: A peer reads title and authors (affiliations as superscripts), the structured abstract with the numbers, sees Figure 1 (trajectory) and Table 1 (companies), notes the conflict-of-interest line that states the market bridge, and follows references or S1–S3.
 
-FIRST VIEWPORT: Ink band masthead with (19) institution and PT/EN, theme controls. Left bibliographic column: (11) name as h1, (72) role, (73) companies, (74) profiles. Right: (57) abstract. Below, full width: Fig. 1 trajectory drawing, numerals 1–7 with leader lines to periods; primary way forward = numerals and "Fig. 1 — ver registo completo".
+FIRST VIEWPORT: Running head (Perfil de investigação · Universidade do Porto; date; PT/EN; theme). Serif article title, author line with superscripts, affiliation list, contact links, then the teal abstract panel starting within the first screen.
 
-FORM: assigned direction, candidate 4 of 7 (patent front page / technology-transfer dossier). seed:dc09f650bd89a9fa
+FORM: user-chosen after prototype round (article chosen over metro map, congress programme, clinical timeline); supersedes the patent-front-page direction. seed: none (unavailable)
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ## Unresolved
-- No email contact (owner choice). No patents are claimed; field codes are wayfinding only.
-- Which project became which company: not confirmed, do not draw links.
+- Nexalyse has no description by owner's choice; Salut.ia has no public URL.
+- historia.html keeps its own dark continuous-background world (owner's choice), labelled S3.

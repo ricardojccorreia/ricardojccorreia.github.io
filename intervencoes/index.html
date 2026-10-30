@@ -27,11 +27,11 @@
 .list b{font:700 1.08rem/1.3 var(--sans);display:block}
 .list .e{display:block;font:400 1rem/1.45 var(--serif);color:var(--ink-2);margin-top:2px}
 .list .k{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.list .k span{font:500 .72rem/1 var(--mono);border:1px solid var(--rule);padding:4px 6px 3px;border-radius:2px;color:var(--ink-2)}
+.list .k span{font:600 .74rem/1 var(--sans);border:1px solid var(--rule);padding:4px 6px 3px;border-radius:2px;color:var(--ink-2)}
 .list .k span.ty{color:var(--ink);border-color:var(--ink)}
 .act{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
-.act a{display:inline-flex;align-items:center;min-height:44px;font:700 .92rem/1.2 var(--sans);text-decoration:none;border-bottom:2px solid var(--ink)}
-.act a:hover{color:var(--a1);border-color:var(--a1)}
+.act a{display:inline-flex;align-items:center;min-height:44px;font:700 .92rem/1.2 var(--sans);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.3em}
+.act a:hover{color:var(--j)}
 .act small{font:500 .8rem/1.3 var(--sans);color:var(--ink-2)}
 .cite{grid-column:2/-1;font:400 .88rem/1.45 var(--serif);color:var(--ink-2)}
 .cite summary{cursor:pointer;font:600 .85rem/1 var(--sans);color:var(--ink);min-height:32px;display:flex;align-items:center}
@@ -71,7 +71,7 @@ section.blk{padding:22px 0 8px}
   <div id="upcoming"></div>
 
   <section class="blk" aria-labelledby="regh">
-    <h2 id="regh"><span class="c">Tabela S2</span><span data-i18n="reg"></span></h2>
+    <h2 id="regh"><span class="c" data-i18n="tabS"></span><span data-i18n="reg"></span></h2>
     <div class="filter" id="types" role="group"></div>
     <div id="tagnote"></div>
     <p class="sr" id="live" aria-live="polite"></p>
@@ -88,19 +88,19 @@ section.blk{padding:22px 0 8px}
 <script src="../assets/site.js"></script>
 <script>
 const UI = {
-  pt:{back:"← Artigo principal: perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026", title:"Intervenções",
+  pt:{tabS:"Tabela S2", back:"Artigo principal: perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026", title:"Intervenções",
       lede:"Palestras, comunicações, aulas abertas e workshops. Os slides públicos abrem diretamente; os restantes recebem-se por email depois de um pedido curto.",
       reg:"Registo de intervenções", all:"Todas", next:"Próximas",
       types:{invited:"Palestra convidada", talk:"Apresentação", workshop:"Workshop", lecture:"Aula aberta", panel:"Painel"},
-      open:"Abrir slides →", req:"Pedir slides →", reqNote:"Recebe por email", video:"Vídeo →", doi:"DOI →", none:"Slides não disponíveis",
+      open:"Abrir slides", req:"Pedir slides", reqNote:"Recebe por email", video:"Vídeo", doi:"DOI", none:"Slides não disponíveis",
       cite:"Como citar", tag:t => `Tema: ${t}`, clear:"Mostrar todos os temas",
       shown:n => n === 1 ? "A mostrar 1 intervenção." : `A mostrar ${n} intervenções.`, empty:"Sem intervenções com estes filtros.",
       contact:"Contacto:", kind:{invited:"Apresentação convidada", other:"Apresentação"}},
-  en:{back:"← Main article: Ricardo Cruz-Correia's profile", updated:"Updated October 2026", title:"Talks",
+  en:{tabS:"Table S2", back:"Main article: Ricardo Cruz-Correia's profile", updated:"Updated October 2026", title:"Talks",
       lede:"Talks, conference presentations, open lectures and workshops. Public slides open directly; the others are sent by email after a short request.",
       reg:"Talks register", all:"All", next:"Upcoming",
       types:{invited:"Invited talk", talk:"Presentation", workshop:"Workshop", lecture:"Open lecture", panel:"Panel"},
-      open:"Open slides →", req:"Request slides →", reqNote:"Sent by email", video:"Video →", doi:"DOI →", none:"Slides not available",
+      open:"Open slides", req:"Request slides", reqNote:"Sent by email", video:"Video", doi:"DOI", none:"Slides not available",
       cite:"How to cite", tag:t => `Topic: ${t}`, clear:"Show all topics",
       shown:n => n === 1 ? "Showing 1 talk." : `Showing ${n} talks.`, empty:"No talks match these filters.",
       contact:"Contact:", kind:{invited:"Invited presentation", other:"Presentation"}}
