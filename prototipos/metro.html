@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo B — Mapa de metro</title>
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+:root{--l1:#1d4ed8;--l2:#0e8a8a;--l3:#6b7280;--l4:#d97706;--l5:#15803d;--l6:#be123c;--ink:#111;--paper:#f7f7f2}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans)}
+.top{background:#111;color:#fff}
+.top .in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:14px}
+.roundel{width:44px;height:44px;border-radius:50%;border:7px solid #fff;display:flex;align-items:center;justify-content:center;font:800 .8rem/1 var(--sans);flex:none}
+.top b{font:800 1.05rem/1.2 var(--sans);letter-spacing:.01em}
+.top span{opacity:.75;font-size:.9rem}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+h1{font:800 clamp(2.4rem,6vw,4.4rem)/.95 var(--sans);font-stretch:85%;letter-spacing:-.02em;margin:34px 0 8px}
+.lede{font:500 1.15rem/1.45 var(--sans);max-width:58ch;margin:0 0 6px;color:#333}
+.role{font:500 .95rem/1.4 var(--sans);color:#555;margin:0}
+.map{margin:28px -16px 0;padding:0 16px;overflow-x:auto}
+.map svg{display:block;min-width:980px;width:100%;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:8px 22px;margin:14px 0 0;font:600 .88rem/1.2 var(--sans)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend i{width:28px;height:7px;border-radius:4px;display:inline-block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:28px;margin:40px 0}
+.panel h2{display:flex;align-items:center;gap:10px;font:800 1.05rem/1.2 var(--sans);text-transform:none;letter-spacing:0;margin:0 0 10px;padding-bottom:8px;border-bottom:3px solid #111}
+.panel h2 i{width:22px;height:22px;border-radius:50%;border:4px solid currentColor;display:inline-block}
+.panel ul{list-style:none;margin:0;padding:0}
+.panel li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #ddd;font:500 .98rem/1.3 var(--sans)}
+.panel li small{color:#555;font-size:.88rem;text-align:right}
+.dep li b{font:700 .9rem/1 var(--mono);background:#111;color:#ffd200;padding:5px 7px;border-radius:2px;white-space:nowrap}
+.proto{max-width:1180px;margin:10px auto 0;padding:0 16px;font:600 .8rem/1.3 var(--sans);color:#555}
+svg text{font-family:var(--sans)}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><span class="roundel">RCC</span><div><b>Rede de Investigação Ricardo Cruz-Correia</b><br><span>FMUP / MEDCIDS · Universidade do Porto · 2005–2026</span></div></div></header>
+<p class="proto">Protótipo B · Mapa de metro — linhas = áreas; estações = períodos; espessura = publicações</p>
+<main class="wrap">
+  <h1>Ricardo Cruz-Correia</h1>
+  <p class="role">Professor Associado de Informática Médica · FMUP / MEDCIDS · Universidade do Porto</p>
+  <p class="lede">Vinte anos de sistemas de informação em saúde: seis linhas de investigação que se cruzam em sete estações, da integração de dados hospitalares à IA generativa.</p>
+  <div class="map"><svg id="map" aria-label="Mapa das áreas de investigação ao longo de sete períodos"></svg></div>
+  <div class="legend" id="legend"></div>
+
+  <div class="grid">
+    <section class="panel"><h2><i style="color:#111"></i>Ligações a outras redes — empresas co-fundadas</h2><ul id="co"></ul></section>
+    <section class="panel"><h2><i style="color:#111"></i>Estações principais — afiliações</h2><ul id="af"></ul></section>
+    <section class="panel dep"><h2><i style="color:#111"></i>Partidas recentes — intervenções</h2><ul id="talks"></ul></section>
+  </div>
+</main>
+<script src="../data/trajetoria.js"></script>
+<script src="../data/intervencoes.js"></script>
+<script>
+const COL=["--l1","--l2","--l3","--l4","--l5","--l6"];
+const areas=TL_AREAS.filter(a=>!a.other);
+const W=1180,H=560,left=150,right=60,T0=60,gap=56,n=TL_PERIODS.length,cw=(W-left-right)/(n-1);
+const X=i=>left+cw*i, Y=k=>T0+k*gap;
+const mid=T0+gap*2.5;
+let s="";
+// linhas: correm em paralelo e convergem para a estação central de cada período
+areas.forEach((a,k)=>{
+  let d="";
+  for(let i=0;i<n;i++){
+    const x=X(i), y=Y(k), yc=mid+(k-2.5)*9;
+    if(i===0) d+=`M${x-50} ${y} `;
+    d+=`L${x-36} ${y} C${x-18} ${y} ${x-18} ${yc} ${x} ${yc} C${x+18} ${yc} ${x+18} ${y} ${x+36} ${y} `;
+  }
+  d+=`L${X(n-1)+50} ${Y(k)}`;
+  const w=a.v.map(v=>v[0]);
+  // espessura média da linha, e troço a tracejado onde não houve publicações
+  for(let i=0;i<n;i++){
+    const x=X(i),y=Y(k),yc=mid+(k-2.5)*9,v=w[i];
+    const seg=`M${x-36} ${y} C${x-18} ${y} ${x-18} ${yc} ${x} ${yc} C${x+18} ${yc} ${x+18} ${y} ${x+36} ${y}`;
+    s+=`<path d="${seg}" fill="none" stroke="var(${COL[k]})" stroke-width="${v?3+v*.75:2}" stroke-linecap="round" ${v?"":'stroke-dasharray="3 5"'}/>`;
+    if(i<n-1) s+=`<line x1="${x+36}" y1="${y}" x2="${X(i+1)-36}" y2="${y}" stroke="var(${COL[k]})" stroke-width="${3+((w[i]+w[i+1])/2)*.75}" stroke-linecap="round"/>`;
+  }
+  s+=`<text x="${left-62}" text-anchor="end" y="${Y(k)+4}" font-size="12" font-weight="700" fill="var(${COL[k]})">${a.s.pt}</text>`;
+});
+// estações (períodos) — rótulo com título e projetos
+for(let i=0;i<n;i++){
+  const x=X(i);
+  s+=`<rect x="${x-14}" y="${mid-34}" width="28" height="68" rx="14" fill="#fff" stroke="#111" stroke-width="4"/>`;
+  const last=i===n-1;
+  s+=`<text x="${x}" y="${T0-30}" text-anchor="middle" font-size="13" font-weight="800">${TL_PERIODS[i]}${last?" (parcial)":""}</text>`;
+  const t=TL_TITLE.pt[i].split(" ");let l1="",l2="";t.forEach(w=>{(l1.length+w.length<18&&!l2)?l1+=(l1?" ":"")+w:l2+=(l2?" ":"")+w});
+  s+=`<text x="${x}" y="${Y(5)+48}" text-anchor="middle" font-size="13" font-weight="700">${l1}</text><text x="${x}" y="${Y(5)+64}" text-anchor="middle" font-size="13" font-weight="700">${l2}</text>`;
+  const pj=TL_PROJECTS.filter(p=>tlPeriodOf(+p.start.slice(0,4))===i).slice(0,4).map(p=>p.short);
+  pj.forEach((p,j)=>s+=`<text x="${x}" y="${Y(5)+88+j*15}" text-anchor="middle" font-size="11" fill="#555">${p}</text>`);
+}
+const svg=document.getElementById("map");svg.setAttribute("viewBox",`0 0 ${W} ${H}`);svg.innerHTML=s;
+document.getElementById("legend").innerHTML=areas.map((a,k)=>`<span><i style="background:var(${COL[k]})"></i>${a.pt}</span>`).join("");
+const li=(a,b)=>`<li><span>${a}</span><small>${b}</small></li>`;
+document.getElementById("co").innerHTML=[["HealthySystems","Interoperabilidade"],["VirtualCare","Saúde digital"],["PharmaDataHub","Medicamentos"],["Ciência e Letras","Formação"],["Opvance",""],["Nexalyse",""],["Salut.ia",""]].map(x=>li(...x)).join("");
+document.getElementById("af").innerHTML=[["FMUP / MEDCIDS","Professor Associado"],["RISE-Health","Entrepreneurship"],["e-MAIS","Presidente"],["HL7 Portugal","Normas"],["EFMI WG EDU","Educação"]].map(x=>li(...x)).join("");
+const MO=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+document.getElementById("talks").innerHTML=INTERVENTIONS.slice(0,3).map(p=>`<li><span>${p.title}<br><small style="text-align:left;display:block">${p.event}</small></span><b>${MO[+p.date.slice(5,7)-1]} ${p.date.slice(0,4)}</b></li>`).join("");
+</script>
+</body>
+</html>

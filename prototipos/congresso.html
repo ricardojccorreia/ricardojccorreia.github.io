@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo C — Programa de congresso</title>
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+:root{--t1:#1e40af;--t2:#0f766e;--t3:#475569;--t4:#b45309;--t5:#166534;--t6:#9f1239;--hi:#ffd23f}
+body{background:#fff;color:#111;font-family:var(--sans)}
+.cover{background:#111;color:#fff;padding:28px 16px 34px}
+.cover .in,.wrap{max-width:1180px;margin:0 auto}
+.cover .meta{display:flex;flex-wrap:wrap;gap:6px 22px;font:600 .82rem/1.3 var(--mono);color:var(--hi);text-transform:uppercase;letter-spacing:.06em}
+.cover h1{font:800 clamp(2.6rem,7.5vw,6rem)/.9 var(--sans);font-stretch:70%;letter-spacing:-.02em;margin:18px 0 0;max-width:14ch}
+.cover h1 em{font-style:normal;color:var(--hi)}
+.key{display:grid;grid-template-columns:120px 1fr;gap:20px;align-items:center;margin-top:28px;max-width:760px}
+.key img{width:120px;height:120px;border-radius:50%;object-fit:cover;filter:grayscale(1);border:3px solid var(--hi)}
+.key small{font:700 .75rem/1 var(--mono);color:var(--hi);letter-spacing:.08em;text-transform:uppercase}
+.key b{display:block;font:800 1.6rem/1.1 var(--sans);margin:6px 0 4px}
+.key p{margin:0;font:400 1rem/1.5 var(--serif);color:#ddd}
+.wrap{padding:0 16px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px 18px;margin:22px 0 4px;font:600 .88rem/1.2 var(--sans)}
+.tabs span{display:inline-flex;align-items:center;gap:8px}
+.tabs i{width:14px;height:14px;display:inline-block}
+.day{display:grid;grid-template-columns:150px minmax(0,1fr);border-top:3px solid #111;padding:18px 0}
+.day .when{font:800 1.5rem/1 var(--sans);font-stretch:80%}
+.day .when small{display:block;font:600 .78rem/1.3 var(--mono);color:#555;margin-top:6px;font-stretch:100%}
+.plen{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.plen b{font:800 1.4rem/1.15 var(--sans)}
+.plen span{font:700 .72rem/1 var(--mono);background:var(--hi);padding:4px 6px 3px}
+.rooms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 10px}
+.room{color:#fff;padding:10px 12px;min-height:64px}
+.room small{display:block;font:700 .7rem/1 var(--mono);opacity:.85;text-transform:uppercase;letter-spacing:.06em}
+.room b{display:block;font:700 .98rem/1.2 var(--sans);margin-top:6px}
+.room em{font:600 .82rem/1 var(--mono);font-style:normal;opacity:.9}
+.sess{display:flex;flex-wrap:wrap;gap:6px}
+.sess span{font:600 .85rem/1 var(--sans);border:1.5px solid #111;padding:6px 8px}
+.sess span.on{background:#111;color:var(--hi)}
+.side{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:28px;margin:34px 0 48px}
+.side h2{font:800 1.1rem/1.2 var(--sans);text-transform:none;letter-spacing:0;border-bottom:3px solid #111;padding-bottom:8px;margin:0 0 8px}
+.side ul{list-style:none;margin:0;padding:0}
+.side li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #ddd;font:500 .98rem/1.3 var(--sans)}
+.side small{color:#555;text-align:right}
+.badge{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;border:2px solid #111;padding:12px;margin-bottom:8px}
+.badge b{grid-column:2;font:700 1rem/1.25 var(--sans)}
+.badge span{grid-row:span 2;font:800 1.5rem/1 var(--mono);background:var(--hi);padding:8px 8px 6px}
+.badge small{grid-column:2;text-align:left}
+.proto{font:600 .8rem/1.3 var(--sans);color:#bbb;margin:0 0 14px}
+@media (max-width:760px){.day{grid-template-columns:1fr;gap:8px}.rooms{grid-template-columns:1fr}.key{grid-template-columns:80px 1fr}.key img{width:80px;height:80px}}
+</style>
+</head>
+<body>
+<header class="cover"><div class="in">
+  <p class="proto">Protótipo C · Programa de congresso — dias = períodos; salas = áreas; sessões = projetos</p>
+  <div class="meta"><span>Programa científico</span><span>2005 — 2026</span><span>Porto · FMUP / MEDCIDS</span></div>
+  <h1>Vinte anos de <em>sistemas de informação</em> em saúde</h1>
+  <div class="key"><img src="../GenAI/ricardo.jpg" alt=""><div><small>Orador principal</small><b>Ricardo Cruz-Correia</b>
+    <p>Professor Associado de Informática Médica, FMUP / MEDCIDS. Interoperabilidade, qualidade e segurança da informação e IA na saúde — com sete empresas co-fundadas.</p></div></div>
+</div></header>
+<main class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <div id="days"></div>
+  <div class="side">
+    <section><h2>Próximas sessões · intervenções</h2><div id="talks"></div></section>
+    <section><h2>Expositores · empresas co-fundadas</h2><ul id="co"></ul></section>
+    <section><h2>Organização · afiliações</h2><ul id="af"></ul></section>
+  </div>
+</main>
+<script src="../data/trajetoria.js"></script>
+<script src="../data/intervencoes.js"></script>
+<script>
+const COL=["--t1","--t2","--t3","--t4","--t5","--t6"];
+const areas=TL_AREAS.filter(a=>!a.other);
+document.getElementById("tabs").innerHTML=areas.map((a,k)=>`<span><i style="background:var(${COL[k]})"></i>Sala ${"ABCDEF"[k]} · ${a.s.pt}</span>`).join("");
+document.getElementById("days").innerHTML=TL_PERIODS.map((p,i)=>{
+  const rooms=areas.map((a,k)=>({a,k,n:a.v[i][0]})).filter(x=>x.n).sort((x,y)=>y.n-x.n).slice(0,3);
+  const pj=TL_PROJECTS.filter(x=>tlPeriodOf(+x.start.slice(0,4))===i);
+  return `<section class="day"><div class="when">Dia ${i+1}<small>${p}${i===6?" · parcial":""}<br>${TL_PUB_TOTAL[i]} comunicações</small></div><div>`+
+   `<div class="plen"><span>Plenária</span><b>${TL_TITLE.pt[i]}</b></div>`+
+   `<div class="rooms">${rooms.map(r=>`<div class="room" style="background:var(${COL[r.k]})"><small>Sala ${"ABCDEF"[r.k]}</small><b>${r.a.pt.split(" (")[0]}</b><em>${r.n} comunicações</em></div>`).join("")}</div>`+
+   `<div class="sess">${pj.map(x=>`<span class="${x.state==="ongoing"?"on":""}">${x.short}</span>`).join("")}</div></div></section>`}).join("");
+const MO=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+document.getElementById("talks").innerHTML=INTERVENTIONS.slice(0,3).map(p=>`<div class="badge"><span>${p.date.slice(8,10)}</span><b>${p.title}</b><small>${MO[+p.date.slice(5,7)-1]} ${p.date.slice(0,4)} · ${p.event}</small></div>`).join("");
+const li=(a,b)=>`<li><span>${a}</span><small>${b}</small></li>`;
+document.getElementById("co").innerHTML=[["HealthySystems","Interoperabilidade"],["VirtualCare","Saúde digital"],["PharmaDataHub","Medicamentos"],["Ciência e Letras","Formação"],["Opvance",""],["Nexalyse",""],["Salut.ia",""]].map(x=>li(...x)).join("");
+document.getElementById("af").innerHTML=[["FMUP / MEDCIDS","Professor Associado"],["RISE-Health","Entrepreneurship"],["e-MAIS","Presidente"],["HL7 Portugal","Normas"],["EFMI WG EDU","Educação"]].map(x=>li(...x)).join("");
+</script>
+</body>
+</html>

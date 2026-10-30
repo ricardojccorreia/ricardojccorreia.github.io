@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protótipo D — Timeline clínica</title>
+<style>
+/* Linguagem gráfica da skill timeline-saude (Source Sans 3, #F5F8FA, #14304A, magenta #B8205F, faixa #E2F1E8) */
+:root{--bg:#F5F8FA;--sf:#fff;--ink:#14304A;--mut:#5a6b7d;--line:#dbe3ea;--mag:#B8205F;--ref:#E2F1E8;
+  --blue:#2f6db5;--teal:#1f8a8a;--slate:#5b6b7c;--ochre:#b7801a;--green:#3f8f4f;--rust:#b4532a;--violet:#6d4aa8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.45 "Source Sans 3","Source Sans Pro",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+header.hd{background:var(--sf);border-bottom:1px solid var(--line);padding:22px 0 16px}
+.hd h1{margin:0;font-size:1.9rem;font-weight:700;letter-spacing:-.01em}
+.hd .sub{margin:2px 0 0;color:var(--mut)}
+.hd .id{display:flex;flex-wrap:wrap;gap:4px 22px;margin:10px 0 0;font-size:.88rem;color:var(--mut)}
+.hd .id b{color:var(--ink);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}
+.chip{border:1px solid var(--mag);color:var(--mag);background:#fbeef3;border-radius:999px;padding:4px 10px;font-size:.85rem;font-weight:600}
+.chip span{color:var(--ink);font-weight:400}
+.leg{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 0;font-size:.85rem;color:var(--mut);align-items:center}
+.leg i{display:inline-block;margin-right:6px;vertical-align:-1px}
+.s-c{width:10px;height:10px;border-radius:50%;background:var(--ink)}
+.s-r{width:10px;height:10px;border-radius:50%;border:2px solid var(--mag)}
+.s-d{width:9px;height:9px;background:var(--ink);transform:rotate(45deg)}
+.bar{position:sticky;top:0;z-index:3;background:var(--sf);border-bottom:1px solid var(--line)}
+.axis{position:relative;height:30px;margin-left:var(--lab)}
+.axis span{position:absolute;top:8px;transform:translateX(-50%);font-size:.78rem;color:var(--mut)}
+:root{--lab:190px}
+.card{background:var(--sf);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:6px;margin:12px 0;overflow:hidden}
+.card h2{margin:0;padding:10px 14px;font-size:1rem;font-weight:700;display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line)}
+.card h2 small{font-weight:400;color:var(--mut)}
+.row{display:grid;grid-template-columns:var(--lab) 1fr;min-height:40px;border-top:1px solid #eef2f5}
+.row:first-of-type{border-top:0}
+.row .lb{padding:10px 14px;font-size:.88rem;font-weight:600;line-height:1.2}
+.row .lb small{display:block;font-weight:400;color:var(--mut)}
+.trk{position:relative}
+.per{position:absolute;top:0;bottom:0;background:#f3f6f9}
+.pt{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:.75rem;font-weight:700}
+.dot{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;background:var(--ink);transform:translate(-50%,-50%)}
+.dot.on{background:#fff;border:2.5px solid var(--mag)}
+.dia{position:absolute;top:50%;width:10px;height:10px;background:var(--ink);transform:translate(-50%,-50%) rotate(45deg)}
+.val{position:absolute;bottom:4px;transform:translateX(-50%);font-size:.72rem;color:var(--mut)}
+.notes{padding:4px 0 8px}
+.note{display:grid;grid-template-columns:var(--lab) 1fr;padding:8px 0;border-top:1px solid #eef2f5}
+.note b{padding:0 14px;font-size:.85rem}
+.note span{font-size:.92rem;padding-right:14px}
+.foot{margin:18px 0 40px;font-size:.85rem;color:var(--mut);display:grid;gap:6px}
+.foot b{color:var(--ink)}
+.proto{font-size:.8rem;font-weight:600;color:var(--mut);margin:0 0 8px}
+.scroll{overflow-x:auto}
+.scroll>div{min-width:900px}
+@media (max-width:700px){:root{--lab:120px}}
+</style>
+</head>
+<body>
+<header class="hd"><div class="wrap">
+  <p class="proto">Protótipo D · Timeline clínica (linguagem da skill timeline-saude) — áreas = séries; projetos = episódios; intervenções = eventos</p>
+  <h1>Ricardo Cruz-Correia</h1>
+  <p class="sub">Professor Associado de Informática Médica · FMUP / MEDCIDS · Universidade do Porto — registo de I&amp;D 2005–2026</p>
+  <div class="id"><span>ORCID <b>0000-0002-3764-5158</b></span><span>Ciência Vitae <b>7F17-9F23-61E9</b></span><span>Atualizado <b>out. 2026</b></span></div>
+  <div class="chips" id="chips"></div>
+  <div class="leg"><span><i class="s-c"></i>Projeto concluído (início)</span><span><i class="s-r"></i>Projeto em curso</span><span><i class="s-d"></i>Intervenção</span><span style="color:var(--mag)">Magenta = ativo</span></div>
+</div></header>
+
+<div class="scroll"><div>
+<div class="bar"><div class="wrap"><div class="axis" id="axis"></div></div></div>
+<main class="wrap" id="cards"></main>
+</div></div>
+
+<div class="wrap foot">
+  <span><b>Fontes:</b> Ciência Vitae, ORCID (50 obras mais recentes de 283) e Universidade do Porto, set. 2026. Publicações agregadas por período; 2024–26 parcial.</span>
+  <span><b>Pendentes:</b> descrição de Opvance, Nexalyse e Salut.ia; datas de fundação das empresas; intervenções anteriores a 2026.</span>
+  <span><b>Aviso:</b> é um perfil de investigação apresentado com a linguagem de uma timeline clínica; não contém dados de saúde.</span>
+</div>
+
+<script src="../data/trajetoria.js"></script>
+<script src="../data/intervencoes.js"></script>
+<script>
+const Y0=2005,Y1=2027,X=y=>((y-Y0)/(Y1-Y0)*100).toFixed(2)+"%";
+const start=i=>i===0?2005:2009+3*(i-1), end=i=>i===0?2009:start(i)+3;
+document.getElementById("axis").innerHTML=TL_PERIODS.map((p,i)=>`<span style="left:${X((start(i)+end(i))/2)}">${p}</span>`).join("");
+const on=TL_PROJECTS.filter(p=>p.state==="ongoing");
+document.getElementById("chips").innerHTML=on.map(p=>`<span class="chip">${p.short} <span>· desde ${p.start.slice(0,4)}</span></span>`).join("");
+const shade=TL_PERIODS.map((p,i)=>i%2?`<div class="per" style="left:${X(start(i))};width:calc(${X(end(i))} - ${X(start(i))})"></div>`:"").join("");
+const COL=["--blue","--teal","--slate","--ochre","--green","--rust"];
+const areas=TL_AREAS.filter(a=>!a.other);
+const mid=i=>(start(i)+end(i))/2;
+let h="";
+// Notas de evolução: um título por período
+h+=`<section class="card" style="--c:var(--ink)"><h2>Notas de evolução <small>7 períodos</small></h2><div class="notes">${TL_PERIODS.map((p,i)=>`<div class="note"><b>${p}</b><span>${TL_TITLE.pt[i]}${i===6?" (período parcial)":""} — ${TL_KEY[i]}</span></div>`).join("")}</div></section>`;
+// Séries: publicações por área e período
+h+=`<section class="card" style="--c:var(--blue)"><h2>Publicações por área <small>valores por período</small></h2>`+
+  areas.map((a,k)=>`<div class="row"><div class="lb">${a.s.pt}<small>${a.v.reduce((s,v)=>s+v[0],0)} no total</small></div><div class="trk">${shade}`+
+  a.v.map((v,i)=>v[0]?`<span class="pt" style="left:${X(mid(i))};color:var(${COL[k]})">${"●".repeat(0)}${v[0]}</span>`:"").join("")+`</div></div>`).join("")+
+  `<div class="row"><div class="lb">Total<small>${TL_PUB_TOTAL.reduce((a,b)=>a+b,0)} publicações</small></div><div class="trk">${shade}${TL_PUB_TOTAL.map((v,i)=>`<span class="pt" style="left:${X(mid(i))}">${v}</span>`).join("")}</div></div></section>`;
+// Episódios: projetos por ano de início
+const byY={};TL_PROJECTS.forEach(p=>{const y=+p.start.slice(0,4)+(+p.start.slice(5,7)||6)/12;(byY[p.start.slice(0,4)]=byY[p.start.slice(0,4)]||[]).push([p,y])});
+const rows=[[],[],[]];Object.values(byY).forEach(l=>l.forEach(([p,y],j)=>rows[j%3].push([p,y])));
+h+=`<section class="card" style="--c:var(--mag)"><h2>Projetos de I&amp;D <small>${TL_PROJECTS.length} registos · início</small></h2>`+
+  rows.map((r,k)=>`<div class="row"><div class="lb">${k===0?"Início do projeto":""}</div><div class="trk">${shade}${r.map(([p,y])=>`<span class="dot${p.state==="ongoing"?" on":""}" style="left:${X(y)}" title="${p.start.slice(0,4)} · ${p.short} — ${p.title}"></span>`).join("")}</div></div>`).join("")+`</section>`;
+// Eventos: intervenções
+h+=`<section class="card" style="--c:var(--violet)"><h2>Intervenções <small>${INTERVENTIONS.length} registadas</small></h2><div class="row"><div class="lb">Palestras e workshops</div><div class="trk">${shade}`+
+  INTERVENTIONS.map(p=>{const y=+p.date.slice(0,4)+(+p.date.slice(5,7)-.5)/12;return `<span class="dia" style="left:${X(y)}" title="${p.date} · ${p.title} — ${p.event}"></span>`}).join("")+`</div></div></section>`;
+// Afiliações como períodos de contexto
+h+=`<section class="card" style="--c:var(--slate)"><h2>Afiliações e empresas <small>sem datas registadas</small></h2><div class="notes">`+
+  [["Académicas","FMUP / MEDCIDS (Professor Associado) · RISE-Health · e-MAIS (Presidente) · HL7 Portugal · EFMI WG EDU"],["Empresas","HealthySystems · VirtualCare · PharmaDataHub · Ciência e Letras · Opvance · Nexalyse · Salut.ia"]].map(([a,b])=>`<div class="note"><b>${a}</b><span>${b}</span></div>`).join("")+`</div></section>`;
+document.getElementById("cards").innerHTML=h;
+</script>
+</body>
+</html>
