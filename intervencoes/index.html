@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intervenções — Ricardo Cruz-Correia</title>
+<meta name="description" content="Ricardo Cruz-Correia — palestras, comunicações, aulas abertas e workshops, com slides públicos ou a pedido.">
+<link rel="preload" href="../fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/source-serif.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+.back{display:inline-flex;align-items:center;min-height:44px;font:600 .9rem/1 var(--sans);text-decoration:none}
+.back:hover{text-decoration:underline}
+.filter{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 6px}
+.filter button{min-height:44px;padding:0 14px;background:transparent;color:var(--ink);border:1px solid var(--rule);border-radius:3px;font:600 .9rem/1 var(--sans);cursor:pointer}
+.filter button[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.filter button:hover:not([aria-pressed="true"]){border-color:var(--ink)}
+.filter b{font-family:var(--mono);font-weight:600;margin-left:6px}
+.tagnote{font:500 .92rem/1.4 var(--sans);color:var(--ink-2);margin:6px 0 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tagnote button{min-height:44px;background:none;border:0;color:var(--ink);font:600 .92rem/1 var(--sans);text-decoration:underline;text-underline-offset:.2em;cursor:pointer;padding:0 4px}
+.yr{padding:22px 0 4px;border-top:2px solid var(--ink);margin-top:20px}
+.yr h2{font-size:1.4rem;letter-spacing:0;text-transform:none;font-weight:800;font-stretch:80%}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:4px 20px;padding:14px 0;border-top:1px solid var(--rule-2);align-items:baseline}
+.list li:first-child{border-top:0}
+.list .d{font:600 .85rem/1.3 var(--mono)}
+.list b{font:700 1.08rem/1.3 var(--sans);display:block}
+.list .e{display:block;font:400 1rem/1.45 var(--serif);color:var(--ink-2);margin-top:2px}
+.list .k{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.list .k span{font:500 .72rem/1 var(--mono);border:1px solid var(--rule);padding:4px 6px 3px;border-radius:2px;color:var(--ink-2)}
+.list .k span.ty{color:var(--ink);border-color:var(--ink)}
+.act{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.act a{display:inline-flex;align-items:center;min-height:44px;font:700 .92rem/1.2 var(--sans);text-decoration:none;border-bottom:2px solid var(--ink)}
+.act a:hover{color:var(--a1);border-color:var(--a1)}
+.act small{font:500 .8rem/1.3 var(--sans);color:var(--ink-2)}
+.cite{grid-column:2/-1;font:400 .88rem/1.45 var(--serif);color:var(--ink-2)}
+.cite summary{cursor:pointer;font:600 .85rem/1 var(--sans);color:var(--ink);min-height:32px;display:flex;align-items:center}
+.next{border:1px solid var(--ink);padding:16px 18px;margin:22px 0 0}
+.next h2{margin-bottom:6px}
+.empty{color:var(--ink-2);margin:18px 0}
+section.blk{padding:22px 0 8px}
+@media (max-width:720px){
+  .list li{grid-template-columns:1fr}
+  .act{align-items:flex-start}
+  .cite{grid-column:1}
+}
+</style>
+</head>
+<body>
+<header class="band">
+  <div class="in">
+    <span class="c">(19)</span>
+    <span class="who"><a href="../"><span>Ricardo Cruz-Correia</span> <span class="long">· FMUP / MEDCIDS</span></a></span>
+    <div class="ctl"><button id="lang" type="button"></button><button id="theme" type="button"></button></div>
+  </div>
+</header>
+
+<main class="sheet">
+  <div class="meta">
+    <a class="back" id="back" href="../"></a>
+    <span><span class="c">(45)</span><span data-i18n="updated"></span></span>
+  </div>
+
+  <div class="title">
+    <div>
+      <h1><span class="c">(54)</span><span data-i18n="title"></span></h1>
+      <p data-i18n="lede"></p>
+    </div>
+  </div>
+
+  <div id="upcoming"></div>
+
+  <section class="blk" aria-labelledby="regh">
+    <h2 id="regh"><span class="c">(56)</span><span data-i18n="reg"></span></h2>
+    <div class="filter" id="types" role="group"></div>
+    <div id="tagnote"></div>
+    <p class="sr" id="live" aria-live="polite"></p>
+    <div id="years"></div>
+  </section>
+</main>
+
+<footer>
+  <span>Ricardo João Cruz Correia · FMUP / MEDCIDS · Universidade do Porto</span>
+  <span><span data-i18n="contact"></span> <a href="https://pt.linkedin.com/in/ricardojccorreia">LinkedIn</a> · <a href="https://orcid.org/0000-0002-3764-5158">ORCID</a></span>
+</footer>
+
+<script src="../data/intervencoes.js"></script>
+<script src="../assets/site.js"></script>
+<script>
+const UI = {
+  pt:{back:"← Perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026", title:"Intervenções",
+      lede:"Palestras, comunicações, aulas abertas e workshops. Os slides públicos abrem diretamente; os restantes recebem-se por email depois de um pedido curto.",
+      reg:"Registo de intervenções", all:"Todas", next:"Próximas",
+      types:{invited:"Palestra convidada", talk:"Apresentação", workshop:"Workshop", lecture:"Aula aberta", panel:"Painel"},
+      open:"Abrir slides →", req:"Pedir slides →", reqNote:"Recebe por email", video:"Vídeo →", doi:"DOI →", none:"Slides não disponíveis",
+      cite:"Como citar", tag:t => `Tema: ${t}`, clear:"Mostrar todos os temas",
+      shown:n => n === 1 ? "A mostrar 1 intervenção." : `A mostrar ${n} intervenções.`, empty:"Sem intervenções com estes filtros.",
+      contact:"Contacto:", kind:{invited:"Apresentação convidada", other:"Apresentação"}},
+  en:{back:"← Ricardo Cruz-Correia's profile", updated:"Updated October 2026", title:"Talks",
+      lede:"Talks, conference presentations, open lectures and workshops. Public slides open directly; the others are sent by email after a short request.",
+      reg:"Talks register", all:"All", next:"Upcoming",
+      types:{invited:"Invited talk", talk:"Presentation", workshop:"Workshop", lecture:"Open lecture", panel:"Panel"},
+      open:"Open slides →", req:"Request slides →", reqNote:"Sent by email", video:"Video →", doi:"DOI →", none:"Slides not available",
+      cite:"How to cite", tag:t => `Topic: ${t}`, clear:"Show all topics",
+      shown:n => n === 1 ? "Showing 1 talk." : `Showing ${n} talks.`, empty:"No talks match these filters.",
+      contact:"Contact:", kind:{invited:"Invited presentation", other:"Presentation"}}
+};
+const MONTHS = {pt:["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"], en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]};
+const today = new Date().toISOString().slice(0, 10);
+const params = new URLSearchParams(location.search);
+let type = "all", tag = params.get("tema");
+
+const f = (p, k, L) => (L === "en" && p[k + "_en"]) || p[k] || "";
+const fmt = (iso, L) => { const [y, m, d] = iso.split("-"); return `${+d} ${MONTHS[L][+m - 1]} ${y}`; };
+const cite = (p, L) => f(p, "citation", L) ||
+  `Cruz-Correia, R. (${p.date.slice(0, 4)}). <i>${f(p, "title", L)}</i> [${p.type === "invited" ? UI[L].kind.invited : UI[L].kind.other}]. ${f(p, "event", L)}${f(p, "place", L) ? ", " + f(p, "place", L) : ""}.`;
+
+function row(p, L) {
+  const t = UI[L];
+  let act = "";
+  if (p.access === "public") act = `<a href="../${p.url}?lang=${L}">${t.open}</a>`;
+  else if (p.access === "form") act = `<a href="../GenAI/pedido.html?slides=${encodeURIComponent(p.id)}&lang=${L}">${t.req}</a><small>${t.reqNote}</small>`;
+  else act = `<small>${t.none}</small>`;
+  if (p.video) act += `<a href="${p.video}">${t.video}</a>`;
+  if (p.doi) act += `<a href="https://doi.org/${p.doi}">${t.doi}</a>`;
+  return `<li><span class="d">${fmt(p.date, L)}</span><div><b>${f(p, "title", L)}</b><span class="e">${f(p, "event", L)}${f(p, "place", L) ? " · " + f(p, "place", L) : ""}</span>` +
+    `<span class="k"><span class="ty">${t.types[p.type] || p.type}</span>${(p.tags || []).map(x => `<span>${L === "en" && INTERVENTION_TAGS_EN[x] || x}</span>`).join("")}</span></div>` +
+    `<div class="act">${act}</div>` +
+    (p.access !== "none" ? `<details class="cite"><summary>${t.cite}</summary>${cite(p, L)}</details>` : "") + `</li>`;
+}
+
+function render(L) {
+  const t = UI[L];
+  document.documentElement.lang = L;
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
+  const back = document.getElementById("back"); back.textContent = t.back; back.href = "../?lang=" + L;
+
+  const sorted = INTERVENTIONS.slice().sort((a, b) => b.date.localeCompare(a.date));
+  const future = sorted.filter(p => p.date > today).reverse();
+  document.getElementById("upcoming").innerHTML = future.length
+    ? `<section class="next" aria-labelledby="nh"><h2 id="nh"><span class="c">(60)</span>${t.next}</h2><ul class="list">${future.map(p => row(p, L)).join("")}</ul></section>` : "";
+
+  const past = sorted.filter(p => p.date <= today && (!tag || (p.tags || []).includes(tag)));
+  const present = [...new Set(past.map(p => p.type))];
+  document.getElementById("types").innerHTML = [["all", t.all, past.length], ...present.map(k => [k, t.types[k] || k, past.filter(p => p.type === k).length])]
+    .map(([k, l, n]) => `<button type="button" data-t="${k}" aria-pressed="${type === k}">${l}<b>${n}</b></button>`).join("");
+  document.getElementById("tagnote").innerHTML = tag ? `<p class="tagnote">${t.tag(tag)} <button type="button" id="cleartag">${t.clear}</button></p>` : "";
+
+  const list = past.filter(p => type === "all" || p.type === type);
+  const years = [...new Set(list.map(p => p.date.slice(0, 4)))];
+  document.getElementById("years").innerHTML = list.length
+    ? years.map(y => `<section class="yr" aria-labelledby="y${y}"><h2 id="y${y}">${y}</h2><ul class="list">${list.filter(p => p.date.startsWith(y)).map(p => row(p, L)).join("")}</ul></section>`).join("")
+    : `<p class="empty">${t.empty}</p>`;
+  document.getElementById("live").textContent = t.shown(list.length);
+}
+
+document.getElementById("types").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  type = b.dataset.t; render(Site.lang);
+  document.querySelector(`#types button[data-t="${type}"]`).focus();
+});
+document.getElementById("tagnote").addEventListener("click", e => {
+  if (e.target.id !== "cleartag") return;
+  tag = null; const u = new URL(location.href); u.searchParams.delete("tema"); history.replaceState(null, "", u); render(Site.lang);
+});
+
+Site.controls(render);
+render(Site.lang);
+</script>
+</body>
+</html>

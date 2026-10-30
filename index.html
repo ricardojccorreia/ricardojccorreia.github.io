@@ -66,6 +66,12 @@
       </section>
 
       <section class="f">
+        <h2><span class="c">(60)</span><span data-i18n="h60"></span></h2>
+        <ul class="talks" id="talks"></ul>
+        <a class="more" id="alltalks" href="intervencoes/"></a>
+      </section>
+
+      <section class="f">
         <h2><span class="c">(74)</span><span data-i18n="h74"></span></h2>
         <div class="prof primary">
           <a href="https://orcid.org/0000-0002-3764-5158">ORCID</a>
@@ -105,6 +111,7 @@
 </footer>
 
 <script src="data/trajetoria.js"></script>
+<script src="data/intervencoes.js"></script>
 <script src="assets/site.js"></script>
 <script>
 /* ==========================================================================
@@ -138,6 +145,7 @@ const INTERESTS = [
 ];
 
 const RELATED = [
+  {url:"intervencoes/", pt:["Intervenções","Palestras, comunicações e workshops, com slides públicos ou a pedido."], en:["Talks","Talks, presentations and workshops, with public slides or on request."]},
   {url:"historia.html", pt:["História — vinte anos em sete períodos","A trajetória contada em ecrã inteiro, período a período."], en:["Story — twenty years in seven periods","The trajectory told full-screen, period by period."]},
   {url:"trajetoria.html", pt:["Trajetória de I&D","Registo de 36 projetos e publicações por área, de 2005 a 2026."], en:["R&D trajectory","Register of 36 projects and publications by area, 2005–2026."]},
   {url:"GenAI/", pt:["IA generativa — apresentações e formação","Materiais públicos e apresentações a pedido."], en:["Generative AI — talks and training","Public materials and talks on request."]}
@@ -155,6 +163,7 @@ const UI = {
       figh:"Trajetória 2005–2026",
       figcap:"Linha: 170 publicações com data (Ciência Vitae e as 50 obras mais recentes do ORCID, que lista 283 no total); 2024–26 é parcial. Marcas: início de cada projeto de I&D; a violeta, os que estão em curso. Os números 1–7 abrem o registo de cada período.",
       more:"Ver o registo completo de projetos →", h62:"Documentos relacionados",
+      h60:"Comunicações", next:"Próxima", alltalks:"Todas as intervenções →",
       contact:"Contacto:"},
   en:{kind:"Research profile", updated:"Updated October 2026",
       role:"Associate Professor of Medical Informatics · FMUP / MEDCIDS · University of Porto",
@@ -167,6 +176,7 @@ const UI = {
       figh:"Trajectory 2005–2026",
       figcap:"Line: 170 dated publications (Ciência Vitae and the 50 most recent ORCID works; ORCID lists 283 in total); 2024–26 is partial. Marks: start of each R&D project; violet marks are ongoing. Numerals 1–7 open each period's register.",
       more:"See the full project register →", h62:"Related documents",
+      h60:"Talks", next:"Upcoming", alltalks:"All talks →",
       contact:"Contact:"}
 };
 
@@ -191,6 +201,18 @@ function render(L) {
   more.textContent = t.more; more.href = "trajetoria.html?lang=" + L;
   document.getElementById("related").innerHTML = RELATED.map(r =>
     `<li><a href="${r.url}?lang=${L}"><b>${r[L][0]}</b><span>${r[L][1]}</span></a></li>`).join("");
+  const today = new Date().toISOString().slice(0, 10), MO = L === "en"
+    ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] : ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+  const tf = (p, k) => (L === "en" && p[k + "_en"]) || p[k];
+  const byDate = INTERVENTIONS.slice().sort((a, b) => b.date.localeCompare(a.date));
+  const next = byDate.filter(p => p.date > today).reverse().slice(0, 1);
+  const recent = byDate.filter(p => p.date <= today).slice(0, 3);
+  document.getElementById("talks").innerHTML = [...next.map(p => [p, true]), ...recent.map(p => [p, false])].map(([p, up]) => {
+    const [y, m] = p.date.split("-");
+    return `<li><a href="intervencoes/?lang=${L}"><span><b>${tf(p, "title")}</b><small>${tf(p, "event")}</small></span>` +
+      `<span class="when">${up ? `<span class="stamp">${t.next}</span> ` : ""}${MO[+m - 1]} ${y}</span></a></li>`;
+  }).join("");
+  const at = document.getElementById("alltalks"); at.textContent = t.alltalks; at.href = "intervencoes/?lang=" + L;
   Site.figure(document.getElementById("fig"), L);
 }
 
