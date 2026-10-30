@@ -75,7 +75,7 @@ canvas:active{cursor:grabbing}
 <div class="end" id="end" role="dialog" aria-labelledby="endh"><div>
   <h2 id="endh" data-i18n="endh"></h2>
   <p data-i18n="endp"></p>
-  <nav><a id="e1" href="./"></a><a id="e2" href="trajetoria.html"></a><a id="e3" href="historia.html"></a><button id="again" type="button"></button></nav>
+  <nav><a id="e1" href="./"></a><a id="e2" href="trajetoria.html"></a><a id="e3" href="historia.html"></a><a id="e4" href="jogo.html"></a><button id="again" type="button"></button></nav>
 </div></div>
 
 <script src="data/trajetoria.js"></script>
@@ -94,13 +94,13 @@ const UI = {
       help:"Espaço pausa · setas avançam e recuam · arraste para percorrer",
       proj:"Projeto", ongoing:"em curso", talk:"Intervenção", partial:"parcial",
       endh:"2026 — e a seguir?", endp:"Vinte anos de sistemas de informação em saúde: da integração de dados hospitalares à IA generativa, com sete empresas pelo caminho.",
-      e1:"Perfil", e2:"Registo de projetos", e3:"História", again:"Ver outra vez", city:"Empresas co-fundadas"},
+      e1:"Perfil", e2:"Registo de projetos", e3:"História", e4:"Jogar o jogo", again:"Ver outra vez", city:"Empresas co-fundadas"},
   en:{home:"Ricardo Cruz-Correia", pubs:"Publications", projs:"Projects", talks:"Talks",
       play:"Pause", paused:"Play", back:"Back 1 year", restart:"Restart", lang:"PT", langLabel:"Mudar para português",
       help:"Space pauses · arrows move forward and back · drag to scrub",
       proj:"Project", ongoing:"ongoing", talk:"Talk", partial:"partial",
       endh:"2026 — what next?", endp:"Twenty years of health information systems: from hospital data integration to generative AI, with seven companies along the way.",
-      e1:"Profile", e2:"Project register", e3:"Story", again:"Watch again", city:"Co-founded companies"}
+      e1:"Profile", e2:"Project register", e3:"Story", e4:"Play the game", again:"Watch again", city:"Co-founded companies"}
 };
 const COMPANIES = ["HealthySystems","VirtualCare","PharmaDataHub","Ciência e Letras","Opvance","Nexalyse","Salut.ia"];
 /* Tema e cor de cada período (os mesmos da História) */
@@ -332,7 +332,7 @@ function paintUI(){
   $("back").innerHTML=ICON.back;$("back").setAttribute("aria-label",t.back);
   $("restart").innerHTML=ICON.restart;$("restart").setAttribute("aria-label",t.restart);
   $("lang").textContent=t.lang;$("lang").setAttribute("aria-label",t.langLabel);
-  $("e1").textContent=t.e1;$("e1").href="./?lang="+lang;$("e2").textContent=t.e2;$("e2").href="trajetoria.html?lang="+lang;$("e3").textContent=t.e3;$("e3").href="historia.html?lang="+lang;$("again").textContent=t.again;
+  $("e1").textContent=t.e1;$("e1").href="./?lang="+lang;$("e2").textContent=t.e2;$("e2").href="trajetoria.html?lang="+lang;$("e3").textContent=t.e3;$("e3").href="historia.html?lang="+lang;$("e4").textContent=t.e4;$("e4").href="jogo.html?lang="+lang;$("again").textContent=t.again;
 }
 const toggle=()=>{playing=!playing;paintUI()};
 $("play").onclick=toggle;
