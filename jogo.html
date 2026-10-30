@@ -46,11 +46,16 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}
 .score{display:grid;grid-template-columns:1fr auto;gap:4px 18px;margin:0 0 14px;font:500 1rem/1.4 "Archivo",sans-serif}
 .score b{font:700 1rem/1.4 "JetBrains Mono",monospace;text-align:right}
 :focus-visible{outline:2px solid #4b6bff;outline-offset:2px}
-.fire{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:calc(70px + env(safe-area-inset-bottom));min-width:96px;height:56px;border:0;border-radius:4px;background:#ff7a1a;color:#1a0b00;font:800 1rem/1 "Archivo",sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.fire{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));height:44px;padding:0 12px 0 8px;border:0;border-radius:22px;background:#ff7a1a;color:#1a0b00;font:800 .85rem/1 "Archivo",sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.fire i{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font:800 .78rem/1 "Archivo",sans-serif;font-style:normal;color:#fff;animation:spin 1.6s linear infinite}
+.fire i.c{background:#c96442}.fire i.g{background:#10a37f}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:1100px){.fire{bottom:calc(70px + env(safe-area-inset-bottom))}}
+@media (prefers-reduced-motion:reduce){.fire i{animation:none}}
 .fire[hidden]{display:none}
 .fire:disabled{background:#7a5a44;color:#e8d8cc}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (max-width:700px){.fire{bottom:calc(150px + env(safe-area-inset-bottom));min-width:110px;height:64px}.hud{flex-wrap:wrap}.stats{order:5;width:100%;grid-template-columns:repeat(3,1fr)}.stats div{min-width:0;font-size:.72rem;padding:5px 7px}.year b{font-size:2rem}.home{font-size:.8rem;padding:0 8px}}
+@media (max-width:700px){.fire{bottom:calc(84px + env(safe-area-inset-bottom))}.hud{flex-wrap:wrap}.stats{order:5;width:100%;grid-template-columns:repeat(3,1fr)}.stats div{min-width:0;font-size:.72rem;padding:5px 7px}.year b{font-size:2rem}.home{font-size:.8rem;padding:0 8px}}
 </style>
 </head>
 <body>
@@ -69,7 +74,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}
   <button class="ctlb" id="pause" type="button">II</button>
   <button class="ctlb" id="lang" type="button"></button>
 </header>
-<button class="fire" id="fire" type="button" hidden>GenAI</button>
+<button class="fire" id="fire" type="button" hidden><i id="fireIcon" class="c" aria-hidden="true">C</i><span>Fire GenAI</span></button>
 <div class="banner" id="banner" aria-hidden="true"></div>
 <div class="ticker" id="ticker" aria-hidden="true"></div>
 <p class="sr" id="live" aria-live="polite"></p>
@@ -252,12 +257,12 @@ function paperStack(x, o){
 }
 
 /* ---------- estado ---------- */
-let shots = [], burns = [], fireCd = 0, nFired = 0, genaiOn = false;
+let shotKind = 0, shots = [], burns = [], fireCd = 0, nFired = 0, genaiOn = false;
 const GENAI_YEAR = 2023;
 let startYear = +(store.get("jogo_ano") || T0); if (!(startYear >= T0 && startYear <= 2026)) startYear = T0;
 let x, vy, hy, playing = false, paused = false, last = 0, step = 0, slow = 0, trip = 0, score, nClear, nHit, nSaved, maxKg, nextPaper, cIdx, rIdx, lastT;
 function reset(){
-  shots = []; burns = []; fireCd = 0; nFired = 0; genaiOn = false; $("fire").hidden = true;
+  shotKind = 0; shots = []; burns = []; fireCd = 0; nFired = 0; genaiOn = false; $("fire").hidden = true;
   x = 0; vy = 0; hy = 0; step = 0; slow = 0; trip = 0; score = 0; nClear = 0; nHit = 0; nSaved = 0; maxKg = 0; nextPaper = 0; lastT = T0;
   papers.forEach(p => p.state = 0); helpers.forEach(h => { h.lastBlock = -9; h.announced = false; });
   companies.forEach(c => c.shown = c.t !== null && c.t < T0); roles.forEach(r => r.shown = r.from < T0 + .01);
@@ -281,7 +286,9 @@ function jump(){
 // GenAI: um disparo de cada vez, que segue à frente e queima o primeiro paper que encontra
 function fire(){
   if (!playing || paused || !genaiOn || fireCd > 0) return;
-  shots.push({x: x + 30, y: hy + 95, d: 0}); fireCd = 1;
+  shots.push({x: x + 30, y: hy + 40, d: 0, k: shotKind}); fireCd = 1;
+  shotKind = 1 - shotKind;                      // alterna: Claude, ChatGPT, Claude…
+  const ic = $("fireIcon"); ic.className = shotKind ? "g" : "c"; ic.textContent = shotKind ? "G" : "C";
 }
 const jumpFactor = kg => Math.max(.56, Math.min(1, 1 - (kg - 72) / 110));
 
@@ -358,9 +365,13 @@ function draw(){
   for (let i = Math.max(0, nextPaper - 6); i < papers.length; i++) { const p = papers[i], sx = p.x - x + hx; if (sx > W + 60) break; if (sx > -60 && p.state === 0 || sx > -60 && p.state === 2) paperStack(sx, p); }
   // fogo GenAI e chamas dos papers eliminados
   shots.forEach(sh => { const sx = sh.x - x + hx, sy = ground - sh.y;
-    const g2 = ctx.createRadialGradient(sx, sy, 2, sx, sy, 18); g2.addColorStop(0, "#fff6c2"); g2.addColorStop(.45, "#ffb21a"); g2.addColorStop(1, "rgba(255,80,0,0)");
-    ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(sx, sy, 18, 0, 7); ctx.fill();
-    ctx.fillStyle = "rgba(255,140,30,.45)"; ctx.beginPath(); ctx.ellipse(sx - 22, sy, 20, 6, 0, 0, 7); ctx.fill(); });
+    const g2 = ctx.createRadialGradient(sx - 18, sy, 2, sx - 18, sy, 26); g2.addColorStop(0, "rgba(255,200,60,.9)"); g2.addColorStop(1, "rgba(255,80,0,0)");
+    ctx.fillStyle = g2; ctx.beginPath(); ctx.ellipse(sx - 22, sy, 30, 12, 0, 0, 7); ctx.fill();
+    ctx.save(); ctx.translate(sx, sy); ctx.rotate(sh.d / 40);
+    ctx.fillStyle = sh.k ? "#10a37f" : "#c96442"; ctx.beginPath(); ctx.arc(0, 0, 15, 0, 7); ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = "#fff"; ctx.font = "800 15px Archivo, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(sh.k ? "G" : "C", 0, 1);
+    ctx.restore(); ctx.textBaseline = "alphabetic"; });
   burns.forEach(b => { const sx = b.x - x + hx, k = b.t / .6;
     ctx.globalAlpha = 1 - k; ctx.fillStyle = "#ff7a1a";
     for (let j = 0; j < 5; j++) { ctx.beginPath(); ctx.arc(sx - 12 + j * 6, ground - b.h * (1 - k) - j * 4 * k * 10 % 30, 7 + 4 * Math.sin(j + b.t * 20), 0, 7); ctx.fill(); }
