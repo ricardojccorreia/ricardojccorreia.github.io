@@ -66,14 +66,14 @@ const Site = (() => {
     Object.keys(byYear).sort().forEach(y => byYear[y].forEach((p, j, list) => cb(p, +y, j, list.length, k++)));
   }
   const tick = (p, x1, y1, x2, y2, k) =>
-    `<line class="tk${p.state === "ongoing" ? "" : " done"}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" style="--d:${(k * 0.02).toFixed(2)}s"><title>${p.start.slice(0, 4)} · ${p.short}</title></line>`;
+    `<line class="tk${p.state === "ongoing" ? "" : " done"}" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"><title>${p.start.slice(0, 4)} · ${p.short}</title></line>`;
 
   function draw(svg, L, opts) {
     const n = TL_PERIODS.length, last = n - 1;
     const start = i => i === 0 ? 2005 : 2009 + 3 * (i - 1), span = i => i === 0 ? 4 : 3;
     const href = i => (opts.local ? "" : "trajetoria.html") + `?lang=${L}#p${i}`;
     const partial = L === "en" ? "partial" : "parcial";
-    const num = (i, x, y) => `<a href="${href(i)}" class="nm" aria-label="${TL_PERIODS[i]} — ${TL_TITLE[L][i]}"><circle cx="${x}" cy="${y}" r="14"/><text x="${x}" y="${y + 5}" text-anchor="middle">${i + 1}</text></a>`;
+    const num = (i, x, y) => `<a href="${href(i)}" class="nm" aria-label="${TL_PERIODS[i]} — ${TL_TITLE[L][i]}"><circle cx="${x}" cy="${y}" r="22" style="fill:transparent;stroke:none"/><circle cx="${x}" cy="${y}" r="14"/><text x="${x}" y="${y + 5}" text-anchor="middle">${i + 1}</text></a>`;
     const maxP = Math.max(...TL_PUB_TOTAL) * 1.08;
     let s = "", W, H, len = 0, d = "", dl = "";
 
@@ -105,7 +105,7 @@ const Site = (() => {
       const pts = TL_PUB_TOTAL.map((v, i) => [cx(i), py(v)]);
       d = pts.slice(0, last).map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
       for (let i = 1; i < last; i++) len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
-      s += `<path class="pl" d="${d}" style="--len:${Math.ceil(len)}"/>`;
+      s += `<path class="pl" d="${d}"/>`;
       s += `<path class="pl part" d="M${pts[last - 1].join(" ")} L${pts[last].join(" ")}"/>`;
       pts.forEach(([x, y], i) => {
         s += `<line class="ld" x1="${x}" y1="${top - 26}" x2="${x}" y2="${y - 7}"/>`;

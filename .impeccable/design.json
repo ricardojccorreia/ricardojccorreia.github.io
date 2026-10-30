@@ -1,0 +1,893 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-30T13:48:56+00:00",
+  "title": "Design System: Ricardo Cruz-Correia",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Sheet White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 90)",
+          "oklch(26% 0.000 90)",
+          "oklch(38% 0.000 90)",
+          "oklch(49% 0.000 90)",
+          "oklch(61% 0.000 90)",
+          "oklch(72% 0.000 90)",
+          "oklch(84% 0.000 90)",
+          "oklch(95% 0.000 90)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Press Ink",
+        "canonical": "#12151b",
+        "tonalRamp": [
+          "oklch(15% 0.005 264)",
+          "oklch(26% 0.008 264)",
+          "oklch(38% 0.010 264)",
+          "oklch(49% 0.012 264)",
+          "oklch(61% 0.012 264)",
+          "oklch(72% 0.010 264)",
+          "oklch(84% 0.008 264)",
+          "oklch(95% 0.005 264)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Secondary Ink",
+        "canonical": "#414857",
+        "tonalRamp": [
+          "oklch(15% 0.011 265)",
+          "oklch(26% 0.016 265)",
+          "oklch(38% 0.020 265)",
+          "oklch(49% 0.025 265)",
+          "oklch(61% 0.025 265)",
+          "oklch(72% 0.020 265)",
+          "oklch(84% 0.016 265)",
+          "oklch(95% 0.011 265)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Field Rule",
+        "canonical": "#c4cad6",
+        "tonalRamp": [
+          "oklch(15% 0.008 264)",
+          "oklch(26% 0.010 264)",
+          "oklch(38% 0.013 264)",
+          "oklch(49% 0.016 264)",
+          "oklch(61% 0.016 264)",
+          "oklch(72% 0.013 264)",
+          "oklch(84% 0.010 264)",
+          "oklch(95% 0.008 264)"
+        ]
+      },
+      "rule-2": {
+        "role": "neutral",
+        "displayName": "Row Rule",
+        "canonical": "#e3e7ee",
+        "tonalRamp": [
+          "oklch(15% 0.004 262)",
+          "oklch(26% 0.006 262)",
+          "oklch(38% 0.008 262)",
+          "oklch(49% 0.010 262)",
+          "oklch(61% 0.010 262)",
+          "oklch(72% 0.008 262)",
+          "oklch(84% 0.006 262)",
+          "oklch(95% 0.004 262)"
+        ]
+      },
+      "ink-blue": {
+        "role": "primary",
+        "displayName": "Bibliographic Ink Blue",
+        "canonical": "#1b2f8f",
+        "tonalRamp": [
+          "oklch(15% 0.067 268)",
+          "oklch(26% 0.093 268)",
+          "oklch(38% 0.120 268)",
+          "oklch(49% 0.146 268)",
+          "oklch(61% 0.146 268)",
+          "oklch(72% 0.120 268)",
+          "oklch(84% 0.093 268)",
+          "oklch(95% 0.067 268)"
+        ]
+      },
+      "ink-blue-on": {
+        "role": "neutral",
+        "displayName": "Band Text White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 90)",
+          "oklch(26% 0.000 90)",
+          "oklch(38% 0.000 90)",
+          "oklch(49% 0.000 90)",
+          "oklch(61% 0.000 90)",
+          "oklch(72% 0.000 90)",
+          "oklch(84% 0.000 90)",
+          "oklch(95% 0.000 90)"
+        ]
+      },
+      "blue-soft": {
+        "role": "neutral",
+        "displayName": "Blue Wash",
+        "canonical": "#eef1fb",
+        "tonalRamp": [
+          "oklch(15% 0.006 273)",
+          "oklch(26% 0.008 273)",
+          "oklch(38% 0.010 273)",
+          "oklch(49% 0.013 273)",
+          "oklch(61% 0.013 273)",
+          "oklch(72% 0.010 273)",
+          "oklch(84% 0.008 273)",
+          "oklch(95% 0.006 273)"
+        ]
+      },
+      "stamp": {
+        "role": "secondary",
+        "displayName": "Date-Stamp Violet",
+        "canonical": "#6a2bb0",
+        "tonalRamp": [
+          "oklch(15% 0.082 300)",
+          "oklch(26% 0.115 300)",
+          "oklch(38% 0.147 300)",
+          "oklch(49% 0.180 300)",
+          "oklch(61% 0.180 300)",
+          "oklch(72% 0.147 300)",
+          "oklch(84% 0.115 300)",
+          "oklch(95% 0.082 300)"
+        ]
+      },
+      "stamp-soft": {
+        "role": "secondary",
+        "displayName": "Stamp Tint",
+        "canonical": "#f3ecfb",
+        "tonalRamp": [
+          "oklch(15% 0.009 307)",
+          "oklch(26% 0.012 307)",
+          "oklch(38% 0.016 307)",
+          "oklch(49% 0.019 307)",
+          "oklch(61% 0.019 307)",
+          "oklch(72% 0.016 307)",
+          "oklch(84% 0.012 307)",
+          "oklch(95% 0.009 307)"
+        ]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Focus Ink Blue",
+        "canonical": "#1b2f8f",
+        "tonalRamp": [
+          "oklch(15% 0.067 268)",
+          "oklch(26% 0.093 268)",
+          "oklch(38% 0.120 268)",
+          "oklch(49% 0.146 268)",
+          "oklch(61% 0.146 268)",
+          "oklch(72% 0.120 268)",
+          "oklch(84% 0.093 268)",
+          "oklch(95% 0.067 268)"
+        ]
+      },
+      "selection": {
+        "role": "neutral",
+        "displayName": "Selection Blue",
+        "canonical": "#d6defa",
+        "tonalRamp": [
+          "oklch(15% 0.016 273)",
+          "oklch(26% 0.023 273)",
+          "oklch(38% 0.030 273)",
+          "oklch(49% 0.036 273)",
+          "oklch(61% 0.036 273)",
+          "oklch(72% 0.030 273)",
+          "oklch(84% 0.023 273)",
+          "oklch(95% 0.016 273)"
+        ]
+      },
+      "area-1-interop": {
+        "role": "tertiary",
+        "displayName": "Area 1 · Interoperability",
+        "canonical": "#1b2f8f",
+        "tonalRamp": [
+          "oklch(15% 0.067 268)",
+          "oklch(26% 0.093 268)",
+          "oklch(38% 0.120 268)",
+          "oklch(49% 0.146 268)",
+          "oklch(61% 0.146 268)",
+          "oklch(72% 0.120 268)",
+          "oklch(84% 0.093 268)",
+          "oklch(95% 0.067 268)"
+        ]
+      },
+      "area-2-quality": {
+        "role": "tertiary",
+        "displayName": "Area 2 · Quality",
+        "canonical": "#0d6b77",
+        "tonalRamp": [
+          "oklch(15% 0.034 209)",
+          "oklch(26% 0.047 209)",
+          "oklch(38% 0.060 209)",
+          "oklch(49% 0.074 209)",
+          "oklch(61% 0.074 209)",
+          "oklch(72% 0.060 209)",
+          "oklch(84% 0.047 209)",
+          "oklch(95% 0.034 209)"
+        ]
+      },
+      "area-3-security": {
+        "role": "tertiary",
+        "displayName": "Area 3 · Security",
+        "canonical": "#4a5568",
+        "tonalRamp": [
+          "oklch(15% 0.014 261)",
+          "oklch(26% 0.020 261)",
+          "oklch(38% 0.026 261)",
+          "oklch(49% 0.031 261)",
+          "oklch(61% 0.031 261)",
+          "oklch(72% 0.026 261)",
+          "oklch(84% 0.020 261)",
+          "oklch(95% 0.014 261)"
+        ]
+      },
+      "area-4-ai": {
+        "role": "tertiary",
+        "displayName": "Area 4 · AI",
+        "canonical": "#8a5a00",
+        "tonalRamp": [
+          "oklch(15% 0.045 73)",
+          "oklch(26% 0.063 73)",
+          "oklch(38% 0.081 73)",
+          "oklch(49% 0.099 73)",
+          "oklch(61% 0.099 73)",
+          "oklch(72% 0.081 73)",
+          "oklch(84% 0.063 73)",
+          "oklch(95% 0.045 73)"
+        ]
+      },
+      "area-5-education": {
+        "role": "tertiary",
+        "displayName": "Area 5 · Education",
+        "canonical": "#2f6b2a",
+        "tonalRamp": [
+          "oklch(15% 0.048 142)",
+          "oklch(26% 0.068 142)",
+          "oklch(38% 0.087 142)",
+          "oklch(49% 0.106 142)",
+          "oklch(61% 0.106 142)",
+          "oklch(72% 0.087 142)",
+          "oklch(84% 0.068 142)",
+          "oklch(95% 0.048 142)"
+        ]
+      },
+      "area-6-devices": {
+        "role": "tertiary",
+        "displayName": "Area 6 · Devices",
+        "canonical": "#a3203a",
+        "tonalRamp": [
+          "oklch(15% 0.069 16)",
+          "oklch(26% 0.097 16)",
+          "oklch(38% 0.124 16)",
+          "oklch(49% 0.152 16)",
+          "oklch(61% 0.152 16)",
+          "oklch(72% 0.124 16)",
+          "oklch(84% 0.097 16)",
+          "oklch(95% 0.069 16)"
+        ]
+      },
+      "area-7-other": {
+        "role": "tertiary",
+        "displayName": "Area 7 · Other",
+        "canonical": "#8f96a3",
+        "tonalRamp": [
+          "oklch(15% 0.009 263)",
+          "oklch(26% 0.012 263)",
+          "oklch(38% 0.016 263)",
+          "oklch(49% 0.019 263)",
+          "oklch(61% 0.019 263)",
+          "oklch(72% 0.016 263)",
+          "oklch(84% 0.012 263)",
+          "oklch(95% 0.009 263)"
+        ]
+      },
+      "cyanotype-paper": {
+        "role": "neutral",
+        "displayName": "Cyanotype Sheet White",
+        "canonical": "#0b1a42",
+        "tonalRamp": [
+          "oklch(15% 0.033 265)",
+          "oklch(26% 0.046 265)",
+          "oklch(38% 0.059 265)",
+          "oklch(49% 0.072 265)",
+          "oklch(61% 0.072 265)",
+          "oklch(72% 0.059 265)",
+          "oklch(84% 0.046 265)",
+          "oklch(95% 0.033 265)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-ink": {
+        "role": "neutral",
+        "displayName": "Cyanotype Press Ink",
+        "canonical": "#eef2ff",
+        "tonalRamp": [
+          "oklch(15% 0.007 272)",
+          "oklch(26% 0.010 272)",
+          "oklch(38% 0.013 272)",
+          "oklch(49% 0.016 272)",
+          "oklch(61% 0.016 272)",
+          "oklch(72% 0.013 272)",
+          "oklch(84% 0.010 272)",
+          "oklch(95% 0.007 272)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-ink-2": {
+        "role": "neutral",
+        "displayName": "Cyanotype Secondary Ink",
+        "canonical": "#bcc6e8",
+        "tonalRamp": [
+          "oklch(15% 0.020 272)",
+          "oklch(26% 0.029 272)",
+          "oklch(38% 0.037 272)",
+          "oklch(49% 0.045 272)",
+          "oklch(61% 0.045 272)",
+          "oklch(72% 0.037 272)",
+          "oklch(84% 0.029 272)",
+          "oklch(95% 0.020 272)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-rule": {
+        "role": "neutral",
+        "displayName": "Cyanotype Field Rule",
+        "canonical": "#3d5296",
+        "tonalRamp": [
+          "oklch(15% 0.048 269)",
+          "oklch(26% 0.066 269)",
+          "oklch(38% 0.085 269)",
+          "oklch(49% 0.104 269)",
+          "oklch(61% 0.104 269)",
+          "oklch(72% 0.085 269)",
+          "oklch(84% 0.066 269)",
+          "oklch(95% 0.048 269)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-rule-2": {
+        "role": "neutral",
+        "displayName": "Cyanotype Row Rule",
+        "canonical": "#22356f",
+        "tonalRamp": [
+          "oklch(15% 0.043 267)",
+          "oklch(26% 0.060 267)",
+          "oklch(38% 0.078 267)",
+          "oklch(49% 0.095 267)",
+          "oklch(61% 0.095 267)",
+          "oklch(72% 0.078 267)",
+          "oklch(84% 0.060 267)",
+          "oklch(95% 0.043 267)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-band": {
+        "role": "primary",
+        "displayName": "Cyanotype Bibliographic Ink Blue",
+        "canonical": "#08133a",
+        "tonalRamp": [
+          "oklch(15% 0.032 267)",
+          "oklch(26% 0.045 267)",
+          "oklch(38% 0.058 267)",
+          "oklch(49% 0.071 267)",
+          "oklch(61% 0.071 267)",
+          "oklch(72% 0.058 267)",
+          "oklch(84% 0.045 267)",
+          "oklch(95% 0.032 267)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-blue-soft": {
+        "role": "neutral",
+        "displayName": "Cyanotype Blue Wash",
+        "canonical": "#132a66",
+        "tonalRamp": [
+          "oklch(15% 0.046 265)",
+          "oklch(26% 0.064 265)",
+          "oklch(38% 0.082 265)",
+          "oklch(49% 0.101 265)",
+          "oklch(61% 0.101 265)",
+          "oklch(72% 0.082 265)",
+          "oklch(84% 0.064 265)",
+          "oklch(95% 0.046 265)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-stamp": {
+        "role": "secondary",
+        "displayName": "Cyanotype Date-Stamp Violet",
+        "canonical": "#d9bcff",
+        "tonalRamp": [
+          "oklch(15% 0.040 304)",
+          "oklch(26% 0.056 304)",
+          "oklch(38% 0.073 304)",
+          "oklch(49% 0.089 304)",
+          "oklch(61% 0.089 304)",
+          "oklch(72% 0.073 304)",
+          "oklch(84% 0.056 304)",
+          "oklch(95% 0.040 304)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-stamp-soft": {
+        "role": "secondary",
+        "displayName": "Cyanotype Stamp Tint",
+        "canonical": "#2a2366",
+        "tonalRamp": [
+          "oklch(15% 0.047 282)",
+          "oklch(26% 0.066 282)",
+          "oklch(38% 0.085 282)",
+          "oklch(49% 0.104 282)",
+          "oklch(61% 0.104 282)",
+          "oklch(72% 0.085 282)",
+          "oklch(84% 0.066 282)",
+          "oklch(95% 0.047 282)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-focus": {
+        "role": "primary",
+        "displayName": "Cyanotype Focus Ink Blue",
+        "canonical": "#9fb6ff",
+        "tonalRamp": [
+          "oklch(15% 0.045 270)",
+          "oklch(26% 0.063 270)",
+          "oklch(38% 0.081 270)",
+          "oklch(49% 0.099 270)",
+          "oklch(61% 0.099 270)",
+          "oklch(72% 0.081 270)",
+          "oklch(84% 0.063 270)",
+          "oklch(95% 0.045 270)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-selection": {
+        "role": "neutral",
+        "displayName": "Cyanotype Selection Blue",
+        "canonical": "#2b4596",
+        "tonalRamp": [
+          "oklch(15% 0.057 267)",
+          "oklch(26% 0.080 267)",
+          "oklch(38% 0.103 267)",
+          "oklch(49% 0.125 267)",
+          "oklch(61% 0.125 267)",
+          "oklch(72% 0.103 267)",
+          "oklch(84% 0.080 267)",
+          "oklch(95% 0.057 267)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-area-1": {
+        "role": "tertiary",
+        "displayName": "Cyanotype Area 1 · Interoperability",
+        "canonical": "#7f9cff",
+        "tonalRamp": [
+          "oklch(15% 0.062 270)",
+          "oklch(26% 0.087 270)",
+          "oklch(38% 0.111 270)",
+          "oklch(49% 0.136 270)",
+          "oklch(61% 0.136 270)",
+          "oklch(72% 0.111 270)",
+          "oklch(84% 0.087 270)",
+          "oklch(95% 0.062 270)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-area-2": {
+        "role": "tertiary",
+        "displayName": "Cyanotype Area 2 · Quality",
+        "canonical": "#3fc1cf",
+        "tonalRamp": [
+          "oklch(15% 0.047 205)",
+          "oklch(26% 0.065 205)",
+          "oklch(38% 0.084 205)",
+          "oklch(49% 0.102 205)",
+          "oklch(61% 0.102 205)",
+          "oklch(72% 0.084 205)",
+          "oklch(84% 0.065 205)",
+          "oklch(95% 0.047 205)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-area-3": {
+        "role": "tertiary",
+        "displayName": "Cyanotype Area 3 · Security",
+        "canonical": "#8c99ad",
+        "tonalRamp": [
+          "oklch(15% 0.014 259)",
+          "oklch(26% 0.019 259)",
+          "oklch(38% 0.025 259)",
+          "oklch(49% 0.030 259)",
+          "oklch(61% 0.030 259)",
+          "oklch(72% 0.025 259)",
+          "oklch(84% 0.019 259)",
+          "oklch(95% 0.014 259)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-area-4": {
+        "role": "tertiary",
+        "displayName": "Cyanotype Area 4 · AI",
+        "canonical": "#f0c46a",
+        "tonalRamp": [
+          "oklch(15% 0.050 84)",
+          "oklch(26% 0.070 84)",
+          "oklch(38% 0.090 84)",
+          "oklch(49% 0.110 84)",
+          "oklch(61% 0.110 84)",
+          "oklch(72% 0.090 84)",
+          "oklch(84% 0.070 84)",
+          "oklch(95% 0.050 84)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-area-5": {
+        "role": "tertiary",
+        "displayName": "Cyanotype Area 5 · Education",
+        "canonical": "#9fdb8f",
+        "tonalRamp": [
+          "oklch(15% 0.050 139)",
+          "oklch(26% 0.070 139)",
+          "oklch(38% 0.090 139)",
+          "oklch(49% 0.110 139)",
+          "oklch(61% 0.110 139)",
+          "oklch(72% 0.090 139)",
+          "oklch(84% 0.070 139)",
+          "oklch(95% 0.050 139)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-area-6": {
+        "role": "tertiary",
+        "displayName": "Cyanotype Area 6 · Devices",
+        "canonical": "#ff9fb1",
+        "tonalRamp": [
+          "oklch(15% 0.048 8)",
+          "oklch(26% 0.068 8)",
+          "oklch(38% 0.087 8)",
+          "oklch(49% 0.106 8)",
+          "oklch(61% 0.106 8)",
+          "oklch(72% 0.087 8)",
+          "oklch(84% 0.068 8)",
+          "oklch(95% 0.048 8)"
+        ],
+        "theme": "dark"
+      },
+      "cyanotype-area-7": {
+        "role": "tertiary",
+        "displayName": "Cyanotype Area 7 · Other",
+        "canonical": "#a9b2c8",
+        "tonalRamp": [
+          "oklch(15% 0.014 268)",
+          "oklch(26% 0.019 268)",
+          "oklch(38% 0.025 268)",
+          "oklch(49% 0.030 268)",
+          "oklch(61% 0.030 268)",
+          "oklch(72% 0.025 268)",
+          "oklch(84% 0.019 268)",
+          "oklch(95% 0.014 268)"
+        ],
+        "theme": "dark"
+      }
+    },
+    "themes": {
+      "light": {
+        "selector": ":root"
+      },
+      "cyanotype": {
+        "selector": ":root[data-theme=\"dark\"], @media (prefers-color-scheme:dark) :root:not([data-theme=\"light\"])",
+        "note": "Every token redefined; same sheet printed in blue."
+      }
+    },
+    "cssVariables": {
+      "paper": "--paper / --sheet",
+      "ink": "--ink",
+      "ink-2": "--ink-2",
+      "rule": "--rule",
+      "rule-2": "--rule-2",
+      "ink-blue": "--blue",
+      "ink-blue-on": "--blue-ink",
+      "blue-soft": "--blue-soft",
+      "stamp": "--stamp",
+      "stamp-soft": "--stamp-soft",
+      "focus": "--focus",
+      "selection": "--sel",
+      "area-1..7": "--a1..--a7"
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (condensed name)",
+        "purpose": "(11) name / (54) page title only; one per page."
+      },
+      "figure-stat": {
+        "displayName": "Bibliographic figure",
+        "purpose": "(21)–(24) figures on the trajectory page."
+      },
+      "headline": {
+        "displayName": "Period headline",
+        "purpose": "Register period headings, preceded by the period in mono."
+      },
+      "subtitle": {
+        "displayName": "Role line",
+        "purpose": "Role / claim under the display."
+      },
+      "field-heading": {
+        "displayName": "Field heading",
+        "purpose": "Every h2, uppercase, with the INID code inline."
+      },
+      "title": {
+        "displayName": "List name",
+        "purpose": "Names of companies, affiliations, projects, references."
+      },
+      "body": {
+        "displayName": "Reading text",
+        "purpose": "Source Serif reading column, descriptions, captions."
+      },
+      "abstract": {
+        "displayName": "Abstract",
+        "purpose": "(57) abstract only, max 62ch."
+      },
+      "field-code": {
+        "displayName": "Field code (mono)",
+        "purpose": "INID codes, Fig. labels, refs, years, periods, counts."
+      },
+      "stamp": {
+        "displayName": "Stamp",
+        "purpose": "Ongoing stamp only."
+      }
+    },
+    "fonts": [
+      {
+        "family": "Archivo",
+        "file": "fonts/archivo.woff2",
+        "axes": "wght 100–900, wdth 62–125",
+        "license": "OFL-1.1"
+      },
+      {
+        "family": "Source Serif 4",
+        "file": "fonts/source-serif.woff2 + source-serif-italic.woff2",
+        "axes": "wght 200–900",
+        "license": "OFL-1.1"
+      },
+      {
+        "family": "JetBrains Mono",
+        "file": "fonts/jetbrains-mono.woff2",
+        "axes": "wght 100–800",
+        "license": "OFL-1.1"
+      }
+    ],
+    "rules": [
+      {
+        "name": "rule-open",
+        "value": "2px solid var(--ink)",
+        "purpose": "Opens a sheet (meta line) or a register period; table head/foot."
+      },
+      {
+        "name": "rule-field",
+        "value": "1px solid var(--rule)",
+        "purpose": "Between fields and sections; vertical field divider."
+      },
+      {
+        "name": "rule-row",
+        "value": "1px solid var(--rule-2)",
+        "purpose": "Between rows in lists, registers, table cells."
+      }
+    ],
+    "shadows": [
+      {
+        "name": "sticky-hairline",
+        "value": "1px 0 0 var(--rule-2)",
+        "purpose": "Zero-blur hairline on the sticky heat-table column. Not elevation."
+      },
+      {
+        "name": "target-bleed",
+        "value": "-6px 0 0 var(--blue-soft), 6px 0 0 var(--blue-soft)",
+        "purpose": "Flat side bleed of the blue wash behind a :target period heading. Not elevation."
+      }
+    ],
+    "motion": [
+      {
+        "name": "numeral-fill",
+        "value": "fill .25s cubic-bezier(.16,1,.3,1)",
+        "purpose": "Fig. 1 numeral hover/focus fill; only under prefers-reduced-motion: no-preference. Nothing starts hidden."
+      }
+    ],
+    "focus": {
+      "value": "outline:2px solid var(--focus); outline-offset:3px; border-radius:2px",
+      "band": "outline-color:#fff"
+    },
+    "figure": {
+      "horizontal": {
+        "minWidth": "761px",
+        "viewBox": "0 0 1000 300",
+        "line": "2px round-join",
+        "axis": "1.25px",
+        "grid": "1px dashed 2 4",
+        "point": "r 4.5 hollow",
+        "numeral": "r 14 on 1px leader",
+        "partial": "dash 5 4 + label 'parcial/partial'"
+      },
+      "vertical": {
+        "maxWidth": "760px",
+        "viewBoxWidth": 360,
+        "rowHeight": 74,
+        "bar": "6px",
+        "partial": "dash 4 3 + label in period text"
+      },
+      "ticks": {
+        "ongoing": "2px var(--stamp)",
+        "closed": "1.25px currentColor at 55%"
+      },
+      "heat": "color-mix(in srgb, var(--a1) 6–40%, var(--sheet))"
+    },
+    "breakpoints": [
+      {
+        "name": "fields-stack",
+        "value": "820px"
+      },
+      {
+        "name": "figure-vertical",
+        "value": "760px"
+      },
+      {
+        "name": "register-reflow",
+        "value": "720px"
+      }
+    ],
+    "layout": {
+      "maxWidth": "1120px",
+      "gutter": "16px",
+      "fieldsGrid": "5fr 7fr, 32px either side of 1px rule",
+      "minTapTarget": "44px"
+    }
+  },
+  "components": [
+    {
+      "name": "Masthead Band",
+      "kind": "nav",
+      "refersTo": "masthead-band",
+      "description": "Ink-blue bibliographic band: (19) code, institution, PT/EN and theme controls (44px).",
+      "html": "<header class=\"ds-band\"><span class=\"ds-c\">(19)</span><span class=\"ds-who\">Universidade do Porto · FMUP / MEDCIDS</span><span class=\"ds-ctl\"><button type=\"button\" class=\"ds-ctl-btn\">EN</button><button type=\"button\" class=\"ds-ctl-btn\" aria-label=\"Tema escuro\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z\"/></svg></button></span></header>",
+      "css": ".ds-band{--sans:\"Archivo\",system-ui,sans-serif;--serif:\"Source Serif 4\",Georgia,serif;--mono:\"JetBrains Mono\",ui-monospace,monospace;background:var(--blue,#1b2f8f);color:var(--blue-ink,#fff);display:flex;align-items:center;gap:16px;min-height:56px;padding:0 16px}.ds-band .ds-c{font:500 .78rem/1 var(--mono);opacity:.8}.ds-who{flex:1;font:600 .9rem/1.2 var(--sans);letter-spacing:.01em}.ds-ctl{display:flex;gap:4px}.ds-ctl-btn{min-width:44px;height:44px;padding:0 10px;background:transparent;color:inherit;border:1px solid rgba(255,255,255,.35);border-radius:3px;font:600 .82rem/1 var(--sans);letter-spacing:.04em;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}.ds-ctl-btn:hover{background:rgba(255,255,255,.12)}.ds-ctl-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}.ds-ctl-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6}"
+    },
+    {
+      "name": "Field Heading with INID Code",
+      "kind": "custom",
+      "refersTo": "field-heading",
+      "description": "Every h2: uppercase Archivo with the bracketed mono code inline on the same baseline.",
+      "html": "<h2 class=\"ds-h2\"><span class=\"ds-c\">(73)</span><span>Titulares — empresas co-fundadas</span></h2>",
+      "css": ".ds-h2{--sans:\"Archivo\",system-ui,sans-serif;--serif:\"Source Serif 4\",Georgia,serif;--mono:\"JetBrains Mono\",ui-monospace,monospace;display:flex;gap:10px;align-items:baseline;margin:0;font:700 .95rem/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink,#12151b)}.ds-h2 .ds-c{font:500 .78rem/1 var(--mono);color:var(--ink-2,#414857);text-transform:none;letter-spacing:0}"
+    },
+    {
+      "name": "Field List",
+      "kind": "custom",
+      "refersTo": "title",
+      "description": "Ruled list of names (Archivo) with serif descriptions; the row is the link.",
+      "html": "<ul class=\"ds-list\"><li><a href=\"#\"><b>HealthySystems</b><small>Interoperabilidade e integração clínica</small></a></li><li><a href=\"#\"><b>VirtualCare</b><small>Saúde digital</small></a></li><li><a href=\"#\"><b>PharmaDataHub</b><small>Dados de medicamentos e farmacovigilância</small></a></li></ul>",
+      "css": ".ds-list{--sans:\"Archivo\",system-ui,sans-serif;--serif:\"Source Serif 4\",Georgia,serif;--mono:\"JetBrains Mono\",ui-monospace,monospace;list-style:none;margin:0;padding:0;max-width:440px;color:var(--ink,#12151b)}.ds-list li{padding:7px 0;border-top:1px solid var(--rule-2,#e3e7ee)}.ds-list li:first-child{border-top:0}.ds-list a{display:flex;justify-content:space-between;gap:12px;align-items:baseline;color:inherit;text-decoration:none}.ds-list b{font:600 1rem/1.3 var(--sans);white-space:nowrap;text-decoration:underline;text-decoration-color:var(--rule,#c4cad6);text-decoration-thickness:1px;text-underline-offset:.2em}.ds-list a:hover b{text-decoration-color:currentColor}.ds-list a:focus-visible{outline:2px solid var(--focus,#1b2f8f);outline-offset:3px;border-radius:2px}.ds-list small{font:400 .9rem/1.35 var(--serif);color:var(--ink-2,#414857);text-align:right}"
+    },
+    {
+      "name": "Filter Button",
+      "kind": "button",
+      "refersTo": "filter-button",
+      "description": "Register filter; 44px, 3px corners; pressed state is solid ink.",
+      "html": "<div class=\"ds-filter\"><button type=\"button\" class=\"ds-fbtn\" aria-pressed=\"true\">Todos<b>36</b></button><button type=\"button\" class=\"ds-fbtn\" aria-pressed=\"false\">Em curso<b>8</b></button></div>",
+      "css": ".ds-filter{--sans:\"Archivo\",system-ui,sans-serif;--serif:\"Source Serif 4\",Georgia,serif;--mono:\"JetBrains Mono\",ui-monospace,monospace;display:flex;gap:8px}.ds-fbtn{min-height:44px;padding:0 16px;background:transparent;color:var(--ink,#12151b);border:1px solid var(--rule,#c4cad6);border-radius:3px;font:600 .92rem/1 var(--sans);cursor:pointer}.ds-fbtn b{font-family:var(--mono);font-weight:600;margin-left:6px}.ds-fbtn[aria-pressed=\"true\"]{background:var(--ink,#12151b);color:var(--sheet,#fff);border-color:var(--ink,#12151b)}.ds-fbtn:hover:not([aria-pressed=\"true\"]){border-color:var(--ink,#12151b)}.ds-fbtn:focus-visible{outline:2px solid var(--focus,#1b2f8f);outline-offset:3px}"
+    },
+    {
+      "name": "Ongoing Stamp",
+      "kind": "chip",
+      "refersTo": "stamp-ongoing",
+      "description": "Violet date-stamp; the only use of violet besides ongoing ticks in Fig. 1.",
+      "html": "<span class=\"ds-stamp\">Em curso</span>",
+      "css": ".ds-stamp{font:700 .68rem/1 \"Archivo\",system-ui,sans-serif;display:inline-flex;align-items:center;letter-spacing:.12em;text-transform:uppercase;color:var(--stamp,#6a2bb0);border:1.5px solid currentColor;border-radius:2px;padding:4px 6px 3px;white-space:nowrap}"
+    },
+    {
+      "name": "Role Tag",
+      "kind": "chip",
+      "refersTo": "role-tag",
+      "description": "Neutral mono tag for IR / Co-IR on register rows.",
+      "html": "<span class=\"ds-role\">IR</span> <span class=\"ds-role\">Co-IR</span>",
+      "css": ".ds-role{font:600 .72rem/1 \"JetBrains Mono\",ui-monospace,monospace;border:1px solid var(--rule,#c4cad6);padding:4px 6px 3px;border-radius:2px;color:var(--ink,#12151b)}"
+    },
+    {
+      "name": "Numeral Reference",
+      "kind": "custom",
+      "refersTo": "numeral-reference",
+      "description": "Outlined numeral linking Fig. 1 to a period of the register.",
+      "html": "<a class=\"ds-ref\" href=\"#\"><span class=\"ds-n\">5</span><strong><em>2018–20</em>Interoperabilidade, privacidade e IA</strong><span class=\"ds-k\">HS.Helios · DigiScope2 · CliKode</span></a>",
+      "css": ".ds-ref{display:grid;grid-template-columns:30px 1fr;gap:4px 10px;padding:12px 0;max-width:360px;border-top:1px solid var(--rule-2,#e3e7ee);color:var(--ink,#12151b);text-decoration:none;font-family:\"Source Serif 4\",Georgia,serif}.ds-n{grid-row:span 2;width:26px;height:26px;border:1.25px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center;font:600 .8rem/1 \"JetBrains Mono\",monospace}.ds-ref strong{font:650 1rem/1.3 \"Archivo\",sans-serif}.ds-ref em{font:500 .82rem/1 \"JetBrains Mono\",monospace;font-style:normal;color:var(--ink-2,#414857);margin-right:8px}.ds-k{font-size:.92rem;line-height:1.4;color:var(--ink-2,#414857)}.ds-ref:hover strong{text-decoration:underline;text-underline-offset:.2em}.ds-ref:focus-visible{outline:2px solid var(--focus,#1b2f8f);outline-offset:3px;border-radius:2px}"
+    },
+    {
+      "name": "More Link",
+      "kind": "button",
+      "refersTo": "more-link",
+      "description": "Primary way forward from Fig. 1; a 2px ink rule instead of an underline.",
+      "html": "<a class=\"ds-more\" href=\"#\">Ver o registo completo de projetos →</a>",
+      "css": ".ds-more{display:inline-flex;align-items:center;min-height:44px;font:700 1rem/1.2 \"Archivo\",system-ui,sans-serif;color:var(--ink,#12151b);text-decoration:none;border-bottom:2px solid var(--ink,#12151b)}.ds-more:hover{color:var(--blue,#1b2f8f);border-color:var(--blue,#1b2f8f)}.ds-more:focus-visible{outline:2px solid var(--focus,#1b2f8f);outline-offset:3px;border-radius:2px}"
+    },
+    {
+      "name": "Title Block",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "Condensed heavy display name with inline (11) code, over a role subtitle.",
+      "html": "<div class=\"ds-title\"><h1><span class=\"ds-c\">(11)</span>Ricardo Cruz&#8209;Correia</h1><p>Professor Associado de Informática Médica · FMUP / MEDCIDS</p></div>",
+      "css": ".ds-title{padding:28px 0 22px;border-top:2px solid var(--ink,#12151b);border-bottom:1px solid var(--rule,#c4cad6);color:var(--ink,#12151b)}.ds-title h1{margin:0;font:800 clamp(2.4rem,6.4vw,4.6rem)/.98 \"Archivo\",system-ui,sans-serif;font-stretch:78%;letter-spacing:-.02em}.ds-title .ds-c{font:500 .8rem/1 \"JetBrains Mono\",monospace;color:var(--ink-2,#414857);vertical-align:.25em;margin-right:14px;letter-spacing:0}.ds-title p{margin:12px 0 0;font:500 clamp(1rem,1.6vw,1.2rem)/1.4 \"Archivo\",sans-serif;color:var(--ink-2,#414857)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Technology-Transfer Dossier",
+    "overview": "**Creative North Star: \"The Technology-Transfer Dossier\"**\n\nThe site is set as the front page of a patent document. A white sheet sits under an ink-blue bibliographic band; the sheet is divided by hairline rules into fields, and each field is numbered with a bracketed INID-style code in mono: (11) the name, (72) the researcher, (73) the companies as titulares, (57) the abstract, (74) the profiles. The codes are wayfinding, not a claim to patents. Below the fields, Fig. 1 is a line drawing of the 2005–2026 trajectory with numeral circles on leader lines that hand the reader into the period register, exactly as a patent figure's reference numerals lead into the description.\n\nThe density is that of a printed document: compact rows, tight ruled lists, a reading column that never exceeds about 62–80ch. Nothing floats or lifts. Hierarchy comes from type width and weight (condensed heavy Archivo for names and titles), from rule weight (2px ink rules open a sheet or a period; 1px rules divide fields; lighter 1px rules divide rows), and from the one reserved colour, the violet date-stamp, which marks only what is ongoing. The dark theme is a cyanotype: the same sheet printed in blue, not an inverted UI.\n\nThe world refuses the academic template of photo plus bio plus cards. The photo exists, but as an 88×110 greyscale plate inside field (72), framed by a 1px ink line like an inventor's mark.",
+    "keyCharacteristics": [
+      "Ink-blue band masthead carrying (19) institution and the PT/EN and theme controls.",
+      "Bracketed mono field codes inline at the start of headings, never as separate eyebrows.",
+      "Hairline-ruled fields and registers; no cards, no drop shadows.",
+      "Condensed Archivo display, Source Serif reading text, JetBrains Mono for codes, refs, years and data.",
+      "Violet stamp reserved for live / ongoing state.",
+      "Line-drawn figures with numeral circles and leader lines into registers; partial data dashed and labelled."
+    ],
+    "rules": [
+      {
+        "name": "The Live Stamp Rule",
+        "body": "Violet means \"ongoing\" and nothing else. It is never used for links, hover, emphasis, headings or decoration; if a thing is not currently running, it is not violet.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Band Rule",
+        "body": "Ink blue as a filled surface appears only in the masthead band. Elsewhere blue is a line, a wash or a data tint.",
+        "section": "colors"
+      },
+      {
+        "name": "The Key Square Rule",
+        "body": "Area colours are applied only as the 2px stroke of a hollow square marker (11–14px) next to the area's name; they never fill text, rows or backgrounds.",
+        "section": "colors"
+      },
+      {
+        "name": "The Inline Code Rule",
+        "body": "A field code sits inside its heading, on the same baseline, before the heading text: `(73) Titulares — empresas co-fundadas`, `Fig. 1 Trajetória 2005–2026`. It is never a standalone line above a heading.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Is Data Rule",
+        "body": "JetBrains Mono is used only for codes, references, years, periods, counts and figure values. Prose, names and headings are never set in mono.",
+        "section": "typography"
+      },
+      {
+        "name": "The Condensed Name Rule",
+        "body": "The narrow width axis (78–80%) is reserved for the display name/title and the bibliographic figures; everything else is set at normal width.",
+        "section": "typography"
+      },
+      {
+        "name": "The Printed Sheet Rule",
+        "body": "Nothing lifts off the sheet. If something needs separation, give it a rule; if it needs emphasis, give it weight or the band; never a shadow or a card.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do number every top-level field with a bracketed mono code placed inline at the start of its heading.",
+      "Do separate with rules: 2px ink to open a sheet or period, 1px field rule between fields, 1px row rule between rows.",
+      "Do reserve the stamp violet for ongoing / live state only (stamp and ongoing ticks).",
+      "Do set names and titles in condensed heavy Archivo, reading text in Source Serif 4, and codes, refs, years and data in JetBrains Mono.",
+      "Do link a figure to its register with outlined numeral circles on leader lines, repeating the same numeral at the register entry.",
+      "Do draw partial or incomplete data dashed and label it in words (\"parcial\" / \"partial\").",
+      "Do give every interactive target at least 44px in its smallest dimension.",
+      "Do redefine every colour token for the cyanotype theme rather than styling components per theme."
+    ],
+    "donts": [
+      "Don't place a field code or label as a standalone eyebrow line above a heading.",
+      "Don't use cards, boxed panels or drop shadows; box-shadow is allowed only as a zero-blur hairline or flat highlight bleed.",
+      "Don't use violet for links, hover, emphasis or decoration.",
+      "Don't fill surfaces with ink blue outside the masthead band.",
+      "Don't set prose, names or headings in mono.",
+      "Don't fill text or rows with area colours; use them only as hollow-square key markers."
+    ]
+  }
+}

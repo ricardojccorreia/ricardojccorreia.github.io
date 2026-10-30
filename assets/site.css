@@ -80,8 +80,9 @@ h1{margin:0;font:800 clamp(2.4rem,6.4vw,4.6rem)/.98 var(--sans);font-stretch:78%
 h2,.h2{display:flex;gap:10px;align-items:baseline;margin:0 0 10px;font:700 .95rem/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase}
 h2 .c{text-transform:none;letter-spacing:0}
 .f ul{list-style:none;margin:0;padding:0}
-.f li{padding:7px 0;border-top:1px solid var(--rule-2);display:flex;justify-content:space-between;gap:12px;align-items:baseline}
-.f li:first-child{border-top:0;padding-top:0}
+.f li{padding:0;min-height:44px;align-items:center;border-top:1px solid var(--rule-2);display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.f li:first-child{border-top:0}
+.f li a{min-height:44px;padding:6px 0}
 .f li b{font:600 1rem/1.3 var(--sans);white-space:nowrap}
 .f li small{font:400 .9rem/1.35 var(--serif);color:var(--ink-2);text-align:right}
 .f li a{text-decoration:none;display:flex;justify-content:space-between;gap:12px;width:100%;align-items:baseline}
@@ -124,6 +125,7 @@ svg .tk{stroke:var(--stamp);stroke-width:2}
 svg .tk.done{stroke:currentColor;stroke-width:1.25;opacity:.55}
 svg .ld{stroke:currentColor;stroke-width:1;fill:none}
 svg .nm circle{fill:var(--sheet);stroke:currentColor;stroke-width:1.25}
+svg .nm{cursor:pointer}
 svg .nm text{font:600 15px var(--mono);fill:currentColor}
 svg text{fill:currentColor}
 svg .yl{font:500 13px var(--sans);fill:var(--ink-2)}
@@ -141,8 +143,7 @@ svg .lg{font:500 12px var(--sans);fill:var(--ink-2)}
 .refs a:hover strong{text-decoration:underline;text-underline-offset:.2em}
 
 .more{display:inline-flex;align-items:center;gap:10px;min-height:44px;margin:12px 0 20px;font:700 1rem/1.2 var(--sans);text-decoration:none;border-bottom:2px solid var(--ink)}
-.more:hover{color:var(--blue);border-color:var(--blue)}
-:root[data-theme="dark"] .more:hover{color:var(--a1);border-color:var(--a1)}
+.more:hover{color:var(--a1);border-color:var(--a1)}
 
 /* Documentos relacionados */
 .rel{padding:24px 0;border-bottom:1px solid var(--rule)}
@@ -170,7 +171,6 @@ footer a{color:var(--ink);display:inline-flex;align-items:center;min-height:44px
   svg .nm circle{transition:fill .25s cubic-bezier(.16,1,.3,1)}
 }
 svg .nm:hover circle,svg .nm:focus-visible circle{fill:var(--blue-soft)}
-}
 @media (max-width:760px){
   .tbl{-webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);mask-image:linear-gradient(90deg,#000 82%,transparent)}
   .tbl.end{-webkit-mask-image:none;mask-image:none}
