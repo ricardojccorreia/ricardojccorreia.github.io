@@ -49,7 +49,7 @@ section.blk{padding:22px 0 8px}
 <body>
 <header class="band">
   <div class="in">
-    <span class="c">(19)</span>
+    <span class="c">S2</span>
     <span class="who"><a href="../"><span>Ricardo Cruz-Correia</span> <span class="long">· FMUP / MEDCIDS</span></a></span>
     <div class="ctl"><button id="lang" type="button"></button><button id="theme" type="button"></button></div>
   </div>
@@ -58,12 +58,12 @@ section.blk{padding:22px 0 8px}
 <main class="sheet">
   <div class="meta">
     <a class="back" id="back" href="../"></a>
-    <span><span class="c">(45)</span><span data-i18n="updated"></span></span>
+    <span data-i18n="updated"></span>
   </div>
 
   <div class="title">
     <div>
-      <h1><span class="c">(54)</span><span data-i18n="title"></span></h1>
+      <h1><span class="c">S2</span><span data-i18n="title"></span></h1>
       <p data-i18n="lede"></p>
     </div>
   </div>
@@ -71,7 +71,7 @@ section.blk{padding:22px 0 8px}
   <div id="upcoming"></div>
 
   <section class="blk" aria-labelledby="regh">
-    <h2 id="regh"><span class="c">(56)</span><span data-i18n="reg"></span></h2>
+    <h2 id="regh"><span class="c">Tabela S2</span><span data-i18n="reg"></span></h2>
     <div class="filter" id="types" role="group"></div>
     <div id="tagnote"></div>
     <p class="sr" id="live" aria-live="polite"></p>
@@ -88,7 +88,7 @@ section.blk{padding:22px 0 8px}
 <script src="../assets/site.js"></script>
 <script>
 const UI = {
-  pt:{back:"← Perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026", title:"Intervenções",
+  pt:{back:"← Artigo principal: perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026", title:"Intervenções",
       lede:"Palestras, comunicações, aulas abertas e workshops. Os slides públicos abrem diretamente; os restantes recebem-se por email depois de um pedido curto.",
       reg:"Registo de intervenções", all:"Todas", next:"Próximas",
       types:{invited:"Palestra convidada", talk:"Apresentação", workshop:"Workshop", lecture:"Aula aberta", panel:"Painel"},
@@ -96,7 +96,7 @@ const UI = {
       cite:"Como citar", tag:t => `Tema: ${t}`, clear:"Mostrar todos os temas",
       shown:n => n === 1 ? "A mostrar 1 intervenção." : `A mostrar ${n} intervenções.`, empty:"Sem intervenções com estes filtros.",
       contact:"Contacto:", kind:{invited:"Apresentação convidada", other:"Apresentação"}},
-  en:{back:"← Ricardo Cruz-Correia's profile", updated:"Updated October 2026", title:"Talks",
+  en:{back:"← Main article: Ricardo Cruz-Correia's profile", updated:"Updated October 2026", title:"Talks",
       lede:"Talks, conference presentations, open lectures and workshops. Public slides open directly; the others are sent by email after a short request.",
       reg:"Talks register", all:"All", next:"Upcoming",
       types:{invited:"Invited talk", talk:"Presentation", workshop:"Workshop", lecture:"Open lecture", panel:"Panel"},
@@ -138,7 +138,7 @@ function render(L) {
   const sorted = INTERVENTIONS.slice().sort((a, b) => b.date.localeCompare(a.date));
   const future = sorted.filter(p => p.date > today).reverse();
   document.getElementById("upcoming").innerHTML = future.length
-    ? `<section class="next" aria-labelledby="nh"><h2 id="nh"><span class="c">(60)</span>${t.next}</h2><ul class="list">${future.map(p => row(p, L)).join("")}</ul></section>` : "";
+    ? `<section class="next" aria-labelledby="nh"><h2 id="nh">${t.next}</h2><ul class="list">${future.map(p => row(p, L)).join("")}</ul></section>` : "";
 
   const past = sorted.filter(p => p.date <= today && (!tag || (p.tags || []).includes(tag)));
   const present = [...new Set(past.map(p => p.type))];

@@ -80,7 +80,7 @@ section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
 <body>
 <header class="band">
   <div class="in">
-    <span class="c">(19)</span>
+    <span class="c">S1</span>
     <span class="who"><a href="./"><span>Ricardo Cruz-Correia</span> <span class="long">· FMUP / MEDCIDS</span></a></span>
     <div class="ctl"><button id="lang" type="button"></button><button id="theme" type="button"></button></div>
   </div>
@@ -89,12 +89,12 @@ section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
 <main class="sheet">
   <div class="meta">
     <a class="back" id="back" href="./"></a>
-    <span><span class="c">(45)</span><span data-i18n="updated"></span></span>
+    <span data-i18n="updated"></span>
   </div>
 
   <div class="title">
     <div>
-      <h1><span class="c">(54)</span><span data-i18n="title"></span></h1>
+      <h1><span class="c">S1</span><span data-i18n="title"></span></h1>
       <p data-i18n="claim"></p>
     </div>
   </div>
@@ -116,7 +116,7 @@ section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
   </section>
 
   <section class="blk" aria-labelledby="reg">
-    <h2 id="reg"><span class="c">(56)</span><span data-i18n="reg"></span></h2>
+    <h2 id="reg"><span class="c">Tabela S1</span><span data-i18n="reg"></span></h2>
     <div class="filter" id="filter" role="group"></div>
     <p class="sr" id="live" aria-live="polite"></p>
     <div id="periods"></div>
@@ -134,7 +134,7 @@ section.blk>p{margin:0 0 10px;color:var(--ink-2);max-width:72ch}
 <script src="assets/site.js"></script>
 <script>
 const UI = {
-  pt:{back:"← Perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026 · dados de setembro de 2026", title:"Trajetória de I&D",
+  pt:{back:"← Artigo principal: perfil de Ricardo Cruz-Correia", updated:"Atualizado em outubro de 2026 · dados de setembro de 2026", title:"Material suplementar — Trajetória de I&D",
       claim:"A interoperabilidade atravessa os sete períodos; a IA e a educação são as áreas que mais cresceram desde 2018.",
       f1:"Publicações e início de projetos", f1cap:"Linha: 170 publicações com data (Ciência Vitae e as 50 obras mais recentes do ORCID, que lista 283 no total); 2024–26 é parcial. Marcas: início de cada projeto; a violeta, os que estão em curso. Os números 1–7 levam ao registo de cada período.",
       f2:"Publicações e projetos por área", f2note:"Cada célula: número de publicações e, por baixo, projetos iniciados nesse período. Quanto mais escura a célula, mais publicações.",
@@ -145,7 +145,7 @@ const UI = {
       roles:{"IR":"IR","Co-IR":"Co-IR"},
       src:"Fontes: Ciência Vitae, ORCID e Universidade do Porto (setembro de 2026). O período 2024–26 está incompleto. IR = investigador responsável. As traduções inglesas dos títulos são indicativas.",
       contact:"Contacto:", story:"Ver a mesma trajetória contada período a período (História) →"},
-  en:{back:"← Ricardo Cruz-Correia's profile", updated:"Updated October 2026 · data from September 2026", title:"R&D trajectory",
+  en:{back:"← Main article: Ricardo Cruz-Correia's profile", updated:"Updated October 2026 · data from September 2026", title:"Supplementary material — R&D trajectory",
       claim:"Interoperability runs through all seven periods; AI and education are the areas that have grown most since 2018.",
       f1:"Publications and project starts", f1cap:"Line: 170 dated publications (Ciência Vitae and the 50 most recent ORCID works; ORCID lists 283 in total); 2024–26 is partial. Marks: start of each project; violet marks are ongoing. Numerals 1–7 lead to each period's register.",
       f2:"Publications and projects by area", f2note:"Each cell: number of publications and, below, projects started in that period. The darker the cell, the more publications.",
@@ -169,7 +169,7 @@ function render(L) {
 
   document.getElementById("biblio").innerHTML = TL_KPIS.map((k, i) => {
     const [main, extra] = k[L].split(" (");
-    return `<div><dt><span class="c">(2${i + 1})</span>${main}</dt><dd>${k.v}${extra ? `<small>(${extra}</small>` : ""}</dd></div>`;
+    return `<div><dt>${main}</dt><dd>${k.v}${extra ? `<small>(${extra}</small>` : ""}</dd></div>`;
   }).join("");
 
   Site.figure(document.getElementById("fig"), L, {local: true});

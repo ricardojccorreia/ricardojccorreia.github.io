@@ -106,7 +106,7 @@ section.sc{min-height:100vh;min-height:100svh;display:flex;flex-direction:column
 <div class="bg" id="bg" aria-hidden="true"></div>
 
 <header class="top">
-  <a class="home" id="home" href="./"><span class="c">(19)</span><span>Ricardo Cruz-Correia</span></a>
+  <a class="home" id="home" href="./"><span class="c">S3</span><span>Ricardo Cruz-Correia</span></a>
   <button id="idxbtn" type="button" aria-haspopup="dialog"></button>
   <button id="lang" type="button"></button>
 </header>
@@ -194,9 +194,9 @@ function render(){
   document.getElementById("dots").setAttribute("aria-label",t.sections);
 
   const areas=TL_AREAS.filter(a=>!a.other), maxN=Math.max(...areas.flatMap(a=>a.v.map(x=>x[0])));
-  let h=`<section class="sc cover" id="s0"><div class="in lift"><h1><span class="c">(54)</span>${t.title}</h1><p class="lede">${t.lede}</p><p class="how">${t.how}</p></div></section>`;
-  h+=`<section class="sc" id="s1"><div class="in lift ficha"><div><h2><span class="c">(56)</span>${t.fichaH}</h2><dl>${t.ficha.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div>`+
-     `<div><h2><span class="c">(56)</span>${t.glH}</h2><ul class="gl">${GLOSS[lang].map(([a,b])=>`<li><b>${a}</b>${b}</li>`).join("")}</ul></div></div></section>`;
+  let h=`<section class="sc cover" id="s0"><div class="in lift"><h1>${t.title}</h1><p class="lede">${t.lede}</p><p class="how">${t.how}</p></div></section>`;
+  h+=`<section class="sc" id="s1"><div class="in lift ficha"><div><h2>${t.fichaH}</h2><dl>${t.ficha.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div>`+
+     `<div><h2>${t.glH}</h2><ul class="gl">${GLOSS[lang].map(([a,b])=>`<li><b>${a}</b>${b}</li>`).join("")}</ul></div></div></section>`;
   TL_PERIODS.forEach((p,i)=>{
     const top=areas.map(a=>({s:a[lang],n:a.v[i][0]})).filter(x=>x.n).sort((x,y)=>y.n-x.n).slice(0,3);
     const projs=TL_PROJECTS.filter(x=>tlPeriodOf(+x.start.slice(0,4))===i).slice().sort((a,b)=>(b.state==="ongoing")-(a.state==="ongoing")||(a.start<b.start?-1:1));

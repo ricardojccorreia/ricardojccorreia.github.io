@@ -5,105 +5,123 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ricardo Cruz-Correia</title>
 <meta name="description" content="Ricardo Cruz-Correia — Professor Associado de Informática Médica (FMUP / MEDCIDS, Universidade do Porto). Interoperabilidade, sistemas de informação em saúde e IA, da investigação às empresas.">
-<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/source-serif.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/site.css">
+<style>
+body{background:var(--desk)}
+.page{max-width:1040px;margin:20px auto 0;background:var(--paper);box-shadow:0 2px 14px rgba(0,0,0,.08);padding:30px clamp(16px,5vw,64px) 44px}
+.run{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;border-bottom:1px solid var(--ink);padding-bottom:8px;font:500 .8rem/1.3 var(--sans);color:var(--ink-2)}
+.run b{color:var(--j);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.run .ctl button{height:44px}
+h1{margin:26px 0 0;font:600 clamp(1.9rem,4.3vw,2.9rem)/1.12 var(--serif);font-stretch:100%;letter-spacing:-.01em;max-width:26ch;text-wrap:balance}
+.au{margin:20px 0 6px;font:700 clamp(1.25rem,2.4vw,1.55rem)/1.2 var(--sans)}
+.au sup{color:var(--j);font-size:.62em;margin-left:2px}
+.af{margin:0;padding:0;list-style:none;font:400 .92rem/1.5 var(--serif);color:var(--ink-2)}
+.af sup{color:var(--j);margin-right:4px;font-family:var(--sans);font-weight:700}
+.corr{margin:8px 0 0;font:500 .88rem/1.4 var(--sans);color:var(--ink-2);display:flex;flex-wrap:wrap;gap:0 14px;align-items:center}
+.corr a{color:var(--j);display:inline-flex;align-items:center;min-height:44px}
+.abs{margin:22px 0 0;background:var(--j-soft);border-top:3px solid var(--j);padding:18px 22px 16px}
+.abs h2,.body h2{display:block;margin:0 0 10px;font:700 .82rem/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--j)}
+.abs p{margin:0 0 8px;font:400 1.02rem/1.58 var(--serif)}
+.abs p b{font:700 .9rem/1 var(--sans);margin-right:4px}
+.kw{margin:12px 0 0 !important;font-size:.95rem !important}
+.kw b{color:var(--j);text-transform:uppercase;letter-spacing:.08em;font-size:.8rem !important}
+.body{columns:2 320px;column-gap:44px;margin-top:28px;font:400 1.02rem/1.62 var(--serif)}
+.body h2{color:var(--ink);letter-spacing:0;text-transform:none;font-size:1.02rem;margin:22px 0 6px;break-after:avoid}
+.body h2:first-child{margin-top:0}
+.body h2 .n{color:var(--j);margin-right:8px}
+.body p{margin:0 0 10px;hyphens:auto}
+.wide{column-span:all;margin:14px 0 18px}
+.wide figcaption{margin-top:10px;font:400 .92rem/1.45 var(--serif);color:var(--ink-2);max-width:none}
+.wide figcaption b{font:700 .92rem/1 var(--sans);color:var(--ink);margin-right:6px}
+.body .refs{margin-top:12px}
+table.t{width:100%;border-collapse:collapse;font:400 .92rem/1.35 var(--sans);margin:4px 0 14px;break-inside:avoid}
+.t caption{text-align:left;font:400 .9rem/1.4 var(--serif);color:var(--ink-2);margin-bottom:6px}
+.t caption b{font:700 .9rem/1 var(--sans);color:var(--ink)}
+.t th,.t td{text-align:left;padding:7px 8px 7px 0;border-bottom:1px solid var(--rule-2);vertical-align:top}
+.t thead th{border-top:1.5px solid var(--ink);border-bottom:1px solid var(--ink);font-weight:700}
+.t tbody tr:last-child td{border-bottom:1.5px solid var(--ink)}
+.t td:first-child{font-weight:600;white-space:nowrap}
+.t td a{text-decoration-color:var(--rule)}
+.t .pend{color:var(--ink-2);font-style:italic}
+.bib{list-style:none;margin:0;padding:0;font:400 .95rem/1.5 var(--serif)}
+.bib li{display:grid;grid-template-columns:34px 1fr;gap:0 6px;padding:5px 0;break-inside:avoid}
+.bib li>span:first-child{font:600 .82rem/1.6 var(--mono);color:var(--j)}
+.bib a{color:var(--j)}
+.bib .up{font:700 .68rem/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--stamp);border:1.5px solid currentColor;padding:3px 5px 2px;margin-right:6px;border-radius:2px}
+.box{background:var(--rule-2);padding:10px 12px;break-inside:avoid;font-size:.96rem}
+.bio{display:grid;grid-template-columns:84px 1fr;gap:14px;break-inside:avoid;font-size:.96rem}
+.bio img{width:84px;height:104px;object-fit:cover;object-position:50% 20%;filter:grayscale(1)}
+.supp{list-style:none;margin:0;padding:0;break-inside:avoid}
+.supp li{border-top:1px solid var(--rule-2)}
+.supp li:first-child{border-top:0}
+.supp a{display:grid;grid-template-columns:44px 1fr;gap:0 8px;padding:8px 0;min-height:44px;text-decoration:none}
+.supp a .c{line-height:1.6}
+.supp a b{font:700 1rem/1.3 var(--sans);text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:.2em}
+.supp a:hover b{text-decoration-color:currentColor}
+.supp a span:last-child{grid-column:2;font-size:.92rem;color:var(--ink-2);line-height:1.4}
+.fig{border:0;padding:0}
+.refs{margin-top:10px}
+footer{max-width:1040px}
+@media (max-width:640px){.page{margin:0;box-shadow:none}.run{font-size:.75rem}}
+</style>
 </head>
 <body>
-<header class="band">
-  <div class="in">
-    <span class="c">(19)</span>
-    <span class="who"><span>Universidade do Porto</span> <span class="long">· FMUP / MEDCIDS</span></span>
-    <div class="ctl"><button id="lang" type="button"></button><button id="theme" type="button"></button></div>
-  </div>
-</header>
+<article class="page">
+  <header class="run">
+    <span><b data-i18n="kind"></b> · <span data-i18n="uni"></span></span>
+    <span class="ctl"><span data-i18n="updated" style="margin-right:8px"></span><button id="lang" type="button"></button><button id="theme" type="button"></button></span>
+  </header>
 
-<main class="sheet">
-  <div class="meta">
-    <span><span class="c">(12)</span><span data-i18n="kind"></span></span>
-    <span><span class="c">(45)</span><span data-i18n="updated"></span></span>
-  </div>
+  <h1 data-i18n="title"></h1>
+  <p class="au">Ricardo Cruz&#8209;Correia<sup>1,2,3</sup></p>
+  <ol class="af" id="aff"></ol>
+  <p class="corr"><span data-i18n="corr"></span><a href="https://pt.linkedin.com/in/ricardojccorreia">LinkedIn</a><a href="https://orcid.org/0000-0002-3764-5158">ORCID 0000-0002-3764-5158</a></p>
 
-  <div class="title">
-    <div>
-      <h1><span class="c">(11)</span>Ricardo Cruz&#8209;Correia</h1>
-      <p data-i18n="role"></p>
-    </div>
-    <a class="docno" href="https://orcid.org/0000-0002-3764-5158"><span class="c">(10)</span> ORCID<b>0000-0002-3764-5158</b></a>
-  </div>
+  <section class="abs" aria-labelledby="absh">
+    <h2 id="absh" data-i18n="abs"></h2>
+    <p><b data-i18n="a1h"></b><span data-i18n="a1"></span></p>
+    <p><b data-i18n="a2h"></b><span data-i18n="a2"></span></p>
+    <p><b data-i18n="a3h"></b><span data-i18n="a3"></span></p>
+    <p><b data-i18n="a4h"></b><span data-i18n="a4"></span></p>
+    <p class="kw"><b data-i18n="kwh"></b> <span data-i18n="kw"></span></p>
+  </section>
 
-  <div class="fields">
-    <div>
-      <section class="f">
-        <h2><span class="c">(72)</span><span data-i18n="h72"></span></h2>
-        <div class="inv">
-          <img src="GenAI/ricardo.jpg" alt="Ricardo Cruz-Correia" width="88" height="110">
-          <div><b>Ricardo João Cruz Correia</b><span data-i18n="inv"></span></div>
-        </div>
-      </section>
+  <div class="body">
+    <h2><span class="n">1.</span><span data-i18n="s1"></span></h2>
+    <p data-i18n="p1"></p>
+    <p data-i18n="p1b"></p>
 
-      <section class="f">
-        <h2><span class="c">(73)</span><span data-i18n="h73"></span></h2>
-        <ul id="companies"></ul>
-      </section>
-
-      <section class="f">
-        <h2><span class="c">(71)</span><span data-i18n="h71"></span></h2>
-        <ul id="academic"></ul>
-      </section>
-    </div>
-
-    <div>
-      <section class="f">
-        <h2><span class="c">(57)</span><span data-i18n="h57"></span></h2>
-        <p class="abstract" data-i18n="abs1"></p>
-        <p class="abstract" data-i18n="abs2"></p>
-      </section>
-
-      <section class="f">
-        <h2><span class="c">(51)</span><span data-i18n="h51"></span></h2>
-        <ul class="cls" id="interests"></ul>
-      </section>
-
-      <section class="f">
-        <h2><span class="c">(60)</span><span data-i18n="h60"></span></h2>
-        <ul class="talks" id="talks"></ul>
-        <a class="more" id="alltalks" href="intervencoes/"></a>
-      </section>
-
-      <section class="f">
-        <h2><span class="c">(74)</span><span data-i18n="h74"></span></h2>
-        <div class="prof primary">
-          <a href="https://orcid.org/0000-0002-3764-5158">ORCID</a>
-          <a href="https://www.cienciavitae.pt/pt/7F17-9F23-61E9">Ciência Vitae</a>
-          <a href="https://pt.linkedin.com/in/ricardojccorreia">LinkedIn</a>
-        </div>
-        <div class="prof">
-          <a href="https://www.authenticus.pt/R-000-FBK">Authenticus</a>
-          <a href="https://www.researchgate.net/profile/Ricardo_Cruz-Correia/">ResearchGate</a>
-          <a href="https://www.researcherid.com/rid/A-2756-2009">ResearcherID</a>
-          <a href="https://lattes.cnpq.br/8710216330372410">Lattes</a>
-          <a href="https://github.com/ricardojccorreia">GitHub</a>
-        </div>
-      </section>
-    </div>
-  </div>
-
-  <section class="fig" aria-labelledby="fig1">
-    <h2 id="fig1"><span class="c">Fig. 1</span><span data-i18n="figh"></span></h2>
-    <figure>
+    <h2><span class="n">2.</span><span data-i18n="s2"></span></h2>
+    <p data-i18n="p2"></p>
+    <figure class="wide fig">
       <div class="figwrap"><svg id="fig" aria-hidden="true"></svg></div>
-      <figcaption><b>Fig. 1</b><span data-i18n="figcap"></span></figcaption>
+      <figcaption><b data-i18n="figl"></b><span data-i18n="figcap"></span></figcaption>
+      <ol class="refs" id="refs"></ol>
     </figure>
-    <ol class="refs" id="refs"></ol>
-    <a class="more" id="more" href="trajetoria.html"></a>
-  </section>
 
-  <section class="rel">
-    <h2><span class="c">(62)</span><span data-i18n="h62"></span></h2>
-    <ul id="related"></ul>
-  </section>
-</main>
+    <h2><span class="n">3.</span><span data-i18n="s3"></span></h2>
+    <p data-i18n="p3"></p>
+    <table class="t"><caption><b data-i18n="t1l"></b> <span data-i18n="t1"></span></caption>
+      <thead><tr><th data-i18n="t1a"></th><th data-i18n="t1b"></th></tr></thead><tbody id="companies"></tbody></table>
+
+    <h2><span class="n">4.</span><span data-i18n="s4"></span></h2>
+    <ol class="bib" id="talks"></ol>
+
+    <h2 data-i18n="supp"></h2>
+    <ul class="supp" id="supp"></ul>
+
+    <h2 data-i18n="coi"></h2>
+    <p class="box" data-i18n="coit"></p>
+
+    <h2 data-i18n="about"></h2>
+    <div class="bio"><img src="GenAI/ricardo.jpg" alt="Ricardo Cruz-Correia" width="84" height="104"><p data-i18n="biot"></p></div>
+
+    <h2 data-i18n="refsh"></h2>
+    <ol class="bib" id="bib"></ol>
+  </div>
+</article>
 
 <footer>
   <span>Ricardo João Cruz Correia · FMUP / MEDCIDS · Universidade do Porto</span>
@@ -128,91 +146,104 @@ const COMPANIES = [
   {name:"Salut.ia", url:"", pt:"", en:""}
 ];
 
-const ACADEMIC = [
-  {name:"FMUP / MEDCIDS", url:"https://medcids.med.up.pt", pt:"Professor Associado", en:"Associate Professor"},
-  {name:"RISE&#8209;Health", url:"https://rise-health.pt/", pt:"Entrepreneurship for Innovative Health Solutions", en:"Entrepreneurship for Innovative Health Solutions"},
-  {name:"e-MAIS", url:"https://www.e-mais.pt/", pt:"Presidente", en:"President"},
-  {name:"HL7 Portugal", url:"https://hl7.pt/", pt:"Normas de interoperabilidade", en:"Interoperability standards"},
-  {name:"EFMI WG EDU", url:"https://efmi-edu-wg.github.io/site/", pt:"Educação em informática biomédica", en:"Biomedical informatics education"}
+const AFFILIATIONS = {
+  pt:["Faculdade de Medicina da Universidade do Porto, MEDCIDS — Professor Associado de Informática Médica",
+      "RISE-Health — Entrepreneurship for Innovative Health Solutions",
+      "HL7 Portugal · e-MAIS (Presidente) · EFMI Working Group on Education"],
+  en:["Faculty of Medicine, University of Porto, MEDCIDS — Associate Professor of Medical Informatics",
+      "RISE-Health — Entrepreneurship for Innovative Health Solutions",
+      "HL7 Portugal · e-MAIS (President) · EFMI Working Group on Education"]
+};
+
+const SUPP = [
+  {url:"trajetoria.html", c:"S1", pt:["Trajetória de I&D","Registo dos 36 projetos e das publicações por área, 2005–2026."], en:["R&D trajectory","Register of 36 projects and publications by area, 2005–2026."]},
+  {url:"intervencoes/", c:"S2", pt:["Intervenções","Palestras e workshops, com slides públicos ou a pedido."], en:["Talks","Talks and workshops, with public slides or on request."]},
+  {url:"historia.html", c:"S3", pt:["História","A trajetória contada em ecrã inteiro, período a período."], en:["Story","The trajectory told full-screen, period by period."]}
 ];
 
-const INTERESTS = [
-  {c:"--a1", pt:["Interoperabilidade em saúde","Integração de sistemas clínicos, HL7 FHIR, openEHR e terminologias."], en:["Health interoperability","Integrating clinical systems: HL7 FHIR, openEHR and terminologies."]},
-  {c:"--a4", pt:["IA na saúde","Modelos de linguagem na prática clínica, na codificação e na informação sobre medicamentos, com validação."], en:["AI in healthcare","Language models in clinical practice, coding and medicines information, with validation."]},
-  {c:"--a3", pt:["Qualidade e segurança da informação","Qualidade de dados, auditoria de acessos e privacidade em sistemas hospitalares."], en:["Information quality and security","Data quality, access auditing and privacy in hospital systems."]},
-  {c:"--ink-2", pt:["Dados de medicamentos","Informação estruturada (FHIR ePI) e farmacovigilância com dados reais."], en:["Medicines data","Structured product information (FHIR ePI) and real-world pharmacovigilance."]},
-  {c:"--a5", pt:["Educação em informática da saúde","Formação e competências em saúde digital e IA."], en:["Health informatics education","Training and competencies in digital health and AI."]}
-];
-
-const RELATED = [
-  {url:"intervencoes/", pt:["Intervenções","Palestras, comunicações e workshops, com slides públicos ou a pedido."], en:["Talks","Talks, presentations and workshops, with public slides or on request."]},
-  {url:"historia.html", pt:["História — vinte anos em sete períodos","A trajetória contada em ecrã inteiro, período a período."], en:["Story — twenty years in seven periods","The trajectory told full-screen, period by period."]},
-  {url:"trajetoria.html", pt:["Trajetória de I&D","Registo de 36 projetos e publicações por área, de 2005 a 2026."], en:["R&D trajectory","Register of 36 projects and publications by area, 2005–2026."]},
-  {url:"GenAI/", pt:["IA generativa — apresentações e formação","Materiais públicos e apresentações a pedido."], en:["Generative AI — talks and training","Public materials and talks on request."]}
+const PROFILES = [
+  ["ORCID 0000-0002-3764-5158","https://orcid.org/0000-0002-3764-5158"],
+  ["Ciência Vitae 7F17-9F23-61E9","https://www.cienciavitae.pt/pt/7F17-9F23-61E9"],
+  ["Authenticus R-000-FBK","https://www.authenticus.pt/R-000-FBK"],
+  ["ResearcherID A-2756-2009","https://www.researcherid.com/rid/A-2756-2009"],
+  ["ResearchGate","https://www.researchgate.net/profile/Ricardo_Cruz-Correia/"],
+  ["Lattes","https://lattes.cnpq.br/8710216330372410"],
+  ["GitHub","https://github.com/ricardojccorreia"]
 ];
 
 const UI = {
-  pt:{kind:"Perfil de investigação", updated:"Atualizado em outubro de 2026",
-      role:"Professor Associado de Informática Médica · FMUP / MEDCIDS · Universidade do Porto",
-      h72:"Investigador", inv:"Doutorado em interoperabilidade de sistemas de informação na saúde. Docente do Mestrado em Informática Médica há 20 anos.",
-      h73:"Titulares — empresas co-fundadas", h71:"Afiliações académicas",
-      h57:"Resumo",
-      abs1:"Investigo sistemas de informação em saúde: como os dados clínicos circulam entre sistemas, com que qualidade e com que segurança — e, mais recentemente, como a inteligência artificial os pode usar com confiança.",
-      abs2:"Parte desta investigação passou para a prática através de empresas que co-fundei, de projetos com a indústria e de cinco spin-offs da Universidade do Porto.",
-      h51:"Áreas", h74:"Perfis",
-      figh:"Trajetória 2005–2026",
-      figcap:"Linha: 170 publicações com data (Ciência Vitae e as 50 obras mais recentes do ORCID, que lista 283 no total); 2024–26 é parcial. Marcas: início de cada projeto de I&D; a violeta, os que estão em curso. Os números 1–7 abrem o registo de cada período.",
-      more:"Ver o registo completo de projetos →", h62:"Documentos relacionados",
-      h60:"Comunicações", next:"Próxima", alltalks:"Todas as intervenções →",
-      contact:"Contacto:"},
-  en:{kind:"Research profile", updated:"Updated October 2026",
-      role:"Associate Professor of Medical Informatics · FMUP / MEDCIDS · University of Porto",
-      h72:"Researcher", inv:"PhD in interoperability between health information systems. Teaching in the MSc in Medical Informatics for 20 years.",
-      h73:"Assignees — companies co-founded", h71:"Academic affiliations",
-      h57:"Abstract",
-      abs1:"I research health information systems: how clinical data moves between systems, with what quality and how securely — and, more recently, how artificial intelligence can use it with confidence.",
-      abs2:"Part of this research has moved into practice through companies I co-founded, projects with industry and five University of Porto spin-offs.",
-      h51:"Areas", h74:"Profiles",
-      figh:"Trajectory 2005–2026",
-      figcap:"Line: 170 dated publications (Ciência Vitae and the 50 most recent ORCID works; ORCID lists 283 in total); 2024–26 is partial. Marks: start of each R&D project; violet marks are ongoing. Numerals 1–7 open each period's register.",
-      more:"See the full project register →", h62:"Related documents",
-      h60:"Talks", next:"Upcoming", alltalks:"All talks →",
-      contact:"Contact:"}
+  pt:{kind:"Perfil de investigação", uni:"Universidade do Porto", updated:"Atualizado em out. 2026",
+      title:"Sistemas de informação em saúde: da integração de dados hospitalares à IA generativa, 2005–2026",
+      corr:"Contacto:",
+      abs:"Resumo",
+      a1h:"Contexto.", a1:"Os dados clínicos circulam mal entre sistemas, com qualidade e segurança desiguais.",
+      a2h:"Abordagem.", a2:"Vinte anos de investigação em interoperabilidade, qualidade e segurança da informação e, mais recentemente, IA aplicada à saúde.",
+      a3h:"Resultados.", a3:"283 obras no ORCID, 33 projetos de I&D, 5 spin-offs da Universidade do Porto e 20 anos no Mestrado em Informática Médica.",
+      a4h:"Conclusão.", a4:"Parte desta investigação passou para a prática através de empresas co-fundadas e de projetos com a indústria.",
+      kwh:"Palavras-chave", kw:"interoperabilidade; HL7 FHIR; openEHR; qualidade de dados; segurança da informação; IA na saúde; dados de medicamentos; educação em informática da saúde",
+      s1:"Introdução",
+      p1:"Investigo sistemas de informação em saúde: como os dados clínicos circulam entre sistemas, com que qualidade e com que segurança — e, mais recentemente, como a inteligência artificial os pode usar com confiança.",
+      p1b:"Sou doutorado em interoperabilidade de sistemas de informação na saúde e ensino no Mestrado em Informática Médica da Universidade do Porto há vinte anos.",
+      s2:"Trajetória",
+      p2:"A Figura 1 mostra as publicações por período e o início de cada projeto. A interoperabilidade atravessa os sete períodos; a IA e a educação são as áreas que mais cresceram desde 2018 (Material suplementar S1).",
+      figl:"Figura 1.", figcap:"Publicações por período (linha; 170 com data, do Ciência Vitae e das 50 obras mais recentes do ORCID, que lista 283) e início de cada projeto (marcas; a violeta, em curso). 2024–26 é parcial. Os números 1–7 abrem o registo de cada período.",
+      s3:"Transferência para a prática",
+      p3:"Parte desta investigação deu origem a empresas, que continuam a trabalhar com a universidade em projetos de I&D (Tabela 1).",
+      t1l:"Tabela 1.", t1:"Empresas co-fundadas.", t1a:"Empresa", t1b:"Área", pend:"descrição por acrescentar",
+      s4:"Comunicações recentes", next:"Próxima",
+      supp:"Material suplementar",
+      coi:"Conflito de interesses", coit:"O autor é co-fundador das empresas da Tabela 1.",
+      about:"Sobre o autor",
+      biot:"Ricardo João Cruz Correia é Professor Associado de Informática Médica na Faculdade de Medicina da Universidade do Porto (MEDCIDS) e investigador do RISE-Health. É presidente da e-MAIS e participa na HL7 Portugal e no grupo de educação da EFMI.",
+      refsh:"Referências", contact:"Contacto:", lang:"EN"},
+  en:{kind:"Research profile", uni:"University of Porto", updated:"Updated Oct. 2026",
+      title:"Health information systems: from hospital data integration to generative AI, 2005–2026",
+      corr:"Contact:",
+      abs:"Abstract",
+      a1h:"Background.", a1:"Clinical data moves poorly between systems, with uneven quality and security.",
+      a2h:"Approach.", a2:"Twenty years of research on interoperability, information quality and security and, more recently, AI applied to health.",
+      a3h:"Results.", a3:"283 works on ORCID, 33 R&D projects, 5 University of Porto spin-offs and 20 years in the MSc in Medical Informatics.",
+      a4h:"Conclusion.", a4:"Part of this research has moved into practice through co-founded companies and projects with industry.",
+      kwh:"Keywords", kw:"interoperability; HL7 FHIR; openEHR; data quality; information security; AI in health; medicines data; health informatics education",
+      s1:"Introduction",
+      p1:"I research health information systems: how clinical data moves between systems, with what quality and how securely — and, more recently, how artificial intelligence can use it with confidence.",
+      p1b:"I hold a PhD in interoperability between health information systems and have taught in the University of Porto MSc in Medical Informatics for twenty years.",
+      s2:"Trajectory",
+      p2:"Figure 1 shows publications per period and the start of each project. Interoperability runs through all seven periods; AI and education are the areas that have grown most since 2018 (Supplementary material S1).",
+      figl:"Figure 1.", figcap:"Publications per period (line; 170 dated, from Ciência Vitae and the 50 most recent ORCID works, which lists 283) and the start of each project (marks; violet are ongoing). 2024–26 is partial. Numerals 1–7 open each period's register.",
+      s3:"Transfer to practice",
+      p3:"Part of this research gave rise to companies, which keep working with the university on R&D projects (Table 1).",
+      t1l:"Table 1.", t1:"Co-founded companies.", t1a:"Company", t1b:"Area", pend:"description to be added",
+      s4:"Recent talks", next:"Upcoming",
+      supp:"Supplementary material",
+      coi:"Conflict of interest", coit:"The author is a co-founder of the companies in Table 1.",
+      about:"About the author",
+      biot:"Ricardo João Cruz Correia is Associate Professor of Medical Informatics at the Faculty of Medicine, University of Porto (MEDCIDS) and a researcher at RISE-Health. He is president of e-MAIS and takes part in HL7 Portugal and the EFMI education working group.",
+      refsh:"References", contact:"Contact:", lang:"PT"}
 };
 
 /* ========================================================================== */
-
-const item = (a, L) => {
-  const inner = `<b>${a.name}</b>${a[L] ? `<small>${a[L]}</small>` : ""}`;
-  return `<li>${a.url ? `<a href="${a.url}">${inner}</a>` : inner}</li>`;
-};
 
 function render(L) {
   const t = UI[L];
   document.documentElement.lang = L;
   document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
-  document.getElementById("companies").innerHTML = COMPANIES.map(a => item(a, L)).join("");
-  document.getElementById("academic").innerHTML = ACADEMIC.map(a => item(a, L)).join("");
-  document.getElementById("interests").innerHTML = INTERESTS.map(i =>
-    `<li><i style="color:var(${i.c})"></i><div><b>${i[L][0]}</b><span>${i[L][1]}</span></div></li>`).join("");
+  document.getElementById("aff").innerHTML = AFFILIATIONS[L].map((a, i) => `<li><sup>${i + 1}</sup>${a}</li>`).join("");
   document.getElementById("refs").innerHTML = TL_PERIODS.map((p, i) =>
     `<li><a href="trajetoria.html?lang=${L}#p${i}"><span class="n">${i + 1}</span><strong><em>${p}</em>${TL_TITLE[L][i]}</strong><span>${TL_KEY[i]}</span></a></li>`).join("");
-  const more = document.getElementById("more");
-  more.textContent = t.more; more.href = "trajetoria.html?lang=" + L;
-  document.getElementById("related").innerHTML = RELATED.map(r =>
-    `<li><a href="${r.url}?lang=${L}"><b>${r[L][0]}</b><span>${r[L][1]}</span></a></li>`).join("");
-  const today = new Date().toISOString().slice(0, 10), MO = L === "en"
-    ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] : ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
-  const tf = (p, k) => (L === "en" && p[k + "_en"]) || p[k];
+  document.getElementById("companies").innerHTML = COMPANIES.map(c =>
+    `<tr><td>${c.url ? `<a href="${c.url}">${c.name}</a>` : c.name}</td><td>${c[L] || `<span class="pend">${t.pend}</span>`}</td></tr>`).join("");
+
+  const today = new Date().toISOString().slice(0, 10);
+  const tf = (p, k) => (L === "en" && p[k + "_en"]) || p[k] || "";
   const byDate = INTERVENTIONS.slice().sort((a, b) => b.date.localeCompare(a.date));
-  const next = byDate.filter(p => p.date > today).reverse().slice(0, 1);
-  const recent = byDate.filter(p => p.date <= today).slice(0, 3);
-  document.getElementById("talks").innerHTML = [...next.map(p => [p, true]), ...recent.map(p => [p, false])].map(([p, up]) => {
-    const [y, m] = p.date.split("-");
-    return `<li><a href="intervencoes/?lang=${L}"><span><b>${tf(p, "title")}</b><small>${tf(p, "event")}</small></span>` +
-      `<span class="when">${up ? `<span class="stamp">${t.next}</span> ` : ""}${MO[+m - 1]} ${y}</span></a></li>`;
-  }).join("");
-  const at = document.getElementById("alltalks"); at.textContent = t.alltalks; at.href = "intervencoes/?lang=" + L;
+  const talks = [...byDate.filter(p => p.date > today).reverse().slice(0, 1).map(p => [p, true]), ...byDate.filter(p => p.date <= today).slice(0, 3).map(p => [p, false])];
+  let n = PROFILES.length;
+  document.getElementById("talks").innerHTML = talks.map(([p, up]) =>
+    `<li><span>[${++n}]</span><span>${up ? `<span class="up">${t.next}</span>` : ""}Cruz-Correia R. <i>${tf(p, "title")}</i>. ${tf(p, "event")}${tf(p, "place") ? ", " + tf(p, "place") : ""}; ${p.date.slice(0, 4)}. <a href="intervencoes/?lang=${L}">${L === "en" ? "Talks" : "Intervenções"}</a></span></li>`).join("");
+  document.getElementById("bib").innerHTML = PROFILES.map(([l, u], i) => `<li><span>[${i + 1}]</span><a href="${u}">${l}</a></li>`).join("");
+  document.getElementById("supp").innerHTML = SUPP.map(s =>
+    `<li><a href="${s.url}?lang=${L}"><span class="c">${s.c}</span><b>${s[L][0]}</b><span>${s[L][1]}</span></a></li>`).join("");
   Site.figure(document.getElementById("fig"), L);
 }
 
