@@ -1,0 +1,5 @@
+# Ficheiros de trabalho que não devem ser publicados no site
+exclude:
+  - PRODUCT.md
+  - DESIGN.md
+  - README.md
