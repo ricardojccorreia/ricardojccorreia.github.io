@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Carreira — o jogo · Ricardo Cruz-Correia</title>
+<meta name="description" content="Um jogo de um só botão sobre 26 anos de carreira académica: salte as publicações; empresas, cargos e projetos pesam; os alunos protegem.">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Archivo";src:url("fonts/archivo.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-display:swap}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0e1220;color:#fff;font-family:"Archivo",system-ui,sans-serif;overflow:hidden;-webkit-user-select:none;user-select:none}
+canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}
+.hud{position:fixed;left:0;right:0;top:0;display:flex;gap:10px;align-items:flex-start;padding:10px max(12px,env(safe-area-inset-left)) 0;pointer-events:none}
+.hud a,.hud button{pointer-events:auto}
+.home{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:3px;background:rgba(14,18,32,.6);color:#fff;text-decoration:none;font:700 .9rem/1 "Archivo",sans-serif}
+.stats{display:grid;grid-template-columns:repeat(3,auto);gap:4px 6px}
+.stats div{background:rgba(14,18,32,.6);padding:6px 9px;border-radius:3px;font:600 .78rem/1.1 "Archivo",sans-serif;display:flex;gap:8px;justify-content:space-between;min-width:112px}
+.stats b{font:700 .9rem/1 "JetBrains Mono",monospace}
+.stats .sh b{color:#9fe3b0}
+.year{margin-left:auto;text-align:right;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.year b{display:block;font:800 clamp(2.2rem,6vw,4rem)/.9 "Archivo",sans-serif;font-stretch:72%}
+.year span{font:600 .85rem/1.2 "JetBrains Mono",monospace}
+.ctlb{min-width:44px;height:44px;margin-left:6px;background:rgba(14,18,32,.6);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:3px;font:700 .82rem/1 "Archivo",sans-serif;cursor:pointer}
+.banner{position:fixed;left:50%;top:26%;transform:translate(-50%,-50%);width:min(92vw,720px);text-align:center;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+.banner p{margin:0 0 8px;font:800 clamp(1.3rem,3.6vw,2.2rem)/1.1 "Archivo",sans-serif;font-stretch:80%;animation:pop 3s ease-out forwards}
+.banner p small{display:block;font:600 .9rem/1.3 "JetBrains Mono",monospace;margin-top:4px}
+@keyframes pop{0%{opacity:0;transform:translateY(10px)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+.ticker{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,760px);background:rgba(14,18,32,.72);padding:9px 12px;border-radius:3px;font:500 .9rem/1.3 "Archivo",sans-serif;min-height:40px;pointer-events:none}
+.ticker b{font-weight:700}
+.ticker .bad{color:#ff9fb1}
+.ticker .ok{color:#9fe3b0}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,14,28,.62);padding:16px}
+.screen[hidden]{display:none}
+.panel{background:#f4f6fb;color:#0e1220;border-radius:4px;padding:24px 26px;max-width:min(94vw,600px);max-height:92vh;overflow:auto}
+.panel h1,.panel h2{margin:0 0 10px;font:800 clamp(1.8rem,5vw,2.6rem)/1 "Archivo",sans-serif;font-stretch:76%}
+.panel p{margin:0 0 10px;font:400 1rem/1.5 Georgia,serif}
+.panel ul{margin:0 0 14px;padding-left:20px;font:400 .98rem/1.5 Georgia,serif}
+.panel li{margin:3px 0}
+.panel b{font-family:"Archivo",sans-serif}
+.go{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;background:#0e1220;color:#fff;border:0;border-radius:3px;font:800 1.05rem/1 "Archivo",sans-serif;cursor:pointer;margin:6px 10px 0 0}
+.panel a{color:#0e1220;font:700 1rem/1 "Archivo",sans-serif;display:inline-flex;align-items:center;min-height:44px;margin-right:16px}
+.score{display:grid;grid-template-columns:1fr auto;gap:4px 18px;margin:0 0 14px;font:500 1rem/1.4 "Archivo",sans-serif}
+.score b{font:700 1rem/1.4 "JetBrains Mono",monospace;text-align:right}
+:focus-visible{outline:2px solid #4b6bff;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:700px){.hud{flex-wrap:wrap}.stats{order:5;width:100%;grid-template-columns:repeat(3,1fr)}.stats div{min-width:0;font-size:.72rem;padding:5px 7px}.year b{font-size:2rem}.home{font-size:.8rem;padding:0 8px}}
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<header class="hud">
+  <a class="home" id="home" href="./"></a>
+  <div class="stats" aria-hidden="true">
+    <div><span data-i18n="s_score"></span><b id="vScore">0</b></div>
+    <div><span data-i18n="s_age"></span><b id="vAge">26</b></div>
+    <div><span data-i18n="s_kg"></span><b id="vKg">70</b></div>
+    <div><span data-i18n="s_co"></span><b id="vCo">0</b></div>
+    <div><span data-i18n="s_roles"></span><b id="vRoles">0</b></div>
+    <div class="sh"><span data-i18n="s_help"></span><b id="vHelp">0</b></div>
+  </div>
+  <div class="year" aria-hidden="true"><b id="vYear">2000</b><span id="vJump"></span></div>
+  <button class="ctlb" id="pause" type="button">II</button>
+  <button class="ctlb" id="lang" type="button"></button>
+</header>
+<div class="banner" id="banner" aria-hidden="true"></div>
+<div class="ticker" id="ticker" aria-hidden="true"></div>
+<p class="sr" id="live" aria-live="polite"></p>
+
+<div class="screen" id="start"><div class="panel" role="dialog" aria-labelledby="t1">
+  <h1 id="t1" data-i18n="title"></h1>
+  <p data-i18n="intro"></p>
+  <ul>
+    <li data-i18n-html="r1"></li><li data-i18n-html="r2"></li><li data-i18n-html="r3"></li><li data-i18n-html="r4"></li>
+  </ul>
+  <button class="go" id="play" type="button" data-i18n="play"></button>
+  <a id="toFilm" href="filme.html" data-i18n="film"></a>
+</div></div>
+
+<div class="screen" id="end" hidden><div class="panel" role="dialog" aria-labelledby="t2">
+  <h2 id="t2" data-i18n="endh"></h2>
+  <div class="score" id="final"></div>
+  <p data-i18n="endp"></p>
+  <button class="go" id="again" type="button" data-i18n="again"></button>
+  <a id="toHome" href="./" data-i18n="home"></a>
+</div></div>
+
+<script src="data/trajetoria.js"></script>
+<script src="data/jogo.js"></script>
+<script src="data/publicacoes.js"></script>
+<script>
+/* ==========================================================================
+   Carreira — o jogo. Corredor de um só botão (espaço, seta para cima ou toque).
+   - Obstáculos: as publicações reais (data/publicacoes.js); a altura cresce
+     com as citações.
+   - Peso: idade + empresas co-fundadas + cargos + projetos de I&D ativos
+     (data/jogo.js, data/trajetoria.js). Mais peso = salto mais baixo, e a
+     personagem engorda.
+   - Ajudantes: cada aluno ativo (mestrado 1 ano, doutoramento 4 anos) é um
+     escudo que absorve um choque por ano.
+   - Choque sem escudo: tropeça, perde pontos e abranda; não há fim de jogo.
+   ========================================================================== */
+
+const UI = {
+  pt:{home:"Ricardo Cruz-Correia", s_score:"Pontos", s_age:"Idade", s_kg:"Peso (kg)", s_co:"Empresas", s_roles:"Cargos", s_help:"Ajudantes",
+      title:"Carreira — o jogo", intro:"26 anos de vida académica, de 2000 a 2026. Corra e salte por cima das publicações.",
+      r1:"<b>Saltar:</b> espaço, seta para cima ou tocar no ecrã.",
+      r2:"<b>Papers:</b> cada publicação real é um obstáculo; quanto mais citada, mais alta.",
+      r3:"<b>Peso:</b> a idade, as empresas, os cargos e os projetos tornam-no mais pesado — e o salto mais baixo.",
+      r4:"<b>Ajudantes:</b> cada aluno de mestrado (1 ano) ou doutoramento (4 anos) protege-o de um choque por ano.",
+      play:"Começar em 2000", film:"Prefiro ver o filme", jump:"salto", endh:"2026 — fim da partida",
+      endp:"Os dados vêm do Google Scholar, do CV da FMUP e das certidões das empresas. A duração dos projetos é estimada em 3 anos.",
+      again:"Jogar outra vez", lang:"EN", langLabel:"Switch to English",
+      company:n=>`Fundou a ${n}`, role:n=>`Novo cargo: ${n}`, kgUp:k=>`+${k} kg`,
+      helperM:"Novo ajudante: aluno de mestrado (1 ano)", helperD:"Novo ajudante: aluno de doutoramento (4 anos)",
+      cleared:"Saltou", hit:"Tropeçou em", saved:"Um ajudante segurou-o em", cit:c=>c===1?"1 citação":`${c} citações`,
+      f_score:"Pontos", f_cleared:"Publicações saltadas", f_hits:"Tropeções", f_saved:"Salvo por ajudantes", f_max:"Peso máximo",
+      paused:"Pausa", resume:"Continuar"},
+  en:{home:"Ricardo Cruz-Correia", s_score:"Score", s_age:"Age", s_kg:"Weight (kg)", s_co:"Companies", s_roles:"Roles", s_help:"Helpers",
+      title:"Career — the game", intro:"26 years of academic life, from 2000 to 2026. Run and jump over the publications.",
+      r1:"<b>Jump:</b> space, up arrow or tap the screen.",
+      r2:"<b>Papers:</b> every real publication is an obstacle; the more cited, the taller.",
+      r3:"<b>Weight:</b> age, companies, roles and projects make him heavier — and the jump lower.",
+      r4:"<b>Helpers:</b> each MSc student (1 year) or PhD student (4 years) shields him from one hit per year.",
+      play:"Start in 2000", film:"I'd rather watch the film", jump:"jump", endh:"2026 — game over",
+      endp:"Data comes from Google Scholar, the FMUP CV and company registry certificates. Project duration is estimated at 3 years.",
+      again:"Play again", lang:"PT", langLabel:"Mudar para português",
+      company:n=>`Co-founded ${n}`, role:n=>`New role: ${n}`, kgUp:k=>`+${k} kg`,
+      helperM:"New helper: MSc student (1 year)", helperD:"New helper: PhD student (4 years)",
+      cleared:"Jumped", hit:"Tripped on", saved:"A helper caught him on", cit:c=>c===1?"1 citation":`${c} citations`,
+      f_score:"Score", f_cleared:"Publications jumped", f_hits:"Trips", f_saved:"Saved by helpers", f_max:"Peak weight",
+      paused:"Paused", resume:"Resume"}
+};
+const ROLE_EN = {"Assistente":"Teaching Assistant","Professor Auxiliar":"Assistant Professor","Professor Associado":"Associate Professor",
+  "Diretor do Mestrado em Informática Médica":"Director, MSc in Medical Informatics","Codiretor do Mestrado em Informática Médica":"Co-director, MSc in Medical Informatics",
+  "Presidente das comissões do MIM":"Chair, MSc committees","Presidente da e-MAIS":"President of e-MAIS","HL7 Portugal":"HL7 Portugal"};
+
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const qs=new URLSearchParams(location.search).get("lang");
+let lang=(qs==="pt"||qs==="en")?qs:(store.get("site_lang")||((navigator.language||"").toLowerCase().startsWith("pt")?"pt":"en"));
+if(lang!=="pt"&&lang!=="en")lang="pt";
+const $=id=>document.getElementById(id);
+
+/* ---------- datas ---------- */
+const dy = s => { if (!s) return null; const p = String(s).split("-"); return +p[0] + ((+p[1] || 1) - 1) / 12 + ((+p[2] || 1) - 1) / 365; };
+const T0 = GAME_START, T1 = 2026.9;
+const companies = G_COMPANIES.map(c => ({name: c.name, t: dy(c.date)}));
+const roles = G_ROLES.filter(r => r.from).map(r => ({name: r.name, from: dy(r.from), to: r.to ? dy(r.to) : 9999}));
+const projects = TL_PROJECTS.map(p => { const t = dy(p.start); return {from: t, to: p.state === "ongoing" ? 9999 : t + 3}; });
+const helpers = [
+  ...G_SUPERVISIONS_DONE.map(([k, y]) => ({k, from: y + .5 - (k === "D" ? 4 : 1), to: y + .5})),
+  ...G_SUPERVISIONS_ONGOING_START.map(([k, y]) => ({k, from: y + .7, to: y + .7 + (k === "D" ? 4 : 1)}))
+].map(h => ({...h, lastBlock: -9, announced: false}));
+
+function weightAt(t){
+  const age = t - BIRTH_YEAR;
+  const nc = companies.filter(c => c.t !== null && c.t <= t).length;
+  const nr = roles.filter(r => r.from <= t && t < r.to).length;
+  const np = projects.filter(p => p.from <= t && t < p.to).length;
+  return {kg: Math.round(58 + age * .45 + nc * 4 + nr * 3 + np * 1.2), nc, nr, np};
+}
+
+/* ---------- pista: cada ano dura o necessário para os seus papers ---------- */
+const SPEED = 380;                             // px/s
+const GAP = 1.05;                               // s mínimos entre papers
+const years = []; let acc = 0;
+for (let y = T0; y <= 2026; y++) {
+  const n = G_PUBS.filter(p => p[0] === y).length;
+  const secs = Math.max(3.2, n * GAP + .8);
+  years.push({y, x0: acc, len: secs * SPEED, n}); acc += secs * SPEED;
+}
+const TRACK = acc;
+const xToT = x => { for (const Y of years) if (x < Y.x0 + Y.len) return Y.y + Math.max(0, x - Y.x0) / Y.len; return 2026.999; };
+const papers = [];
+years.forEach(Y => {
+  const list = G_PUBS.filter(p => p[0] === Y.y);
+  list.forEach((p, i) => {
+    const h = Math.round(26 + Math.min(62, Math.sqrt(p[2]) * 7));
+    papers.push({x: Y.x0 + 300 + (Y.len - 380) * (list.length === 1 ? .5 : i / (list.length - 1)), y: p[0], title: p[1], cit: p[2], h, w: 24 + Math.min(14, p[2] / 10), state: 0});
+  });
+});
+
+/* ---------- canvas e cenário ---------- */
+const cv = $("c"), ctx = cv.getContext("2d");
+let W, H, ground, DPR;
+function resize(){DPR=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);ground=Math.round(H*.76)}
+addEventListener("resize", resize); resize();
+const hex=h=>{const n=parseInt(h.slice(1),16);return[n>>16,n>>8&255,n&255]};
+const mixC=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t)), css=c=>`rgb(${c})`;
+const SCENE = [[2000,"#5b7cff"],[2005,"#5b7cff"],[2009,"#8796ad"],[2012,"#5b7cff"],[2015,"#ff7f98"],[2018,"#f0b44a"],[2021,"#6fcf7f"],[2024,"#f0b44a"]];
+function pal(t){let i=0;while(i<SCENE.length-1&&t>=SCENE[i+1][0])i++;let c=hex(SCENE[i][1]);if(i<SCENE.length-1){const k=Math.max(0,(t-(SCENE[i+1][0]-.4))/.4);if(k>0)c=mixC(c,hex(SCENE[i+1][1]),k)}
+  return {top:mixC(c,[10,14,40],.55),bot:mixC(c,[255,244,230],.55),far:mixC(c,[20,24,50],.35),mid:mixC(c,[14,18,32],.6),gr:mixC(c,[14,18,32],.8),acc:c}}
+function rnd(s){return()=>(s=s*16807%2147483647)/2147483647}
+const hills=(()=>{const r=rnd(7),a=[];for(let x=-400;x<TRACK*.2+3000;x+=120)a.push([x,60+r()*90]);return a})();
+const city=(()=>{const r=rnd(11),a=[];for(let x=-600;x<TRACK*.5+3000;x+=70+r()*60)a.push({x,w:50+r()*70,h:60+r()*170});return a})();
+
+/* ---------- personagem: a largura cresce com o peso ---------- */
+function hero(x, y, kg, step, onGround, trip){
+  const fat = Math.max(0, Math.min(1.4, (kg - 70) / 45));
+  const sw = onGround && !trip ? Math.sin(step) : .5;
+  const bw = 17 + fat * 13;                 // meia largura do tronco
+  ctx.save(); ctx.translate(x, y); if (trip) ctx.rotate(.5);
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "#1b2233"; ctx.lineWidth = 11 + fat * 3;
+  ctx.beginPath(); ctx.moveTo(-6, -56); ctx.lineTo(-6 + sw * 15, -4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(6, -56); ctx.lineTo(6 - sw * 15, -4); ctx.stroke();
+  ctx.fillStyle = "#0d0f14";
+  ctx.beginPath(); ctx.ellipse(-6 + sw * 15 + 5, -2, 10, 5, 0, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(6 - sw * 15 + 5, -2, 10, 5, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#2f3d63"; ctx.beginPath();
+  ctx.moveTo(-bw + 2, -122); ctx.quadraticCurveTo(-bw - fat * 10, -90, -bw + 1, -56); ctx.lineTo(bw - 1, -56); ctx.quadraticCurveTo(bw + fat * 12, -90, bw - 2, -122); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = "#e9edf5"; ctx.beginPath(); ctx.moveTo(-6, -122); ctx.lineTo(6, -122); ctx.lineTo(0, -102); ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = "#34446d"; ctx.lineWidth = 9 + fat * 2;
+  ctx.beginPath(); ctx.moveTo(bw - 6, -114); ctx.lineTo(bw - 6 + sw * 12, -76); ctx.stroke();
+  ctx.fillStyle = "#e3b48f"; ctx.beginPath(); ctx.arc(2, -140, 17 + fat * 2, 0, 7); ctx.fill();
+  ctx.fillStyle = "#4b4b52"; ctx.beginPath(); ctx.arc(0, -146, 17 + fat * 2, Math.PI * .95, Math.PI * 2.05); ctx.fill();
+  ctx.strokeStyle = "#111"; ctx.lineWidth = 2; ctx.strokeRect(5, -145, 9, 7); ctx.strokeRect(-6, -145, 9, 7);
+  ctx.restore();
+}
+function helperFig(x, y, k, i, step){
+  const sw = Math.sin(step + i * 1.3);
+  ctx.save(); ctx.translate(x, y);
+  ctx.strokeStyle = "#20283a"; ctx.lineWidth = 6; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(-3, -30); ctx.lineTo(-3 + sw * 8, -2); ctx.moveTo(3, -30); ctx.lineTo(3 - sw * 8, -2); ctx.stroke();
+  ctx.fillStyle = k === "D" ? "#2e8b57" : "#3fa7c9"; ctx.fillRect(-9, -64, 18, 36);
+  ctx.fillStyle = "#e9b58f"; ctx.beginPath(); ctx.arc(0, -73, 10, 0, 7); ctx.fill();
+  ctx.fillStyle = "#6b3e1f"; ctx.fillRect(-15, -60, 7, 22);
+  ctx.fillStyle = "#fff"; ctx.font = "700 10px 'JetBrains Mono', monospace"; ctx.textAlign = "center"; ctx.fillText(k === "D" ? "PhD" : "MSc", 0, -88);
+  ctx.restore();
+}
+function paperStack(x, o){
+  const top = ground - o.h;
+  ctx.fillStyle = o.state === 2 ? "#ffb3c1" : "#ffffff";
+  ctx.fillRect(x - o.w / 2, top, o.w, o.h);
+  ctx.strokeStyle = "#1b2233"; ctx.lineWidth = 1.5; ctx.strokeRect(x - o.w / 2 + .5, top + .5, o.w - 1, o.h - 1);
+  ctx.fillStyle = "#c9ccd2"; for (let yy = top + 8; yy < ground - 6; yy += 7) ctx.fillRect(x - o.w / 2 + 5, yy, o.w - 10, 2);
+  if (o.cit >= 50) { ctx.fillStyle = "#ffd23f"; ctx.font = "700 10px 'JetBrains Mono', monospace"; ctx.textAlign = "center"; ctx.fillText(o.cit, x, top - 6); }
+}
+
+/* ---------- estado ---------- */
+let x, vy, hy, playing = false, paused = false, last = 0, step = 0, slow = 0, trip = 0, score, nClear, nHit, nSaved, maxKg, nextPaper, cIdx, rIdx, lastT;
+function reset(){
+  x = 0; vy = 0; hy = 0; step = 0; slow = 0; trip = 0; score = 0; nClear = 0; nHit = 0; nSaved = 0; maxKg = 0; nextPaper = 0; lastT = T0;
+  papers.forEach(p => p.state = 0); helpers.forEach(h => { h.lastBlock = -9; h.announced = false; });
+  companies.forEach(c => c.shown = c.t !== null && c.t < T0); roles.forEach(r => r.shown = r.from < T0 + .01);
+  $("ticker").innerHTML = ""; $("banner").innerHTML = "";
+}
+// Mensagens iguais no mesmo instante juntam-se ("× 3"); nunca mais de duas no ecrã
+function banner(html){
+  const box = $("banner"), same = [...box.children].find(e => e.dataset.k === html);
+  if (same) { same.dataset.n = +same.dataset.n + 1; same.querySelector(".n").textContent = ` × ${same.dataset.n}`; return; }
+  const p = document.createElement("p"); p.dataset.k = html; p.dataset.n = 1;
+  p.innerHTML = html.replace(/<small>|$/, m => `<span class="n"></span>${m}`);
+  box.appendChild(p); while (box.children.length > 2) box.firstChild.remove();
+  setTimeout(() => p.remove(), 3000); $("live").textContent = p.textContent;
+}
+function ticker(html){ $("ticker").innerHTML = html; }
+
+function jump(){
+  if (!playing || paused) return;
+  if (hy === 0 && trip <= 0) { const w = weightAt(xToT(x)); vy = 930 * jumpFactor(w.kg); }
+}
+const jumpFactor = kg => Math.max(.56, Math.min(1, 1 - (kg - 72) / 110));
+
+function frame(now){
+  const dt = Math.min(.04, (now - last) / 1000 || 0); last = now;
+  if (playing && !paused) update(dt);
+  draw();
+  requestAnimationFrame(frame);
+}
+
+function update(dt){
+  const sp = SPEED * (slow > 0 ? .45 : 1);
+  slow = Math.max(0, slow - dt); trip = Math.max(0, trip - dt);
+  x += sp * dt; step += dt * 10 * (slow > 0 ? .5 : 1);
+  // física do salto
+  if (hy > 0 || vy > 0) { vy -= 2600 * dt; hy = Math.max(0, hy + vy * dt); if (hy === 0) vy = 0; }
+  const t = xToT(x), L = UI[lang], w = weightAt(t);
+  maxKg = Math.max(maxKg, w.kg);
+  // eventos
+  companies.forEach(c => { if (!c.shown && c.t !== null && t >= c.t) { c.shown = true; banner(`${L.company(c.name)}<small>${L.kgUp(4)}</small>`); } });
+  roles.forEach(r => { if (!r.shown && t >= r.from) { r.shown = true; banner(`${L.role(lang === "en" ? (ROLE_EN[r.name] || r.name) : r.name)}<small>${L.kgUp(3)}</small>`); } });
+  helpers.forEach(h => { if (!h.announced && t >= h.from && t < h.to) { h.announced = true; banner(h.k === "D" ? L.helperD : L.helperM); } });
+  // colisões com papers
+  const hx = W * .3;
+  for (let i = nextPaper; i < papers.length; i++) {
+    const p = papers[i], px = p.x - x + hx;
+    if (px > hx + 60) break;
+    if (p.state !== 0) continue;
+    const overlapX = Math.abs(px - hx) < p.w / 2 + 12;
+    if (overlapX && hy < p.h - 4) {
+      const active = helpers.filter(h => t >= h.from && t < h.to && t - h.lastBlock >= 1);
+      if (active.length) { active[0].lastBlock = t; p.state = 3; nSaved++; score += 1;
+        ticker(`<span class="ok">${L.saved}</span> <b>${p.title}</b> (${p.y})`); }
+      else { p.state = 2; nHit++; score = Math.max(0, score - 5); slow = 1.2; trip = .6;
+        ticker(`<span class="bad">${L.hit}</span> <b>${p.title}</b> (${p.y}) · ${L.cit(p.cit)}`); }
+    } else if (px < hx - p.w / 2 - 12) {
+      p.state = 1; nClear++; score += 10 + Math.min(20, Math.round(Math.sqrt(p.cit)));
+      ticker(`${L.cleared} <b>${p.title}</b> (${p.y}) · ${L.cit(p.cit)}`);
+      nextPaper = i + 1;
+    }
+  }
+  while (nextPaper < papers.length && papers[nextPaper].state !== 0) nextPaper++;
+  if (x >= TRACK - 10) finish();
+}
+
+function draw(){
+  const t = xToT(x), P = pal(t), hx = W * .3, w = weightAt(t);
+  const g = ctx.createLinearGradient(0, 0, 0, ground); g.addColorStop(0, css(P.top)); g.addColorStop(1, css(P.bot));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, ground);
+  ctx.fillStyle = "rgba(255,248,225,.85)"; ctx.beginPath(); ctx.arc(W * .82, H * .2, 30, 0, 7); ctx.fill();
+  ctx.fillStyle = css(P.far); ctx.beginPath(); ctx.moveTo(0, ground);
+  hills.forEach(([hx2, h]) => { const sx = hx2 - x * .2; if (sx > -200 && sx < W + 200) ctx.lineTo(sx, ground - 70 - h); }); ctx.lineTo(W, ground); ctx.fill();
+  ctx.fillStyle = css(P.mid); city.forEach(b => { const sx = b.x - x * .5; if (sx > -150 && sx < W + 150) ctx.fillRect(sx, ground - b.h, b.w, b.h); });
+  ctx.fillStyle = css(P.gr); ctx.fillRect(0, ground, W, H - ground);
+  ctx.fillStyle = css(mixC(P.acc, [255, 255, 255], .2)); ctx.fillRect(0, ground, W, 4);
+  // marcos de ano
+  ctx.font = "700 13px 'JetBrains Mono', monospace"; ctx.textAlign = "center";
+  years.forEach(Y => { const sx = Y.x0 - x + hx; if (sx > -40 && sx < W + 40) { ctx.fillStyle = "rgba(255,255,255,.9)"; ctx.fillRect(sx - 22, ground + 14, 44, 20); ctx.fillStyle = "#121520"; ctx.fillText(Y.y, sx, ground + 29); } });
+  // papers
+  for (let i = Math.max(0, nextPaper - 6); i < papers.length; i++) { const p = papers[i], sx = p.x - x + hx; if (sx > W + 60) break; if (sx > -60 && p.state !== 1 && p.state !== 3) paperStack(sx, p); }
+  // ajudantes ativos atrás da personagem
+  const act = helpers.filter(h => t >= h.from && t < h.to);
+  act.slice(0, 6).forEach((h, i) => helperFig(hx - 46 - i * 30, ground, h.k, i, step));
+  hero(hx, ground - hy, w.kg, step, hy === 0, trip > 0);
+  // HUD
+  $("vYear").textContent = Math.floor(t); $("vScore").textContent = score ?? 0; $("vAge").textContent = Math.floor(t - BIRTH_YEAR);
+  $("vKg").textContent = w.kg; $("vCo").textContent = w.nc; $("vRoles").textContent = w.nr; $("vHelp").textContent = act.length;
+  $("vJump").textContent = `${UI[lang].jump} ${Math.round(jumpFactor(w.kg) * 100)}%`;
+}
+
+function finish(){
+  playing = false; const L = UI[lang];
+  $("final").innerHTML = [[L.f_score, score], [L.f_cleared, `${nClear} / ${papers.length}`], [L.f_hits, nHit], [L.f_saved, nSaved], [L.f_max, maxKg + " kg"]].map(([a, b]) => `<span>${a}</span><b>${b}</b>`).join("");
+  $("end").hidden = false; $("again").focus();
+}
+
+/* ---------- interface ---------- */
+function paint(){
+  const L = UI[lang]; document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(e => e.textContent = L[e.dataset.i18n]);
+  document.querySelectorAll("[data-i18n-html]").forEach(e => e.innerHTML = L[e.dataset.i18nHtml]);
+  $("home").textContent = L.home; $("home").href = "./?lang=" + lang;
+  $("lang").textContent = L.lang; $("lang").setAttribute("aria-label", L.langLabel);
+  $("pause").setAttribute("aria-label", paused ? L.resume : L.paused); $("pause").textContent = paused ? "▶" : "II";
+  $("toFilm").href = "filme.html?lang=" + lang; $("toHome").href = "./?lang=" + lang;
+}
+function start(){ reset(); $("start").hidden = true; $("end").hidden = true; playing = true; paused = false; paint(); cv.focus(); }
+$("play").onclick = start; $("again").onclick = start;
+$("pause").onclick = () => { if (!playing) return; paused = !paused; paint(); };
+$("lang").onclick = () => { lang = lang === "pt" ? "en" : "pt"; store.set("site_lang", lang); const u = new URL(location.href); u.searchParams.set("lang", lang); history.replaceState(null, "", u); paint(); };
+addEventListener("keydown", e => {
+  if (e.target.closest("button,a")) return;
+  if (e.key === " " || e.key === "ArrowUp" || e.key === "w") { e.preventDefault(); jump(); }
+  else if (e.key === "p" || e.key === "Escape") { if (playing) { paused = !paused; paint(); } }
+});
+cv.addEventListener("pointerdown", e => { e.preventDefault(); jump(); });
+
+reset(); paint();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(t => { last = t; frame(t); }));
+</script>
+</body>
+</html>
