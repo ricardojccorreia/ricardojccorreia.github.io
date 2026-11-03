@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Filme — Jorge Ribeiro</title>
+<meta name="description" content="Jorge Ribeiro — mais de 25 anos de animação, do Porto para a RTP, contados como um percurso em movimento.">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Archivo";src:url("fonts/archivo.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-display:swap}
+:root{--ink:#14110f;--paper:#f7f1e6;--gold:#ffd23f}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#14110f;color:#fff;font-family:"Archivo",system-ui,sans-serif;overflow:hidden}
+canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;cursor:grab}
+canvas:active{cursor:grabbing}
+.hud{position:fixed;left:0;right:0;top:26px;display:flex;align-items:flex-start;gap:12px;padding:10px max(12px,env(safe-area-inset-left)) 0;pointer-events:none}
+.hud>*{pointer-events:auto}
+.home{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:3px;background:rgba(20,17,15,.6);color:#fff;text-decoration:none;font:700 .9rem/1 "Archivo",sans-serif}
+.home small{font-weight:500;opacity:.8;margin-left:8px}
+.year{margin-left:auto;text-align:right;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.year b{display:block;font:800 clamp(2.4rem,7vw,4.4rem)/.9 "Archivo",sans-serif;font-stretch:72%;letter-spacing:-.02em}
+.year span{font:600 .85rem/1.2 "JetBrains Mono",monospace;opacity:.9}
+.count{position:fixed;left:max(12px,env(safe-area-inset-left));top:90px;display:grid;gap:6px;font:600 .82rem/1.2 "Archivo",sans-serif}
+.count div{background:rgba(20,17,15,.6);padding:7px 10px;border-radius:3px;display:flex;gap:10px;justify-content:space-between;min-width:178px}
+.count b{font:700 .95rem/1 "JetBrains Mono",monospace}
+.card{position:fixed;left:50%;top:24%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity .6s;width:min(92vw,820px);text-shadow:0 2px 14px rgba(0,0,0,.45)}
+.card.show{opacity:1}
+.card small{display:block;font:600 .95rem/1 "JetBrains Mono",monospace;letter-spacing:.06em;margin-bottom:10px}
+.card b{display:block;font:800 clamp(2rem,6vw,4rem)/.95 "Archivo",sans-serif;font-stretch:74%;letter-spacing:-.015em}
+.card i{display:block;font:500 1.05rem/1.3 Georgia,serif;margin-top:10px}
+.log{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,640px);display:grid;gap:6px;pointer-events:none}
+.log p{margin:0;background:rgba(20,17,15,.74);padding:8px 12px;border-radius:3px;font:500 .92rem/1.3 "Archivo",sans-serif;animation:in .35s ease-out}
+.log p b{font-weight:700}
+.log p .t{display:inline-block;padding:1px 6px;border-radius:2px;color:#14110f;font:700 .72rem/1.3 "JetBrains Mono",monospace;margin-right:6px;vertical-align:1px}
+.log p .on{color:var(--gold);font-weight:700}
+@keyframes in{from{transform:translateY(8px);opacity:0}}
+.ctl{position:fixed;left:50%;bottom:calc(40px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:6px;background:rgba(20,17,15,.74);padding:6px;border-radius:4px}
+.ctl button{min-width:44px;height:44px;padding:0 12px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:3px;font:700 .85rem/1 "Archivo",sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.ctl button:hover{background:rgba(255,255,255,.12)}
+.ctl button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+.ctl svg{width:18px;height:18px;fill:currentColor}
+:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.end{position:fixed;inset:0;display:none;align-items:flex-start;justify-content:center;padding-top:clamp(80px,13vh,130px);background:linear-gradient(rgba(20,17,15,.55),transparent 60%)}
+.end.show{display:flex}
+.end div{background:var(--paper);color:var(--ink);padding:26px 28px;border-radius:4px;max-width:min(92vw,560px)}
+.end h2{margin:0 0 8px;font:800 2rem/1 "Archivo",sans-serif;font-stretch:76%}
+.end p{margin:0 0 14px;font:400 1rem/1.5 Georgia,serif}
+.end nav{display:flex;flex-wrap:wrap;gap:8px 18px}
+.end a,.end button{display:inline-flex;align-items:center;min-height:44px;font:700 1rem/1 "Archivo",sans-serif;color:var(--ink);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:.3em;text-decoration-thickness:2px;cursor:pointer}
+.watch{position:fixed;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;background:var(--gold);color:var(--ink);border-radius:3px;font:800 .9rem/1 "Archivo",sans-serif;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.4);max-width:min(90vw,420px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.help{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(46px + env(safe-area-inset-bottom));font:500 .78rem/1.3 "Archivo",sans-serif;opacity:.8;text-align:right;max-width:210px}
+@media (max-width:640px){.help{display:none}.log{top:150px;bottom:auto !important}.count{top:auto;bottom:calc(160px + env(safe-area-inset-bottom));grid-template-columns:repeat(3,auto)}.count div{min-width:0}.home small{display:none}}
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<header class="hud">
+  <a class="home" href="jogo.html">Jorge Ribeiro<small>· jogar o jogo</small></a>
+  <div class="year" aria-hidden="true"><b id="yr">1999</b><span id="per"></span></div>
+</header>
+<div class="count" aria-hidden="true">
+  <div><span>Obras</span><b id="nObra">0</b></div>
+  <div><span>Como realizador</span><b id="nReal">0</b></div>
+  <div><span>Clientes e artistas</span><b id="nCli">0</b></div>
+</div>
+<div class="card" id="card" aria-hidden="true"><small id="cardY"></small><b id="cardT"></b><i id="cardS"></i></div>
+<div class="log" id="log" aria-hidden="true"></div>
+<p class="sr" id="live" aria-live="polite"></p>
+<a class="watch" id="watch" href="#" target="_blank" rel="noopener" hidden></a>
+<div class="ctl" role="group" aria-label="Controlos do filme">
+  <button id="back" type="button" aria-label="Recuar 1 ano"></button>
+  <button id="play" type="button"></button>
+  <button id="fast" type="button" aria-pressed="false" aria-label="Velocidade 2×">2×</button>
+  <button id="restart" type="button" aria-label="Recomeçar"></button>
+</div>
+<p class="help">Espaço pausa · setas avançam e recuam · arraste para percorrer · clique num cartaz para o ver</p>
+<div class="end" id="end" role="dialog" aria-labelledby="endh"><div>
+  <h2 id="endh">2026 — e a seguir?</h2>
+  <p id="endp"></p>
+  <nav><a href="jogo.html">Jogar o jogo</a><button id="again" type="button">Ver outra vez</button></nav>
+</div></div>
+
+<script src="data/obras.js"></script>
+<script>
+/* ==========================================================================
+   Filme do percurso de Jorge Ribeiro: a personagem fica ao centro e o mundo
+   passa por trás (camadas em paralaxe, com a ponte D. Luís ao fundo).
+   Tudo vem de data/obras.js: cada obra é um cartaz (miniatura do YouTube
+   quando existe; dourado quando é realizada por ele). Cada ano ocupa o espaço
+   dos seus cartazes. A partir de 2018 aparece o pinguim. No fim, as produtoras
+   formam uma pequena cidade.
+   ========================================================================== */
+
+/* ---------- mundo: anos com largura variável ---------- */
+const Y0 = 1999, YL = 2026, GAP = 158, MINY = 520;
+const years = []; { let acc = 0;
+  for (let y = Y0; y <= YL; y++) { const n = TODAS.filter(o => o.y === y).length; const len = Math.max(MINY, n * GAP + 120); years.push({y, x0: acc, len, n}); acc += len; } }
+const xOfYear = y => { const Y = years.find(q => q.y === Math.floor(y)) || years[years.length - 1]; return Y.x0 + (y - Y.y) * Y.len; };
+const yearOf = x => { for (const Y of years) if (x < Y.x0 + Y.len) return Y.y + Math.max(0, x - Y.x0) / Y.len; return YL + .999; };
+
+function rnd(seed){let s=seed%2147483647;if(s<=0)s+=2147483646;return()=>(s=s*16807%2147483647)/2147483647}
+
+const posters = [];
+years.forEach(Y => TODAS.filter(o => o.y === Y.y).forEach((o, i) => posters.push({o, x: Y.x0 + 120 + i * GAP + GAP / 2, seen: false})));
+const imgs = {};
+function imgFor(o){ const u = thumb(o); if (!u) return null;
+  if (!imgs[u]) { const im = new Image(); im.decoding = "async"; im.src = u; imgs[u] = im; } return imgs[u]; }
+
+/* Produtoras: a cidade final (por ordem da primeira obra; altura = n.º de obras) */
+const PRODS = (() => { const m = new Map(); TODAS.forEach(o => { if (!o.prod) return; const k = o.prod; if (!m.has(k)) m.set(k, {name: k, n: 0, y: o.y}); m.get(k).n++; });
+  const all = [...m.values()], big = all.filter(p => p.n >= 2 || p.name === "Os Filmes do Pinguim").sort((a, b) => a.y - b.y);
+  const pin = big.findIndex(p => p.name === "Os Filmes do Pinguim"); if (pin >= 0) big.push(big.splice(pin, 1)[0]);  // o Pinguim fica no fim
+  return {big, rest: all.length - big.length}; })();
+const BW = 104;
+const CITY_X = xOfYear(2026) + 120;
+const STOP = CITY_X + (PRODS.big.length * BW - 12) / 2;
+const WORLD = STOP + 2000;
+
+/* Camadas de fundo geradas uma vez */
+const hills = (() => { const r = rnd(7), a = []; for (let x = -400; x < WORLD * .2 + 3000; x += 120) a.push([x, 60 + r() * 90]); return a; })();
+const skyline = (() => { const r = rnd(11), a = []; for (let x = -600; x < WORLD * .5 + 3000; x += 46 + r() * 30) a.push({x, w: 40 + r() * 34, h: 50 + r() * 90, roof: r() > .4, c: r()}); return a; })();
+const trees = (() => { const r = rnd(23), a = []; for (let x = -300; x < WORLD + 2000; x += 220 + r() * 300) a.push({x, s: .7 + r() * .6}); return a; })();
+const BRIDGES = (() => { const a = []; for (let x = 900; x < WORLD * .5 + 3000; x += 3400) a.push(x); return a; })();
+
+/* ---------- canvas ---------- */
+const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+let W, H, DPR, ground;
+function resize(){DPR=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);ground=Math.round(H*.72)}
+addEventListener("resize",resize);resize();
+
+const hex = h => { const n = parseInt(h.slice(1), 16); return [n >> 16, n >> 8 & 255, n & 255]; };
+const mixC = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+const css = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+function periodAt(y){for(let i=PERIODOS.length-1;i>=0;i--)if(y>=PERIODOS[i].de)return i;return 0}
+const pLabel = i => PERIODOS[i].de + "–" + (i < PERIODOS.length - 1 ? PERIODOS[i + 1].de - 1 : "hoje");
+function palette(y){
+  const i = periodAt(y), base = hex(PERIODOS[i].cor); let c = base;
+  if (i < PERIODOS.length - 1) { const t = Math.max(0, (y - (PERIODOS[i + 1].de - .4)) / .4); if (t > 0) c = mixC(base, hex(PERIODOS[i + 1].cor), t); }
+  return { skyTop: mixC(c, [16, 12, 30], .55), skyBot: mixC(c, [255, 236, 210], .55),
+    far: mixC(c, [24, 20, 40], .35), mid: mixC(c, [20, 17, 15], .6), ground: mixC(c, [20, 17, 15], .8), accent: c };
+}
+
+/* ---------- personagem: o animador, de lápis ao ombro e caderno na mão ---------- */
+function hero(x, y, step, moving){
+  const sw = moving ? Math.sin(step) : 0, bob = moving ? Math.abs(Math.cos(step)) * 3 : 0;
+  ctx.save(); ctx.translate(x, y - bob); ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.fillStyle = "rgba(0,0,0,.25)"; ctx.beginPath(); ctx.ellipse(0, bob + 2, 30, 6, 0, 0, 7); ctx.fill();
+  // pernas (calças de ganga) e ténis
+  ctx.strokeStyle = "#2b4a78"; ctx.lineWidth = 11;
+  ctx.beginPath(); ctx.moveTo(-6, -58); ctx.lineTo(-6 + sw * 16, -4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(6, -58); ctx.lineTo(6 - sw * 16, -4); ctx.stroke();
+  ctx.fillStyle = "#f4f1ea";
+  ctx.beginPath(); ctx.ellipse(-6 + sw * 16 + 5, -2, 10, 5, 0, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(6 - sw * 16 + 5, -2, 10, 5, 0, 0, 7); ctx.fill();
+  // braço de trás com o caderno de esboços
+  ctx.strokeStyle = "#b8452f"; ctx.lineWidth = 9;
+  ctx.beginPath(); ctx.moveTo(-4, -112); ctx.lineTo(-4 - sw * 14, -72); ctx.stroke();
+  ctx.save(); ctx.translate(-4 - sw * 14, -66); ctx.rotate(-.15);
+  ctx.fillStyle = "#f7f1e6"; ctx.fillRect(-14, -10, 28, 20); ctx.fillStyle = "#14110f"; ctx.fillRect(-14, -10, 3, 20);
+  ctx.strokeStyle = "#14110f"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(2, 0, 5, 0, 7); ctx.moveTo(-6, 6); ctx.lineTo(10, 6); ctx.stroke(); ctx.restore();
+  // t-shirt às riscas
+  ctx.fillStyle = "#d2553b"; ctx.beginPath(); ctx.moveTo(-17, -122); ctx.lineTo(17, -122); ctx.lineTo(18, -56); ctx.lineTo(-18, -56); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = "#f7f1e6"; for (let k = 0; k < 4; k++) ctx.fillRect(-17.5, -112 + k * 15, 35, 5);
+  // lápis gigante ao ombro e braço da frente
+  ctx.save(); ctx.translate(10, -118); ctx.rotate(-.9);
+  ctx.fillStyle = "#ffd23f"; ctx.fillRect(-4, -6, 52, 12); ctx.fillStyle = "#f2b8a0"; ctx.fillRect(-12, -6, 8, 12);
+  ctx.fillStyle = "#e9c99b"; ctx.beginPath(); ctx.moveTo(48, -6); ctx.lineTo(62, 0); ctx.lineTo(48, 6); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.moveTo(57, -2.5); ctx.lineTo(62, 0); ctx.lineTo(57, 2.5); ctx.fill(); ctx.restore();
+  ctx.strokeStyle = "#c04a33"; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(8, -114); ctx.lineTo(16, -96); ctx.lineTo(20, -110); ctx.stroke();
+  ctx.fillStyle = "#e3b48f"; ctx.beginPath(); ctx.arc(20, -112, 5, 0, 7); ctx.fill();
+  // cabeça, cabelo e barba
+  ctx.fillStyle = "#e3b48f"; ctx.beginPath(); ctx.arc(2, -140, 17, 0, 7); ctx.fill();
+  ctx.fillStyle = "#2a211c"; ctx.beginPath(); ctx.arc(1, -145, 17.5, Math.PI * .92, Math.PI * 2.08); ctx.fill();
+  ctx.beginPath(); ctx.arc(2, -136, 17, Math.PI * .1, Math.PI * .9); ctx.lineTo(-8, -134); ctx.quadraticCurveTo(4, -128, 15, -134); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(9, -143, 2, 0, 7); ctx.fill();
+  ctx.restore();
+}
+/* O pinguim (a partir de PINGUIM_DESDE) bamboleia ao lado */
+function penguin(x, y, step, s){
+  const wob = Math.sin(step * 1.2) * .12;
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(wob);
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.ellipse(0, -26, 17, 26, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.ellipse(3, -22, 11, 19, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(2, -46, 13, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(7, -48, 4.5, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(8.5, -48, 2, 0, 7); ctx.fill();
+  ctx.fillStyle = "#ff9f1c"; ctx.beginPath(); ctx.moveTo(12, -45); ctx.lineTo(23, -42); ctx.lineTo(12, -39); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-6, -1, 7, 3, 0, 0, 7); ctx.ellipse(8, -1, 7, 3, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#d2553b"; ctx.fillRect(-11, -36, 24, 5);   // cachecol
+  ctx.restore();
+}
+
+/* ---------- elementos do mundo ---------- */
+function fit(s, w){ if (ctx.measureText(s).width <= w) return s; while (s.length > 1 && ctx.measureText(s + "…").width > w) s = s.slice(0, -1); return s + "…"; }
+const PW = 140, PH = 79, PT = 210;   // cartaz: largura, altura da imagem, altura do topo acima do chão
+function poster(x, it, t){
+  const o = it.o, ty = TIPOS[o.tipo] || {c: "#ccc", s: o.tipo}, mine = realizou(o);
+  ctx.save(); ctx.translate(x, ground);
+  ctx.fillStyle = "#3a2a1c"; ctx.fillRect(-PW / 2 + 14, -PT + PH + 40, 5, PT - PH - 40); ctx.fillRect(PW / 2 - 19, -PT + PH + 40, 5, PT - PH - 40);
+  const top = -PT, glow = mine ? .5 + .5 * Math.sin(t * 3 + x * .01) : 0;
+  if (mine) { ctx.shadowColor = `rgba(255,210,63,${.55 + glow * .4})`; ctx.shadowBlur = 14 + glow * 10; }
+  ctx.fillStyle = "#14110f"; ctx.fillRect(-PW / 2 - 6, top - 6, PW + 12, PH + 52); ctx.shadowBlur = 0;
+  // perfurações de película no caixilho
+  ctx.fillStyle = "rgba(255,255,255,.75)"; for (let k = 0; k < 9; k++) { ctx.fillRect(-PW / 2 + 2 + k * 16, top - 4.5, 7, 3); }
+  const im = imgFor(o);
+  if (im && im.complete && im.naturalWidth) { const ih = im.naturalHeight * PW / im.naturalWidth;
+    ctx.save(); ctx.beginPath(); ctx.rect(-PW / 2, top, PW, PH); ctx.clip(); ctx.drawImage(im, -PW / 2, top + (PH - ih) / 2, PW, ih); ctx.restore(); }
+  else { ctx.fillStyle = css(mixC(hex(ty.c), [20, 17, 15], .25)); ctx.fillRect(-PW / 2, top, PW, PH);
+    ctx.fillStyle = "#14110f"; ctx.font = "800 15px Archivo, sans-serif"; ctx.textAlign = "center"; ctx.fillText(fit(o.t, PW - 16), 0, top + PH / 2 + 5); }
+  ctx.fillStyle = ty.c; ctx.fillRect(-PW / 2, top + PH, PW, 4);
+  ctx.textAlign = "left"; ctx.fillStyle = "#fff"; ctx.font = "700 12.5px Archivo, sans-serif"; ctx.fillText(fit(o.t, PW - 4), -PW / 2 + 2, top + PH + 20);
+  ctx.font = "600 10px 'JetBrains Mono', monospace"; ctx.fillStyle = mine ? "#ffd23f" : "rgba(255,255,255,.75)";
+  ctx.fillText(fit((o.fn || ty.s).toLowerCase() + " · " + ty.s.toLowerCase(), PW - 4), -PW / 2 + 2, top + PH + 36);
+  if (o.src === "web") { ctx.fillStyle = "#ffd23f"; ctx.font = "700 9px 'JetBrains Mono', monospace"; ctx.textAlign = "right"; ctx.fillText("a confirmar", PW / 2, top - 10); }
+  ctx.restore();
+}
+function bridge(sx, col){
+  // a ponte D. Luís, em silhueta: arco, tabuleiro e pilares
+  const w = 520, top = ground - 190;
+  ctx.save(); ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = 7;
+  ctx.beginPath(); ctx.moveTo(sx, ground); ctx.quadraticCurveTo(sx + w / 2, top - 150, sx + w, ground); ctx.stroke();
+  ctx.fillRect(sx - 30, top - 8, w + 60, 7);
+  ctx.lineWidth = 2; for (let k = 1; k < 12; k++) { const px = sx + k * w / 12, t = k / 12, ay = (1 - t) * (1 - t) * ground + 2 * (1 - t) * t * (top - 150) + t * t * ground;
+    ctx.beginPath(); ctx.moveTo(px, top); ctx.lineTo(px, ay); ctx.stroke(); }
+  ctx.fillRect(sx - 34, top - 8, 14, ground - top + 8); ctx.fillRect(sx + w + 20, top - 8, 14, ground - top + 8);
+  ctx.restore();
+}
+function city(x0, t){
+  const r = rnd(5), max = Math.max(...PRODS.big.map(p => p.n));
+  PRODS.big.forEach((p, i) => {
+    const x = x0 + i * BW, h = 120 + Math.sqrt(p.n / max) * 190 + r() * 20, w = BW - 12, pin = p.name === "Os Filmes do Pinguim";
+    ctx.fillStyle = pin ? "#20324f" : css(mixC(hex(PERIODOS[i % PERIODOS.length].cor), [20, 17, 15], .45)); ctx.fillRect(x, ground - h, w, h);
+    ctx.fillStyle = "rgba(255,236,190,.85)";
+    for (let yy = ground - h + 14; yy < ground - 40; yy += 22) for (let xx = x + 10; xx < x + w - 12; xx += 22) if (r() > .35) ctx.fillRect(xx, yy, 11, 10);
+    ctx.fillStyle = "#fff"; ctx.font = "700 12px Archivo, sans-serif"; ctx.textAlign = "center";
+    const words = p.name.split(" "), lines = []; let ln = "";
+    words.forEach(wd => { if (ctx.measureText(ln + " " + wd).width > w + 6 && ln) { lines.push(ln); ln = wd; } else ln = ln ? ln + " " + wd : wd; }); lines.push(ln);
+    const ly = ground - h - (pin ? 70 : 12) - (lines.length - 1) * 14;
+    lines.forEach((l, k) => ctx.fillText(l, x + w / 2, ly + k * 14));
+    ctx.font = "600 10px 'JetBrains Mono', monospace"; ctx.fillText(p.n + (p.n === 1 ? " obra" : " obras"), x + w / 2, ground - 16);
+    if (pin) penguin(x + w / 2, ground - h, t * 4, .9);
+  });
+  if (PRODS.rest) { ctx.fillStyle = "rgba(255,255,255,.8)"; ctx.font = "600 11px 'JetBrains Mono', monospace"; ctx.textAlign = "center";
+    ctx.fillText(`+ ${PRODS.rest} produtoras com uma obra`, x0 + (PRODS.big.length * BW - 12) / 2, ground + 62); }
+}
+/* Película nas margens de cima e de baixo, a correr com a câmara */
+function filmStrip(cam){
+  ctx.fillStyle = "#14110f"; ctx.fillRect(0, 0, W, 26); ctx.fillRect(0, H - 26, W, 26);
+  ctx.fillStyle = "rgba(247,241,230,.85)"; const off = -(cam * .9 % 28);
+  for (let x = off; x < W + 28; x += 28) { ctx.fillRect(x, 8, 14, 10); ctx.fillRect(x, H - 18, 14, 10); }
+}
+
+/* ---------- estado e ciclo ---------- */
+let cam = 0, playing = !matchMedia("(prefers-reduced-motion: reduce)").matches, fast = false, last = performance.now(), T = 0, step = 0, lastPer = -1, drag = null, ended = false;
+let nObra = 0, nReal = 0; const clientes = new Set();
+const SPEED = 230;
+const $ = id => document.getElementById(id);
+
+function reset(){cam=0;recount();lastPer=-1;ended=false;$("end").classList.remove("show");$("log").innerHTML=""}
+function recount(){ nObra = 0; nReal = 0; clientes.clear();
+  posters.forEach(p => { p.seen = p.x < cam; if (p.seen) count(p.o); }); }
+function count(o){ nObra++; if (realizou(o)) nReal++; if (o.cli) clientes.add(o.cli); }
+function logMsg(html){const l=$("log"),p=document.createElement("p");p.innerHTML=html;l.prepend(p);while(l.children.length>3)l.lastChild.remove()}
+function showCard(i){
+  $("cardY").textContent = pLabel(i); $("cardT").textContent = PERIODOS[i].titulo; $("cardS").textContent = PERIODOS[i].sub;
+  $("card").classList.add("show"); clearTimeout(showCard.t); showCard.t = setTimeout(() => $("card").classList.remove("show"), 2800);
+  $("live").textContent = pLabel(i) + " — " + PERIODOS[i].titulo;
+}
+const esc = s => s.replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"})[c]);
+function describe(o){ const ty = TIPOS[o.tipo] || {c: "#ccc", s: o.tipo};
+  const quem = [o.cli, o.real && o.real !== NOME ? "real. " + o.real : ""].filter(Boolean).join(" · ");
+  return `<span class="t" style="background:${ty.c}">${ty.s}</span><b>${esc(o.t)}</b>${quem ? " — " + esc(quem) : ""}${o.fn ? ` · <span class="${realizou(o) ? "on" : ""}">${esc(o.fn.toLowerCase())}</span>` : ""}`; }
+
+function frame(now){
+  const dt = Math.min(.05, (now - last) / 1000); last = now; T += dt;
+  const moving = playing && !ended && !drag;
+  if (moving) { cam += SPEED * (fast ? 2.4 : 1) * dt; step += dt * (fast ? 16 : 9); }
+  if (cam >= STOP && !ended) { cam = STOP; ended = true; $("end").classList.add("show"); $("again").focus(); }
+  cam = Math.max(0, Math.min(STOP, cam));
+  const y = yearOf(cam), pal = palette(y), cx = W / 2;
+
+  const g = ctx.createLinearGradient(0, 0, 0, ground); g.addColorStop(0, css(pal.skyTop)); g.addColorStop(1, css(pal.skyBot));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, ground);
+  ctx.fillStyle = "rgba(255,246,220,.85)"; ctx.beginPath(); ctx.arc(W * .78, H * .2, 34, 0, 7); ctx.fill();
+  // montes (0.2)
+  ctx.fillStyle = css(pal.far); ctx.beginPath(); ctx.moveTo(0, ground);
+  hills.forEach(([x, h]) => { const sx = x - cam * .2 + cx; if (sx > -200 && sx < W + 200) ctx.lineTo(sx, ground - 70 - h); });
+  ctx.lineTo(W, ground); ctx.closePath(); ctx.fill();
+  // ponte e casario da Ribeira (0.5)
+  const midc = css(pal.mid);
+  BRIDGES.forEach(bx => { const sx = bx - cam * .5 + cx; if (sx > -700 && sx < W + 100) bridge(sx, css(mixC(pal.mid, [255, 255, 255], .08))); });
+  skyline.forEach(b => { const sx = b.x - cam * .5 + cx; if (sx > -100 && sx < W + 100) {
+    ctx.fillStyle = css(mixC(pal.mid, pal.accent, b.c * .25)); ctx.fillRect(sx, ground - b.h, b.w, b.h);
+    if (b.roof) { ctx.beginPath(); ctx.moveTo(sx - 3, ground - b.h); ctx.lineTo(sx + b.w / 2, ground - b.h - 16); ctx.lineTo(sx + b.w + 3, ground - b.h); ctx.fill(); }
+    ctx.fillStyle = "rgba(255,236,190,.35)"; for (let yy = ground - b.h + 10; yy < ground - 16; yy += 20) for (let xx = sx + 7; xx < sx + b.w - 10; xx += 14) ctx.fillRect(xx, yy, 6, 9); } });
+  ctx.fillStyle = midc;
+  // chão
+  ctx.fillStyle = css(pal.ground); ctx.fillRect(0, ground, W, H - ground);
+  ctx.fillStyle = css(mixC(pal.accent, [255, 255, 255], .2)); ctx.fillRect(0, ground, W, 5);
+  trees.forEach(tr => { const sx = tr.x - cam + cx; if (sx > -80 && sx < W + 80) { ctx.fillStyle = "#3a2a1c"; ctx.fillRect(sx - 4, ground - 46 * tr.s, 8, 46 * tr.s);
+    ctx.fillStyle = css(mixC(pal.accent, [20, 60, 40], .55)); ctx.beginPath(); ctx.arc(sx, ground - 58 * tr.s, 26 * tr.s, 0, 7); ctx.fill(); } });
+  // marcos de ano
+  ctx.font = "700 14px 'JetBrains Mono', monospace"; ctx.textAlign = "center";
+  years.forEach(Y => { const sx = Y.x0 - cam + cx; if (sx > -40 && sx < W + 40) {
+    ctx.fillStyle = "rgba(255,255,255,.9)"; ctx.fillRect(sx - 22, ground + 16, 44, 22); ctx.fillStyle = "#14110f"; ctx.fillText(Y.y, sx, ground + 32); } });
+  PERIODOS.forEach(p => { const sx = xOfYear(p.de) - cam + cx; if (sx > -10 && sx < W + 10) { ctx.fillStyle = "rgba(255,255,255,.55)"; ctx.fillRect(sx - 2, ground - 250, 4, 250); } });
+  city(CITY_X - cam + cx, T);
+
+  posters.forEach(it => { const sx = it.x - cam + cx; if (sx > -PW && sx < W + PW) poster(sx, it, T);
+    if (!it.seen && it.x < cam) { it.seen = true; count(it.o); logMsg(describe(it.o)); } });
+
+  if (y >= PINGUIM_DESDE) penguin(cx - 62, ground + 2, step, .8);
+  hero(cx, ground + 2, step, moving || !!drag);
+  filmStrip(cam);
+
+  const pi = periodAt(y);
+  $("yr").textContent = Math.min(YL, Math.floor(y)); $("per").textContent = PERIODOS[pi].titulo;
+  $("nObra").textContent = nObra; $("nReal").textContent = nReal; $("nCli").textContent = clientes.size;
+  if (pi !== lastPer) { lastPer = pi; showCard(pi); }
+  requestAnimationFrame(frame);
+}
+
+/* ---------- controlos ---------- */
+const ICON={play:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>',pause:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>',
+  back:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 6v12L3 12zM20 6v12l-8-6z"/></svg>',restart:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 11-5 5H5a7 7 0 107-7z"/></svg>'};
+function paintUI(){
+  $("play").innerHTML = playing ? ICON.pause : ICON.play; $("play").setAttribute("aria-label", playing ? "Pausa" : "Continuar");
+  $("back").innerHTML = ICON.back; $("restart").innerHTML = ICON.restart;
+}
+const anos = YL - Y0, prods = PRODS.big.length + PRODS.rest;
+$("endp").textContent = `${anos} anos de animação: ${TODAS.length} obras, ${TODAS.filter(realizou).length} delas realizadas por ele, com ${prods} produtoras — de Os Espadinhas a Os Filmes do Pinguim.`;
+const toggle = () => { playing = !playing; paintUI(); };
+$("play").onclick = toggle;
+$("fast").onclick = () => { fast = !fast; $("fast").setAttribute("aria-pressed", fast); };
+$("back").onclick = () => { cam = Math.max(0, xOfYear(Math.floor(yearOf(cam)) - 1)); ended = false; $("end").classList.remove("show"); recount(); };
+$("restart").onclick = $("again").onclick = () => { reset(); playing = true; paintUI(); };
+addEventListener("keydown", e => {
+  if (e.target.closest("button,a") && (e.key === " " || e.key === "Enter")) return;
+  if (e.key === " ") { e.preventDefault(); toggle(); }
+  else if (e.key === "ArrowRight") { cam += 500; recount(); }
+  else if (e.key === "ArrowLeft") { cam = Math.max(0, cam - 500); ended = false; $("end").classList.remove("show"); recount(); }
+});
+// arrastar percorre; um clique curto num cartaz abre a obra
+cv.addEventListener("pointerdown", e => { $("watch").hidden = true; drag = {x: e.clientX, y: e.clientY, cam, moved: 0}; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener("pointermove", e => { if (!drag) return; drag.moved = Math.max(drag.moved, Math.abs(e.clientX - drag.x));
+  cam = Math.max(0, drag.cam - (e.clientX - drag.x) * 1.5); step = cam / 22; recount(); });
+cv.addEventListener("pointerup", e => { const d = drag; drag = null; if (!d || d.moved > 6) return;
+  const cx = W / 2, hit = posters.find(it => { const sx = it.x - cam + cx; return Math.abs(e.clientX - sx) < PW / 2 + 6 && e.clientY > ground - PT - 6 && e.clientY < ground - PT + PH + 46; });
+  const a = $("watch"); if (!hit || !hit.o.url) { a.hidden = true; return; }
+  // um link a sério (não window.open), junto ao cartaz; o filme pausa enquanto está aberto
+  a.href = hit.o.url; a.textContent = `Ver “${hit.o.t}” ↗`; a.hidden = false;
+  a.style.left = Math.max(8, Math.min(W - a.offsetWidth - 8, hit.x - cam + cx - a.offsetWidth / 2)) + "px"; a.style.top = (ground - PT - 52) + "px";
+  if (playing) toggle(); a.focus(); });
+cv.addEventListener("pointermove", e => { if (drag) return; const cx = W / 2;
+  cv.style.cursor = posters.some(it => it.o.url && Math.abs(e.clientX - (it.x - cam + cx)) < PW / 2 + 6 && e.clientY > ground - PT - 6 && e.clientY < ground - PT + PH + 46) ? "pointer" : ""; });
+
+paintUI();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(frame));
+</script>
+</body>
+</html>
