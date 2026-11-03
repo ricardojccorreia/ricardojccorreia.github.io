@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Parede de Obras · Jorge Ribeiro</title>
+<meta name="description" content="Um Arkanoid feito com as obras de Jorge Ribeiro: cada tijolo é uma obra, cada nível é um período do percurso.">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Archivo";src:url("fonts/archivo.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-display:swap}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#14110f;color:#fff;font-family:"Archivo",system-ui,sans-serif;overflow:hidden;-webkit-user-select:none;user-select:none}
+canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none;cursor:none}
+.hud{position:fixed;left:0;right:0;top:26px;display:flex;gap:10px;align-items:flex-start;padding:10px max(12px,env(safe-area-inset-left)) 0;pointer-events:none}
+.hud a,.hud button{pointer-events:auto}
+.home{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:3px;background:rgba(20,17,15,.6);color:#fff;text-decoration:none;font:700 .9rem/1 "Archivo",sans-serif}
+.stats{display:flex;flex-wrap:wrap;gap:4px 6px}
+.stats div{background:rgba(20,17,15,.6);padding:6px 9px;border-radius:3px;font:600 .78rem/1.1 "Archivo",sans-serif;display:flex;gap:8px;justify-content:space-between;min-width:100px;align-items:center}
+.stats b{font:700 .9rem/1 "JetBrains Mono",monospace}
+.lvl{margin-left:auto;text-align:right;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.lvl b{display:block;font:800 clamp(1.6rem,4vw,2.6rem)/.9 "Archivo",sans-serif;font-stretch:72%}
+.lvl span{font:600 .8rem/1.2 "JetBrains Mono",monospace}
+.ctlb{min-width:44px;height:44px;margin-left:6px;background:rgba(20,17,15,.6);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:3px;font:700 .82rem/1 "Archivo",sans-serif;cursor:pointer}
+.banner{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92vw,720px);text-align:center;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.55)}
+.banner p{margin:0 0 8px;font:800 clamp(1.3rem,3.6vw,2.2rem)/1.1 "Archivo",sans-serif;font-stretch:80%;animation:pop 2.6s ease-out forwards}
+.banner p small{display:block;font:600 .9rem/1.3 "JetBrains Mono",monospace;margin-top:4px}
+@keyframes pop{0%{opacity:0;transform:translateY(10px)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+.ticker{position:fixed;left:50%;bottom:calc(36px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,640px);display:flex;gap:10px;align-items:center;background:rgba(20,17,15,.78);padding:6px 10px;border-radius:3px;font:500 .88rem/1.3 "Archivo",sans-serif;min-height:44px;pointer-events:none}
+.ticker:empty{display:none}
+.ticker img{width:64px;height:36px;object-fit:cover;border-radius:2px;flex:none}
+.ticker b{font-weight:700}
+.ticker .t{display:inline-block;padding:1px 6px;border-radius:2px;color:#14110f;font:700 .72rem/1.3 "JetBrains Mono",monospace;margin-right:6px;vertical-align:1px}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,17,15,.62);padding:16px}
+.screen[hidden]{display:none}
+.panel{background:#f7f1e6;color:#14110f;border-radius:4px;padding:24px 26px;max-width:min(94vw,600px);max-height:92vh;overflow:auto;cursor:auto}
+.panel h1,.panel h2{margin:0 0 10px;font:800 clamp(1.8rem,5vw,2.6rem)/1 "Archivo",sans-serif;font-stretch:76%}
+.panel p{margin:0 0 10px;font:400 1rem/1.5 Georgia,serif}
+.panel ul{margin:0 0 14px;padding-left:20px;font:400 .98rem/1.5 Georgia,serif}
+.panel li{margin:3px 0}
+.panel b{font-family:"Archivo",sans-serif}
+.go{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;background:#14110f;color:#fff;border:0;border-radius:3px;font:800 1.05rem/1 "Archivo",sans-serif;cursor:pointer;margin:6px 10px 0 0}
+.panel a{color:#14110f;font:700 1rem/1 "Archivo",sans-serif;display:inline-flex;align-items:center;min-height:44px;margin-right:16px}
+.pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:600 1rem/1.3 "Archivo",sans-serif !important}
+.pick select{min-height:44px;padding:0 10px;font:700 .95rem/1 "JetBrains Mono",monospace;border:1.5px solid #14110f;border-radius:3px;background:#fff;color:#14110f;max-width:100%}
+.score{display:grid;grid-template-columns:1fr auto;gap:4px 18px;margin:0 0 14px;font:500 1rem/1.4 "Archivo",sans-serif}
+.score b{font:700 1rem/1.4 "JetBrains Mono",monospace;text-align:right}
+:focus-visible{outline:2px solid #d2553b;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:700px){.hud{flex-wrap:wrap}.stats{order:5;width:100%}.stats div{min-width:0;flex:1;font-size:.72rem;padding:5px 7px}.home{font-size:.8rem;padding:0 8px}.ticker img{display:none}}
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<header class="hud">
+  <a class="home" href="jogo.html">← Jogos</a>
+  <div class="stats" aria-hidden="true">
+    <div><span>Pontos</span><b id="vScore">0</b></div>
+    <div><span>Vidas</span><b id="vLives">3</b></div>
+    <div><span>Obras partidas</span><b id="vBroken">0</b></div>
+  </div>
+  <div class="lvl" aria-hidden="true"><b id="vLvl">Nível 1</b><span id="vPer"></span></div>
+  <button class="ctlb" id="pause" type="button" aria-label="Pausa">II</button>
+</header>
+<div class="banner" id="banner" aria-hidden="true"></div>
+<div class="ticker" id="ticker" aria-hidden="true"></div>
+<p class="sr" id="live" aria-live="polite"></p>
+<div class="screen" id="start"><div class="panel" role="dialog" aria-labelledby="t1">
+  <h1 id="t1">Parede de Obras</h1>
+  <p id="intro"></p>
+  <ul>
+    <li><b>Lápis:</b> mova o rato, arraste o dedo ou use as setas. Espaço ou toque lançam a bobina.</li>
+    <li><b>Tijolos:</b> cada obra real é um tijolo, com a cor do tipo; cada fila é um ano. As obras que ele realizou (★) precisam de dois toques.</li>
+    <li><b>Realizadores:</b> partir uma obra feita com outro realizador larga uma cápsula; apanhe-a e o lápis cresce durante 10 s.</li>
+    <li><b>Pinguim:</b> as obras de Os Filmes do Pinguim largam um pinguim que traz mais duas bobinas.</li>
+    <li><b>Níveis:</b> os sete períodos do percurso, de 1999 até hoje. Tem três vidas.</li>
+  </ul>
+  <p class="pick"><label for="startLvl">Começar no nível</label> <select id="startLvl"></select></p>
+  <button class="go" id="play" type="button">Começar</button>
+  <a href="jogo.html">Outros jogos</a>
+</div></div>
+<div class="screen" id="end" hidden><div class="panel" role="dialog" aria-labelledby="t2">
+  <h2 id="t2"></h2>
+  <div class="score" id="final"></div>
+  <button class="go" id="again" type="button">Jogar outra vez</button>
+  <a href="jogo.html">Escolher outro jogo</a> <a href="filme.html">Ver o filme</a>
+</div></div>
+<script src="data/obras.js"></script>
+<script>
+/* ==========================================================================
+   Parede de Obras — Arkanoid com o currículo do Jorge Ribeiro.
+   - Níveis: os PERIODOS de data/obras.js; tijolos: as obras de cada período,
+     uma fila por ano (anos cheios partem-se em várias filas de 10).
+   - Cor = tipo de obra; obras realizadas por ele (★) têm dois toques.
+   - Cápsulas: obra com outro realizador → lápis largo 10 s;
+     obra de Os Filmes do Pinguim → pinguim com mais duas bobinas.
+   O campo tem coordenadas lógicas fixas (FW × FH) e é escalado para o ecrã.
+   ========================================================================== */
+
+const $ = id => document.getElementById(id);
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const esc = s => s.replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"})[c]);
+const FW = 960, FH = 680, COLS = 10, BH = 24, BG = 5, TOPY = 70;
+const PIN = "Os Filmes do Pinguim";
+
+const LEVELS = PERIODOS.map((p, i) => { const to = i < PERIODOS.length - 1 ? PERIODOS[i + 1].de - 1 : 2026;
+  return {...p, to, obras: TODAS.filter(o => o.y >= p.de && o.y <= to)}; });
+
+function buildBricks(L){
+  const bw = (FW - 80 - (COLS - 1) * BG) / COLS, rows = [];
+  for (let y = L.de; y <= L.to; y++) { const list = L.obras.filter(o => o.y === y);
+    for (let k = 0; k < list.length; k += COLS) rows.push({y, first: k === 0, list: list.slice(k, k + COLS)}); }
+  const out = [];
+  rows.forEach((r, ri) => { const w = r.list.length * bw + (r.list.length - 1) * BG, x0 = (FW - w) / 2 + 20;
+    r.list.forEach((o, i) => { const ty = TIPOS[o.tipo] || {c: "#ccc", s: o.tipo};
+      out.push({o, x: x0 + i * (bw + BG), y: TOPY + ri * (BH + BG), w: bw, h: BH, c: ty.c, s: ty.s, hp: realizou(o) ? 2 : 1, max: realizou(o) ? 2 : 1, alive: true}); });
+    r.label = {y: TOPY + ri * (BH + BG) + BH / 2, t: r.first ? r.y : ""}; });
+  return {bricks: out, labels: rows.map(r => r.label)};
+}
+
+/* ---------- canvas: campo lógico escalado ---------- */
+const cv = $("c"), ctx = cv.getContext("2d");
+let W, H, DPR, S, OX, OY;
+function resize(){ DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR;
+  const top = W < 700 ? 150 : 96, bot = 90; S = Math.min(W / FW, (H - top - bot) / FH); OX = (W - FW * S) / 2; OY = top + (H - top - bot - FH * S) / 2; }
+addEventListener("resize", resize); resize();
+const hex = h => { const n = parseInt(h.slice(1), 16); return [n >> 16, n >> 8 & 255, n & 255]; };
+const mixC = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t)), css = c => `rgb(${c})`;
+function rnd(s){return()=>(s=s*16807%2147483647)/2147483647}
+const skyline = (() => { const r = rnd(11), a = []; for (let x = -20; x < FW + 40; x += 34 + r() * 22) a.push({x, w: 30 + r() * 26, h: 30 + r() * 70, roof: r() > .4}); return a; })();
+const imgs = {};
+const imgFor = o => { const u = thumb(o); if (!u) return null; if (!imgs[u]) { const im = new Image(); im.src = u; imgs[u] = im; } return imgs[u]; };
+function fit(s, w){ if (ctx.measureText(s).width <= w) return s; while (s.length > 1 && ctx.measureText(s + "…").width > w) s = s.slice(0, -1); return s + "…"; }
+
+/* ---------- estado ---------- */
+let lvl = 0, bricks = [], labels = [], balls = [], caps = [], bits = [], pad, lives, score, broken, maxCombo, combo, playing = false, paused = false, wideT = 0, last = 0, T = 0, keys = {}, aimX = null, lvlBroken = 0;
+let startLvl = +(store.get("ark_jr_lvl") || 0); if (!(startLvl >= 0 && startLvl < LEVELS.length)) startLvl = 0;
+const BASE_PW = 130, R = 9;
+function speed(){ return 430 + lvl * 28; }
+function newBall(stuck){ return {x: pad.x, y: pad.y - R - 8, vx: 0, vy: 0, stuck, spin: 0}; }
+function loadLevel(i){
+  lvl = i; const b = buildBricks(LEVELS[i]); bricks = b.bricks; labels = b.labels; caps = []; bits = []; wideT = 0; lvlBroken = 0;
+  pad = {x: FW / 2, y: FH - 40, w: BASE_PW}; balls = [newBall(true)];
+  $("vLvl").textContent = `Nível ${i + 1}`; $("vPer").textContent = `${LEVELS[i].de}–${i < LEVELS.length - 1 ? LEVELS[i].to : "hoje"} · ${LEVELS[i].titulo}`;
+  banner(`Nível ${i + 1} · ${esc(LEVELS[i].titulo)}<small>${LEVELS[i].obras.length} obras · ${esc(LEVELS[i].sub)}</small>`);
+}
+function banner(html){ const box = $("banner"), p = document.createElement("p"); p.innerHTML = html; box.innerHTML = ""; box.appendChild(p); $("live").textContent = p.textContent; }
+function ticker(o, extra){ const ty = TIPOS[o.tipo] || {c: "#ccc", s: o.tipo}, u = thumb(o);
+  $("ticker").innerHTML = `${u ? `<img src="${u}" alt="">` : ""}<span><span class="t" style="background:${ty.c}">${ty.s}</span><b>${esc(o.t)}</b> (${o.y})${o.cli ? " · " + esc(o.cli) : ""}${extra ? " · " + extra : ""}</span>`; }
+
+function launch(){ if (!playing || paused) return;
+  balls.forEach(b => { if (!b.stuck) return; b.stuck = false; const a = -Math.PI / 2 + (Math.random() - .5) * .6; b.vx = Math.cos(a) * speed(); b.vy = Math.sin(a) * speed(); }); }
+
+function update(dt){
+  T += dt; wideT = Math.max(0, wideT - dt);
+  pad.w += ((wideT > 0 ? BASE_PW * 1.7 : BASE_PW) - pad.w) * Math.min(1, dt * 8);
+  if (keys.l) pad.x -= 720 * dt; if (keys.r) pad.x += 720 * dt;
+  if (aimX !== null) pad.x += (aimX - pad.x) * Math.min(1, dt * 18);
+  pad.x = Math.max(pad.w / 2 + 6, Math.min(FW - pad.w / 2 - 6, pad.x));
+  for (const b of balls) {
+    if (b.stuck) { b.x = pad.x; b.y = pad.y - R - 8; continue; }
+    const steps = 4;
+    for (let s = 0; s < steps; s++) {
+      b.x += b.vx * dt / steps; b.y += b.vy * dt / steps; b.spin += dt * 4 / steps;
+      if (b.x < R) { b.x = R; b.vx = Math.abs(b.vx); } if (b.x > FW - R) { b.x = FW - R; b.vx = -Math.abs(b.vx); }
+      if (b.y < R) { b.y = R; b.vy = Math.abs(b.vy); }
+      // lápis: o ângulo depende de onde a bobina bate
+      if (b.vy > 0 && b.y + R >= pad.y - 7 && b.y + R <= pad.y + 10 && Math.abs(b.x - pad.x) <= pad.w / 2 + R) {
+        const k = Math.max(-1, Math.min(1, (b.x - pad.x) / (pad.w / 2))), a = -Math.PI / 2 + k * 1.05, sp = speed();
+        b.vx = Math.cos(a) * sp; b.vy = Math.sin(a) * sp; b.y = pad.y - 7 - R; combo = 0;
+      }
+      for (const br of bricks) { if (!br.alive) continue;
+        const cx = Math.max(br.x, Math.min(b.x, br.x + br.w)), cy = Math.max(br.y, Math.min(b.y, br.y + br.h)), dx = b.x - cx, dy = b.y - cy;
+        if (dx * dx + dy * dy > R * R) continue;
+        const ox = Math.min(b.x + R - br.x, br.x + br.w - (b.x - R)), oy = Math.min(b.y + R - br.y, br.y + br.h - (b.y - R));
+        if (ox < oy) { b.vx = b.x < br.x + br.w / 2 ? -Math.abs(b.vx) : Math.abs(b.vx); } else { b.vy = b.y < br.y + br.h / 2 ? -Math.abs(b.vy) : Math.abs(b.vy); }
+        hit(br); break; }
+    }
+    // nunca deixar a bobina presa na horizontal
+    if (Math.abs(b.vy) < speed() * .25) { b.vy = (b.vy < 0 ? -1 : 1) * speed() * .25; const k = Math.sqrt(speed() ** 2 - b.vy ** 2); b.vx = Math.sign(b.vx || 1) * k; }
+  }
+  const before = balls.length; balls = balls.filter(b => b.y < FH + 30);
+  if (before && !balls.length) { lives--; paint();
+    if (lives <= 0) return finish(false);
+    banner(`Perdeu uma bobina<small>${lives} ${lives === 1 ? "vida" : "vidas"}</small>`); pad.w = BASE_PW; wideT = 0; balls = [newBall(true)]; }
+  caps.forEach(c => { c.y += 170 * dt; c.r += dt * 3;
+    if (c.y > pad.y - 12 && c.y < pad.y + 12 && Math.abs(c.x - pad.x) < pad.w / 2 + 14) { c.got = true;
+      if (c.k === "p") { const src = balls.find(b => !b.stuck) || balls[0];
+        for (let n = 0; n < 2; n++) { const a = -Math.PI / 2 + (n ? .5 : -.5), sp = speed(); balls.push({x: src.x, y: src.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, stuck: false, spin: 0, pin: true}); }
+        banner("O pinguim trouxe mais duas bobinas"); }
+      else { wideT = 10; banner(`${esc(c.name)} alarga o lápis<small>10 segundos</small>`); } } });
+  caps = caps.filter(c => !c.got && c.y < FH + 20);
+  bits.forEach(p => { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 900 * dt; p.t += dt; }); bits = bits.filter(p => p.t < .7);
+  if (!bricks.some(b => b.alive)) { if (lvl < LEVELS.length - 1) { score += 100 * (lvl + 1); loadLevel(lvl + 1); } else finish(true); }
+  paint();
+}
+function hit(br){
+  br.hp--; combo++; maxCombo = Math.max(maxCombo, combo);
+  if (br.hp > 0) { score += 5; ticker(br.o, "★ realizou — falta um toque"); return; }
+  br.alive = false; broken++; lvlBroken++; score += 10 * combo + (br.max > 1 ? 20 : 0);
+  for (let k = 0; k < 10; k++) bits.push({x: br.x + br.w / 2, y: br.y + br.h / 2, vx: (Math.random() - .5) * 360, vy: -Math.random() * 260, t: 0, c: br.c});
+  const o = br.o;
+  if (o.prod === PIN) caps.push({x: br.x + br.w / 2, y: br.y + br.h, k: "p", r: 0});
+  else if (o.real && o.real !== NOME) caps.push({x: br.x + br.w / 2, y: br.y + br.h, k: "r", name: o.real, r: 0});
+  ticker(o, combo > 1 ? `combo × ${combo}` : "");
+}
+
+/* ---------- desenho ---------- */
+function draw(){
+  const L = LEVELS[lvl], c = hex(L.cor);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = "#14110f"; ctx.fillRect(0, 0, W, H);
+  ctx.setTransform(DPR * S, 0, 0, DPR * S, DPR * OX, DPR * OY);
+  const g = ctx.createLinearGradient(0, 0, 0, FH); g.addColorStop(0, css(mixC(c, [16, 12, 30], .6))); g.addColorStop(1, css(mixC(c, [255, 236, 210], .35)));
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, FW, FH); ctx.clip();
+  ctx.fillStyle = g; ctx.fillRect(0, 0, FW, FH);
+  ctx.fillStyle = css(mixC(c, [20, 17, 15], .65));
+  skyline.forEach(b => { ctx.fillRect(b.x, FH - b.h, b.w, b.h); if (b.roof) { ctx.beginPath(); ctx.moveTo(b.x - 2, FH - b.h); ctx.lineTo(b.x + b.w / 2, FH - b.h - 12); ctx.lineTo(b.x + b.w + 2, FH - b.h); ctx.fill(); } });
+  ctx.restore();
+  ctx.strokeStyle = "rgba(247,241,230,.5)"; ctx.lineWidth = 3; ctx.strokeRect(-1.5, -1.5, FW + 3, FH + 3);
+  // anos à esquerda das filas
+  ctx.font = "700 12px 'JetBrains Mono', monospace"; ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillStyle = "rgba(255,255,255,.8)";
+  labels.forEach(l => l.t && ctx.fillText(l.t, 6, l.y));
+  // tijolos: miniatura da obra a espreitar por baixo da cor do tipo
+  bricks.forEach(b => { if (!b.alive) return;
+    ctx.fillStyle = b.c; ctx.fillRect(b.x, b.y, b.w, b.h);
+    const im = imgFor(b.o); if (im && im.complete && im.naturalWidth) { ctx.save(); ctx.globalAlpha = .35; ctx.beginPath(); ctx.rect(b.x, b.y, b.w, b.h); ctx.clip();
+      const ih = im.naturalHeight * b.w / im.naturalWidth; ctx.drawImage(im, b.x, b.y + (b.h - ih) / 2, b.w, ih); ctx.restore(); }
+    ctx.fillStyle = "rgba(255,255,255,.35)"; ctx.fillRect(b.x, b.y, b.w, 3); ctx.fillStyle = "rgba(0,0,0,.25)"; ctx.fillRect(b.x, b.y + b.h - 3, b.w, 3);
+    if (b.max > 1) { ctx.strokeStyle = "#ffd23f"; ctx.lineWidth = 2.5; ctx.strokeRect(b.x + 1.2, b.y + 1.2, b.w - 2.4, b.h - 2.4); }
+    if (b.max > 1 && b.hp === 1) { ctx.strokeStyle = "rgba(20,17,15,.8)"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(b.x + b.w * .3, b.y); ctx.lineTo(b.x + b.w * .45, b.y + b.h * .5); ctx.lineTo(b.x + b.w * .38, b.y + b.h); ctx.stroke(); }
+    ctx.fillStyle = "#14110f"; ctx.font = "700 10.5px Archivo, sans-serif"; ctx.textAlign = "center";
+    ctx.fillText((b.max > 1 ? "★ " : "") + fit(b.o.t, b.w - (b.max > 1 ? 18 : 8)), b.x + b.w / 2, b.y + b.h / 2 + 1); });
+  bits.forEach(p => { ctx.globalAlpha = 1 - p.t / .7; ctx.fillStyle = p.c; ctx.fillRect(p.x - 3, p.y - 3, 6, 6); }); ctx.globalAlpha = 1;
+  caps.forEach(c2 => { ctx.save(); ctx.translate(c2.x, c2.y);
+    if (c2.k === "p") { penguin(0, 14, .55, Math.sin(c2.r * 2) * .2); }
+    else { ctx.fillStyle = "#f7f1e6"; ctx.beginPath(); ctx.ellipse(0, 0, 28, 11, 0, 0, 7); ctx.fill(); ctx.strokeStyle = "#d2553b"; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = "#14110f"; ctx.font = "700 10px Archivo, sans-serif"; ctx.textAlign = "center"; ctx.fillText(c2.name.split(" ").pop(), 0, 1); }
+    ctx.restore(); });
+  pencil(pad.x, pad.y, pad.w);
+  balls.forEach(b => reel(b.x, b.y, b.spin, b.pin));
+  if (balls.some(b => b.stuck) && playing) { ctx.fillStyle = "rgba(255,255,255,.9)"; ctx.font = "600 14px 'JetBrains Mono', monospace"; ctx.textAlign = "center"; ctx.fillText("espaço ou toque para lançar", FW / 2, FH - 90); }
+  // película nas margens do ecrã
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = "#14110f"; ctx.fillRect(0, 0, W, 26); ctx.fillRect(0, H - 26, W, 26);
+  ctx.fillStyle = "rgba(247,241,230,.85)"; const off = -(T * 40 % 28);
+  for (let x = off; x < W + 28; x += 28) { ctx.fillRect(x, 8, 14, 10); ctx.fillRect(x, H - 18, 14, 10); }
+}
+function pencil(x, y, w){
+  ctx.save(); ctx.translate(x - w / 2, y - 7);
+  ctx.fillStyle = "#f2b8a0"; ctx.fillRect(0, 0, 14, 14); ctx.fillStyle = "#c9c9c9"; ctx.fillRect(14, 0, 6, 14);
+  ctx.fillStyle = "#ffd23f"; ctx.fillRect(20, 0, w - 40, 14); ctx.fillStyle = "rgba(0,0,0,.12)"; ctx.fillRect(20, 9, w - 40, 5);
+  ctx.fillStyle = "#e9c99b"; ctx.beginPath(); ctx.moveTo(w - 20, 0); ctx.lineTo(w, 7); ctx.lineTo(w - 20, 14); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.moveTo(w - 7, 3.5); ctx.lineTo(w, 7); ctx.lineTo(w - 7, 10.5); ctx.fill();
+  ctx.restore();
+}
+function reel(x, y, spin, pin){
+  ctx.save(); ctx.translate(x, y); ctx.rotate(spin);
+  ctx.fillStyle = pin ? "#7fb8ff" : "#f7f1e6"; ctx.beginPath(); ctx.arc(0, 0, R, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; for (let k = 0; k < 5; k++) { const a = k / 5 * 6.28; ctx.beginPath(); ctx.arc(Math.cos(a) * 5, Math.sin(a) * 5, 1.8, 0, 7); ctx.fill(); }
+  ctx.beginPath(); ctx.arc(0, 0, 1.6, 0, 7); ctx.fill(); ctx.restore();
+}
+function penguin(x, y, s, rot){
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(rot);
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.ellipse(0, -26, 17, 26, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.ellipse(3, -22, 11, 19, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(2, -46, 13, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(7, -48, 4.5, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(8.5, -48, 2, 0, 7); ctx.fill();
+  ctx.fillStyle = "#ff9f1c"; ctx.beginPath(); ctx.moveTo(12, -45); ctx.lineTo(23, -42); ctx.lineTo(12, -39); ctx.fill();
+  ctx.fillStyle = "#d2553b"; ctx.fillRect(-11, -36, 24, 5);
+  ctx.restore();
+}
+
+function frame(now){ const dt = Math.min(.033, (now - last) / 1000 || 0); last = now; if (playing && !paused) update(dt); draw(); requestAnimationFrame(frame); }
+function paint(){ $("vScore").textContent = score; $("vLives").textContent = lives; $("vBroken").textContent = broken;
+  $("pause").textContent = paused ? "▶" : "II"; $("pause").setAttribute("aria-label", paused ? "Continuar" : "Pausa"); }
+function finish(won){
+  playing = false;
+  $("t2").textContent = won ? "Parede toda partida — 2026!" : `Fim no nível ${lvl + 1}: ${LEVELS[lvl].titulo}`;
+  $("final").innerHTML = [["Pontos", score], ["Obras partidas", `${broken} / ${TODAS.length}`], ["Nível alcançado", `${lvl + 1} de ${LEVELS.length}`], ["Maior combo", maxCombo]].map(([a, b]) => `<span>${a}</span><b>${b}</b>`).join("");
+  $("end").hidden = false; $("again").focus();
+}
+function start(){ lives = 3; score = 0; broken = 0; maxCombo = 0; combo = 0; loadLevel(startLvl); $("start").hidden = true; $("end").hidden = true; playing = true; paused = false; $("ticker").innerHTML = ""; paint(); }
+
+/* ---------- controlos ---------- */
+$("intro").textContent = `As ${TODAS.length} obras do Jorge, de ${TODAS[0].y} até hoje, empilhadas em sete paredes. Parta-as todas com uma bobina de película.`;
+const sel = $("startLvl"); LEVELS.forEach((L, i) => sel.add(new Option(`${i + 1} · ${L.titulo} (${L.obras.length} obras)`, i)));
+sel.value = startLvl; sel.onchange = () => { startLvl = +sel.value; store.set("ark_jr_lvl", startLvl); };
+$("play").onclick = start; $("again").onclick = start;
+$("pause").onclick = () => { if (!playing) return; paused = !paused; paint(); };
+const toField = cx => (cx - OX) / S;
+cv.addEventListener("pointermove", e => { if (playing) aimX = toField(e.clientX); });
+cv.addEventListener("pointerdown", e => { e.preventDefault(); if (!playing) return; aimX = toField(e.clientX); launch(); });
+addEventListener("keydown", e => {
+  if (e.target.closest("button,a,select")) return;
+  if (e.key === "ArrowLeft" || e.key === "a") { keys.l = true; aimX = null; e.preventDefault(); }
+  else if (e.key === "ArrowRight" || e.key === "d") { keys.r = true; aimX = null; e.preventDefault(); }
+  else if (e.key === " " || e.key === "ArrowUp") { e.preventDefault(); launch(); }
+  else if (e.key === "p" || e.key === "Escape") { if (playing) { paused = !paused; paint(); } }
+});
+addEventListener("keyup", e => { if (e.key === "ArrowLeft" || e.key === "a") keys.l = false; if (e.key === "ArrowRight" || e.key === "d") keys.r = false; });
+addEventListener("blur", () => { keys = {}; if (playing) { paused = true; paint(); } });
+
+lives = 3; score = 0; broken = 0; loadLevel(startLvl); $("banner").innerHTML = "";
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(t => { last = t; frame(t); }));
+</script>
+</body>
+</html>
