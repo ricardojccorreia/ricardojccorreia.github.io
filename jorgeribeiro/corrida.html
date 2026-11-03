@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Corrida das Claquetes · Jorge Ribeiro</title>
+<meta name="description" content="Um jogo de um só botão sobre mais de 25 anos de animação: salte as claquetes; as encomendas pesam; os realizadores com quem trabalhou protegem.">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Archivo";src:url("fonts/archivo.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-display:swap}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#14110f;color:#fff;font-family:"Archivo",system-ui,sans-serif;overflow:hidden;-webkit-user-select:none;user-select:none}
+canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}
+.hud{position:fixed;left:0;right:0;top:26px;display:flex;gap:10px;align-items:flex-start;padding:10px max(12px,env(safe-area-inset-left)) 0;pointer-events:none}
+.hud a,.hud button{pointer-events:auto}
+.home{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:3px;background:rgba(20,17,15,.6);color:#fff;text-decoration:none;font:700 .9rem/1 "Archivo",sans-serif}
+.stats{display:grid;grid-template-columns:repeat(3,auto);gap:4px 6px}
+.stats div{background:rgba(20,17,15,.6);padding:6px 9px;border-radius:3px;font:600 .78rem/1.1 "Archivo",sans-serif;display:flex;gap:8px;justify-content:space-between;min-width:112px}
+.stats b{font:700 .9rem/1 "JetBrains Mono",monospace}
+.stats .sh b{color:#9fe3b0}
+.year{margin-left:auto;text-align:right;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.year b{display:block;font:800 clamp(2.2rem,6vw,4rem)/.9 "Archivo",sans-serif;font-stretch:72%}
+.year span{font:600 .85rem/1.2 "JetBrains Mono",monospace}
+.ctlb{min-width:44px;height:44px;margin-left:6px;background:rgba(20,17,15,.6);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:3px;font:700 .82rem/1 "Archivo",sans-serif;cursor:pointer}
+.banner{position:fixed;left:50%;top:28%;transform:translate(-50%,-50%);width:min(92vw,720px);text-align:center;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+.banner p{margin:0 0 8px;font:800 clamp(1.3rem,3.6vw,2.2rem)/1.1 "Archivo",sans-serif;font-stretch:80%;animation:pop 3s ease-out forwards}
+.banner p small{display:block;font:600 .9rem/1.3 "JetBrains Mono",monospace;margin-top:4px}
+@keyframes pop{0%{opacity:0;transform:translateY(10px)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+.ticker{position:fixed;left:50%;bottom:calc(36px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,760px);background:rgba(20,17,15,.74);padding:9px 12px;border-radius:3px;font:500 .9rem/1.3 "Archivo",sans-serif;min-height:40px;pointer-events:none}
+.ticker b{font-weight:700}
+.ticker .bad{color:#ff9fb1}
+.ticker .ok{color:#9fe3b0}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,17,15,.62);padding:16px}
+.screen[hidden]{display:none}
+.panel{background:#f7f1e6;color:#14110f;border-radius:4px;padding:24px 26px;max-width:min(94vw,600px);max-height:92vh;overflow:auto}
+.panel h1,.panel h2{margin:0 0 10px;font:800 clamp(1.8rem,5vw,2.6rem)/1 "Archivo",sans-serif;font-stretch:76%}
+.panel p{margin:0 0 10px;font:400 1rem/1.5 Georgia,serif}
+.panel ul{margin:0 0 14px;padding-left:20px;font:400 .98rem/1.5 Georgia,serif}
+.panel li{margin:3px 0}
+.panel b{font-family:"Archivo",sans-serif}
+.go{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;background:#14110f;color:#fff;border:0;border-radius:3px;font:800 1.05rem/1 "Archivo",sans-serif;cursor:pointer;margin:6px 10px 0 0}
+.panel a{color:#14110f;font:700 1rem/1 "Archivo",sans-serif;display:inline-flex;align-items:center;min-height:44px;margin-right:16px}
+.pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:600 1rem/1.3 "Archivo",sans-serif !important}
+.pick select{min-height:44px;padding:0 10px;font:700 1rem/1 "JetBrains Mono",monospace;border:1.5px solid #14110f;border-radius:3px;background:#fff;color:#14110f}
+.score{display:grid;grid-template-columns:1fr auto;gap:4px 18px;margin:0 0 14px;font:500 1rem/1.4 "Archivo",sans-serif}
+.score b{font:700 1rem/1.4 "JetBrains Mono",monospace;text-align:right}
+:focus-visible{outline:2px solid #d2553b;outline-offset:2px}
+.fire{position:fixed;left:max(12px,env(safe-area-inset-left));bottom:calc(36px + env(safe-area-inset-bottom));height:44px;padding:0 14px 0 6px;border:0;border-radius:22px;background:#7fb8ff;color:#0b1a2e;font:800 .85rem/1 "Archivo",sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 3px 10px rgba(0,0,0,.35)}
+.fire svg{width:32px;height:32px}
+@media (max-width:1100px){.fire{bottom:calc(90px + env(safe-area-inset-bottom))}}
+.fire[hidden]{display:none}
+.fire:disabled{background:#4c5f78;color:#cfd8e4}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:700px){.fire{bottom:calc(104px + env(safe-area-inset-bottom))}.hud{flex-wrap:wrap}.stats{order:5;width:100%;grid-template-columns:repeat(3,1fr)}.stats div{min-width:0;font-size:.72rem;padding:5px 7px}.year b{font-size:2rem}.home{font-size:.8rem;padding:0 8px}}
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<header class="hud">
+  <a class="home" href="filme.html">Jorge Ribeiro</a>
+  <div class="stats" aria-hidden="true">
+    <div><span>Pontos</span><b id="vScore">0</b></div>
+    <div><span>Idade</span><b id="vAge">24</b></div>
+    <div><span>Peso (kg)</span><b id="vKg">62</b></div>
+    <div><span>Obras no ano</span><b id="vYearN">0</b></div>
+    <div><span>Produtoras</span><b id="vProd">0</b></div>
+    <div class="sh"><span>Ajudantes</span><b id="vHelp">0</b></div>
+  </div>
+  <div class="year" aria-hidden="true"><b id="vYear">1999</b><span id="vJump"></span></div>
+  <button class="ctlb" id="pause" type="button" aria-label="Pausa">II</button>
+</header>
+<button class="fire" id="fire" type="button" hidden><svg viewBox="-20 -30 40 40" aria-hidden="true"><ellipse cx="0" cy="-10" rx="11" ry="16" fill="#14110f"/><ellipse cx="2" cy="-8" rx="7" ry="12" fill="#fff"/><circle cx="1" cy="-22" r="8" fill="#14110f"/><circle cx="4" cy="-23" r="2.6" fill="#fff"/><path d="M8 -21 L15 -19 L8 -17z" fill="#ff9f1c"/></svg><span>Pinguim</span></button>
+<div class="banner" id="banner" aria-hidden="true"></div>
+<div class="ticker" id="ticker" aria-hidden="true"></div>
+<p class="sr" id="live" aria-live="polite"></p>
+<div class="screen" id="start"><div class="panel" role="dialog" aria-labelledby="t1">
+  <h1 id="t1">Corrida das Claquetes</h1>
+  <p id="intro"></p>
+  <ul>
+    <li><b>Saltar:</b> espaço, seta para cima ou tocar no ecrã.</li>
+    <li><b>Claquetes:</b> cada obra real é um obstáculo; uma curta-metragem é mais alta do que um spot.</li>
+    <li><b>Peso:</b> a idade, as encomendas do ano e as produtoras com quem trabalha tornam-no mais pesado — e o salto mais baixo.</li>
+    <li><b>Ajudantes:</b> cada realizador com quem colaborou (Regina Pessoa, Nuno Amorim, Jorge Oliveira…) protege-o de um choque durante um ano e meio.</li>
+    <li><b>Pinguim (a partir de 2018):</b> tecla F, seta para a direita ou botão Pinguim lançam o pinguim a deslizar de barriga, que derruba a próxima claquete (recarrega em 1 s).</li>
+  </ul>
+  <p class="pick"><label for="startYear">Em que ano quer começar?</label> <select id="startYear"></select></p>
+  <button class="go" id="play" type="button"></button>
+  <a href="jogo.html">Outros jogos</a> <a href="filme.html">Prefiro ver o filme</a>
+</div></div>
+<div class="screen" id="end" hidden><div class="panel" role="dialog" aria-labelledby="t2">
+  <h2 id="t2">2026 — fim da rodagem</h2>
+  <div class="score" id="final"></div>
+  <p>Os dados vêm do currículo do Jorge (1999–2022) e, depois disso, de fichas de festivais e notícias, ainda a confirmar.</p>
+  <button class="go" id="again" type="button">Jogar outra vez</button>
+  <a href="jogo.html">Escolher outro jogo</a> <a href="filme.html">Ver o filme</a>
+</div></div>
+<script src="data/obras.js"></script>
+<script>
+/* ==========================================================================
+   Animação — o jogo. Corredor de um só botão (espaço, seta para cima ou toque).
+   - Obstáculos: as obras reais (data/obras.js), em forma de claquete; a altura
+     depende do tipo (spot < videoclip < institucional < série < curta).
+   - Peso: idade + obras desse ano + produtoras ativas (com obra nos últimos
+     3 anos) + Os Filmes do Pinguim. Mais peso = salto mais baixo.
+   - Ajudantes: cada realizador com quem colaborou é um escudo durante 1,5 anos.
+   - Choque sem escudo: tropeça, perde pontos e abranda; não há fim de jogo.
+   - A partir de PINGUIM_DESDE, o pinguim desliza e derruba a próxima claquete.
+   ========================================================================== */
+
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const $=id=>document.getElementById(id);
+const esc = s => s.replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"})[c]);
+
+const T0 = TODAS[0].y, TEND = 2026;
+const helpers = TODAS.filter(o => o.real && o.real !== NOME).map(o => ({name: o.real, from: o.y + .2, to: o.y + 1.7, lastBlock: -9, announced: false}))
+  .filter((h, i, a) => a.findIndex(q => q.name === h.name && Math.abs(q.from - h.from) < 1) === i);
+const firstRole = {}, firstProd = {};
+TODAS.forEach(o => { const fn = o.fn && o.fn.split(" e ")[0]; if (fn && !(fn in firstRole)) firstRole[fn] = o.y; if (o.prod && !(o.prod in firstProd)) firstProd[o.prod] = o.y; });
+
+function weightAt(t){
+  const y = Math.floor(t), age = t - BIRTH_YEAR;
+  const nYear = TODAS.filter(o => o.y === y).length;
+  const prods = new Set(TODAS.filter(o => o.prod && o.y <= y && o.y > y - 3).map(o => o.prod)).size;
+  const pin = t >= PINGUIM_DESDE ? 6 : 0;
+  return {kg: Math.round(60 + age * .4 + Math.min(30, nYear) * .8 + prods + pin), nYear, prods};
+}
+
+/* ---------- pista: cada ano dura o necessário para as suas obras ---------- */
+const SPEED = 380, GAP = 1.05;
+const years = []; let acc = 0;
+for (let y = T0; y <= TEND; y++) {
+  const n = TODAS.filter(o => o.y === y).length, secs = Math.max(3.2, n * GAP + .8);
+  years.push({y, x0: acc, len: secs * SPEED, n}); acc += secs * SPEED;
+}
+const TRACK = acc;
+const xToT = x => { for (const Y of years) if (x < Y.x0 + Y.len) return Y.y + Math.max(0, x - Y.x0) / Y.len; return TEND + .999; };
+const boards = [];
+years.forEach(Y => { const list = TODAS.filter(o => o.y === Y.y);
+  list.forEach((o, i) => { const ty = TIPOS[o.tipo] || {h: 50, c: "#ccc", s: o.tipo};
+    boards.push({x: Y.x0 + 300 + (Y.len - 380) * (list.length === 1 ? .5 : i / (list.length - 1)), o, h: ty.h, w: 30 + Math.round(ty.h / 6), c: ty.c, s: ty.s, state: 0}); }); });
+
+/* ---------- canvas e cenário ---------- */
+const cv = $("c"), ctx = cv.getContext("2d");
+let W, H, ground, DPR;
+function resize(){DPR=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);ground=Math.round(H*.74)}
+addEventListener("resize", resize); resize();
+const hex=h=>{const n=parseInt(h.slice(1),16);return[n>>16,n>>8&255,n&255]};
+const mixC=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t)), css=c=>`rgb(${c})`;
+function pal(t){let i=0;while(i<PERIODOS.length-1&&t>=PERIODOS[i+1].de)i++;let c=hex(PERIODOS[i].cor);if(i<PERIODOS.length-1){const k=Math.max(0,(t-(PERIODOS[i+1].de-.4))/.4);if(k>0)c=mixC(c,hex(PERIODOS[i+1].cor),k)}
+  return {top:mixC(c,[16,12,30],.55),bot:mixC(c,[255,236,210],.55),far:mixC(c,[24,20,40],.35),mid:mixC(c,[20,17,15],.6),gr:mixC(c,[20,17,15],.8),acc:c}}
+function rnd(s){return()=>(s=s*16807%2147483647)/2147483647}
+const hills=(()=>{const r=rnd(7),a=[];for(let x=-400;x<TRACK*.2+3000;x+=120)a.push([x,60+r()*90]);return a})();
+const city=(()=>{const r=rnd(11),a=[];for(let x=-600;x<TRACK*.5+3000;x+=46+r()*30)a.push({x,w:40+r()*34,h:50+r()*90,roof:r()>.4});return a})();
+
+/* ---------- personagem: engorda com o peso ---------- */
+function hero(x, y, kg, step, onGround, trip){
+  const fat = Math.max(0, Math.min(1.4, (kg - 72) / 45));
+  const sw = onGround && !trip ? Math.sin(step) : .5, bw = 17 + fat * 13;
+  ctx.save(); ctx.translate(x, y); if (trip) ctx.rotate(.5);
+  ctx.lineCap = "round";
+  ctx.strokeStyle = "#2b4a78"; ctx.lineWidth = 11 + fat * 3;
+  ctx.beginPath(); ctx.moveTo(-6, -56); ctx.lineTo(-6 + sw * 15, -4); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(6, -56); ctx.lineTo(6 - sw * 15, -4); ctx.stroke();
+  ctx.fillStyle = "#f4f1ea";
+  ctx.beginPath(); ctx.ellipse(-6 + sw * 15 + 5, -2, 10, 5, 0, 0, 7); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(6 - sw * 15 + 5, -2, 10, 5, 0, 0, 7); ctx.fill();
+  ctx.save(); ctx.beginPath();
+  ctx.moveTo(-bw + 2, -122); ctx.quadraticCurveTo(-bw - fat * 10, -90, -bw + 1, -56); ctx.lineTo(bw - 1, -56); ctx.quadraticCurveTo(bw + fat * 12, -90, bw - 2, -122); ctx.closePath();
+  ctx.fillStyle = "#d2553b"; ctx.fill(); ctx.clip();
+  ctx.fillStyle = "#f7f1e6"; for (let k = 0; k < 4; k++) ctx.fillRect(-bw - 20, -112 + k * 15, bw * 2 + 40, 5);
+  ctx.restore();
+  // lápis ao ombro
+  ctx.save(); ctx.translate(bw - 8, -118); ctx.rotate(-.9);
+  ctx.fillStyle = "#ffd23f"; ctx.fillRect(-4, -6, 52, 12); ctx.fillStyle = "#f2b8a0"; ctx.fillRect(-12, -6, 8, 12);
+  ctx.fillStyle = "#e9c99b"; ctx.beginPath(); ctx.moveTo(48, -6); ctx.lineTo(62, 0); ctx.lineTo(48, 6); ctx.fill(); ctx.restore();
+  ctx.strokeStyle = "#c04a33"; ctx.lineWidth = 9 + fat * 2; ctx.beginPath(); ctx.moveTo(bw - 8, -114); ctx.lineTo(bw, -96); ctx.lineTo(bw + 4, -110); ctx.stroke();
+  const hr = 17 + fat * 2;
+  ctx.fillStyle = "#e3b48f"; ctx.beginPath(); ctx.arc(2, -140, hr, 0, 7); ctx.fill();
+  ctx.fillStyle = "#2a211c"; ctx.beginPath(); ctx.arc(1, -145, hr + .5, Math.PI * .92, Math.PI * 2.08); ctx.fill();
+  ctx.beginPath(); ctx.arc(2, -136, hr, Math.PI * .1, Math.PI * .9); ctx.lineTo(-8, -134); ctx.quadraticCurveTo(4, -128, 15, -134); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(9, -143, 2, 0, 7); ctx.fill();
+  ctx.restore();
+}
+function helperFig(x, y, name, i, step){
+  const sw = Math.sin(step + i * 1.3);
+  ctx.save(); ctx.translate(x, y);
+  ctx.strokeStyle = "#20283a"; ctx.lineWidth = 6; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(-3, -30); ctx.lineTo(-3 + sw * 8, -2); ctx.moveTo(3, -30); ctx.lineTo(3 - sw * 8, -2); ctx.stroke();
+  ctx.fillStyle = ["#2e8b57", "#3fa7c9", "#8a5cd0", "#d08a2e"][i % 4]; ctx.fillRect(-9, -64, 18, 36);
+  ctx.fillStyle = "#e9b58f"; ctx.beginPath(); ctx.arc(0, -73, 10, 0, 7); ctx.fill();
+  // megafone de realizador
+  ctx.fillStyle = "#f7f1e6"; ctx.beginPath(); ctx.moveTo(8, -58); ctx.lineTo(20, -64); ctx.lineTo(20, -48); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.font = "700 10px 'JetBrains Mono', monospace"; ctx.textAlign = "center";
+  ctx.fillText(name.split(" ").pop(), 0, -90 - (i % 2) * 12);
+  ctx.restore();
+}
+function penguin(x, y, s, rot){
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(rot);
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.ellipse(0, -26, 17, 26, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.ellipse(3, -22, 11, 19, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(2, -46, 13, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(7, -48, 4.5, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(8.5, -48, 2, 0, 7); ctx.fill();
+  ctx.fillStyle = "#ff9f1c"; ctx.beginPath(); ctx.moveTo(12, -45); ctx.lineTo(23, -42); ctx.lineTo(12, -39); ctx.fill();
+  ctx.fillStyle = "#d2553b"; ctx.fillRect(-11, -36, 24, 5);
+  ctx.restore();
+}
+/* Claquete: corpo na cor do tipo de obra, barra às riscas por cima */
+function clapper(x, b){
+  const top = ground - b.h, l = x - b.w / 2;
+  ctx.fillStyle = b.state === 2 ? "#ffb3c1" : "#1d1916"; ctx.fillRect(l, top + 9, b.w, b.h - 9);
+  ctx.fillStyle = b.c; ctx.fillRect(l + 3, top + 13, b.w - 6, b.h - 16);
+  ctx.save(); ctx.translate(l, top + 9); ctx.rotate(b.state === 0 ? -.18 : -.05);
+  ctx.fillStyle = "#1d1916"; ctx.fillRect(0, -9, b.w, 9);
+  ctx.fillStyle = "#fff"; for (let k = 0; k < b.w; k += 10) { ctx.beginPath(); ctx.moveTo(k, -9); ctx.lineTo(k + 5, -9); ctx.lineTo(k + 1, 0); ctx.lineTo(k - 4, 0); ctx.fill(); }
+  ctx.restore();
+  ctx.fillStyle = "#1d1916"; ctx.font = "700 9px 'JetBrains Mono', monospace"; ctx.textAlign = "center"; ctx.fillText(b.o.y, x, top + 26);
+  if (realizou(b.o)) { ctx.fillStyle = "#ffd23f"; ctx.font = "800 14px Archivo, sans-serif"; ctx.fillText("★", x, top - 8); }
+}
+function filmStrip(off){
+  ctx.fillStyle = "#14110f"; ctx.fillRect(0, 0, W, 26); ctx.fillRect(0, H - 26, W, 26);
+  ctx.fillStyle = "rgba(247,241,230,.85)"; const o = -(off % 28);
+  for (let x = o; x < W + 28; x += 28) { ctx.fillRect(x, 8, 14, 10); ctx.fillRect(x, H - 18, 14, 10); }
+}
+
+/* ---------- estado ---------- */
+let slides = [], hitsFx = [], fireCd = 0, nFired = 0, pinOn = false;
+let startYear = +(store.get("corrida_jr_ano") || T0); if (!(startYear >= T0 && startYear <= TEND)) startYear = T0;
+let x, vy, hy, playing = false, paused = false, last = 0, step = 0, slow = 0, trip = 0, score, nClear, nHit, nSaved, maxKg, nextB;
+const shownRole = {}, shownProd = {};
+function reset(){
+  slides = []; hitsFx = []; fireCd = 0; nFired = 0; pinOn = false; $("fire").hidden = true;
+  x = 0; vy = 0; hy = 0; step = 0; slow = 0; trip = 0; score = 0; nClear = 0; nHit = 0; nSaved = 0; maxKg = 0; nextB = 0;
+  boards.forEach(b => b.state = 0); helpers.forEach(h => { h.lastBlock = -9; h.announced = false; });
+  for (const k in firstRole) shownRole[k] = false; for (const k in firstProd) shownProd[k] = false;
+  $("ticker").innerHTML = ""; $("banner").innerHTML = "";
+}
+function banner(html){
+  const box = $("banner"), same = [...box.children].find(e => e.dataset.k === html);
+  if (same) { same.dataset.n = +same.dataset.n + 1; same.querySelector(".n").textContent = ` × ${same.dataset.n}`; return; }
+  const p = document.createElement("p"); p.dataset.k = html; p.dataset.n = 1;
+  p.innerHTML = html.replace(/<small>|$/, m => `<span class="n"></span>${m}`);
+  box.appendChild(p); while (box.children.length > 2) box.firstChild.remove();
+  setTimeout(() => p.remove(), 3000); $("live").textContent = p.textContent;
+}
+const ticker = html => { $("ticker").innerHTML = html; };
+const who = o => [o.cli, o.real && o.real !== NOME ? "real. " + o.real : ""].filter(Boolean).join(" · ");
+const label = b => `<b>${esc(b.o.t)}</b> (${b.o.y}) · ${b.s}${who(b.o) ? " · " + esc(who(b.o)) : ""}`;
+
+const jumpFactor = kg => Math.max(.56, Math.min(1, 1 - (kg - 72) / 110));
+function jump(){ if (!playing || paused) return; if (hy === 0 && trip <= 0) vy = 930 * jumpFactor(weightAt(xToT(x)).kg); }
+function fire(){ if (!playing || paused || !pinOn || fireCd > 0) return; slides.push({x: x + 30, d: 0}); fireCd = 1; }
+
+function frame(now){
+  const dt = Math.min(.04, (now - last) / 1000 || 0); last = now;
+  if (playing && !paused) update(dt);
+  draw(); requestAnimationFrame(frame);
+}
+function update(dt){
+  const sp = SPEED * (slow > 0 ? .45 : 1);
+  slow = Math.max(0, slow - dt); trip = Math.max(0, trip - dt);
+  x += sp * dt; step += dt * 10 * (slow > 0 ? .5 : 1);
+  if (hy > 0 || vy > 0) { vy -= 2600 * dt; hy = Math.max(0, hy + vy * dt); if (hy === 0) vy = 0; }
+  const t = xToT(x), w = weightAt(t), y = Math.floor(t);
+  maxKg = Math.max(maxKg, w.kg);
+  if (!pinOn && t >= PINGUIM_DESDE) { pinOn = true; $("fire").hidden = false; banner("Nasceram Os Filmes do Pinguim<small>F ou botão Pinguim: derruba a próxima claquete · +6 kg</small>"); }
+  fireCd = Math.max(0, fireCd - dt); $("fire").disabled = fireCd > 0;
+  slides.forEach(s => { const dx = (760 + sp) * dt; s.x += dx; s.d += dx;
+    for (let i = nextB; i < boards.length; i++) { const b = boards[i]; if (b.x - s.x > 40) break;
+      if (b.state === 0 && Math.abs(b.x - s.x) < b.w / 2 + 12) { b.state = 4; s.d = 1e9; nFired++; score += 5; hitsFx.push({x: b.x, h: b.h, t: 0, c: b.c});
+        ticker(`<span class="ok">O pinguim derrubou</span> ${label(b)}`); break; } } });
+  slides = slides.filter(s => s.d < 760);
+  hitsFx.forEach(f => f.t += dt); hitsFx = hitsFx.filter(f => f.t < .6);
+  // eventos: primeira vez numa função, primeira obra com uma produtora, novos ajudantes
+  for (const k in firstRole) if (!shownRole[k] && t >= firstRole[k] + .1) { shownRole[k] = true; banner(`Primeira vez: ${esc(k.toLowerCase())}`); }
+  for (const k in firstProd) if (!shownProd[k] && t >= firstProd[k] + .15) { shownProd[k] = true; if (k !== "Os Filmes do Pinguim") banner(`Primeira obra com ${esc(k)}<small>+1 kg enquanto durar</small>`); }
+  helpers.forEach(h => { if (!h.announced && t >= h.from && t < h.to) { h.announced = true; banner(`Novo ajudante: ${esc(h.name)}`); } });
+  // colisões
+  const hx = W * .3;
+  for (let i = nextB; i < boards.length; i++) {
+    const b = boards[i], px = b.x - x + hx;
+    if (px > hx + 60) break;
+    if (b.state !== 0) continue;
+    if (Math.abs(px - hx) < b.w / 2 + 12 && hy < b.h - 4) {
+      const act = helpers.filter(h => t >= h.from && t < h.to && t - h.lastBlock >= 1);
+      if (act.length) { act[0].lastBlock = t; b.state = 3; nSaved++; score += 1; ticker(`<span class="ok">${esc(act[0].name)} segurou-o em</span> ${label(b)}`); }
+      else { b.state = 2; nHit++; score = Math.max(0, score - 5); slow = 1.2; trip = .6; ticker(`<span class="bad">Tropeçou em</span> ${label(b)}`); }
+    } else if (px < hx - b.w / 2 - 12) {
+      b.state = 1; nClear++; score += 10 + (realizou(b.o) ? 10 : 0); ticker(`Saltou ${label(b)}`); nextB = i + 1;
+    }
+  }
+  while (nextB < boards.length && boards[nextB].state !== 0) nextB++;
+  if (x >= TRACK - 10) finish();
+}
+
+function draw(){
+  const t = xToT(x), P = pal(t), hx = W * .3, w = weightAt(t);
+  const g = ctx.createLinearGradient(0, 0, 0, ground); g.addColorStop(0, css(P.top)); g.addColorStop(1, css(P.bot));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, ground);
+  ctx.fillStyle = "rgba(255,246,220,.85)"; ctx.beginPath(); ctx.arc(W * .82, H * .22, 30, 0, 7); ctx.fill();
+  ctx.fillStyle = css(P.far); ctx.beginPath(); ctx.moveTo(0, ground);
+  hills.forEach(([hx2, h]) => { const sx = hx2 - x * .2; if (sx > -200 && sx < W + 200) ctx.lineTo(sx, ground - 70 - h); }); ctx.lineTo(W, ground); ctx.fill();
+  ctx.fillStyle = css(P.mid); city.forEach(b => { const sx = b.x - x * .5; if (sx > -100 && sx < W + 100) { ctx.fillRect(sx, ground - b.h, b.w, b.h);
+    if (b.roof) { ctx.beginPath(); ctx.moveTo(sx - 3, ground - b.h); ctx.lineTo(sx + b.w / 2, ground - b.h - 16); ctx.lineTo(sx + b.w + 3, ground - b.h); ctx.fill(); } } });
+  ctx.fillStyle = css(P.gr); ctx.fillRect(0, ground, W, H - ground);
+  ctx.fillStyle = css(mixC(P.acc, [255, 255, 255], .2)); ctx.fillRect(0, ground, W, 4);
+  ctx.font = "700 13px 'JetBrains Mono', monospace"; ctx.textAlign = "center";
+  years.forEach(Y => { const sx = Y.x0 - x + hx; if (sx > -40 && sx < W + 40) { ctx.fillStyle = "rgba(255,255,255,.9)"; ctx.fillRect(sx - 22, ground + 14, 44, 20); ctx.fillStyle = "#14110f"; ctx.fillText(Y.y, sx, ground + 29); } });
+  for (let i = Math.max(0, nextB - 6); i < boards.length; i++) { const b = boards[i], sx = b.x - x + hx; if (sx > W + 60) break; if (sx > -60 && (b.state === 0 || b.state === 2)) clapper(sx, b); }
+  slides.forEach(s => penguin(s.x - x + hx, ground - 4, .75, Math.PI / 2 - .1));
+  hitsFx.forEach(f => { const sx = f.x - x + hx, k = f.t / .6; ctx.globalAlpha = 1 - k; ctx.fillStyle = f.c;
+    for (let j = 0; j < 6; j++) { const a = j / 6 * 6.28; ctx.fillRect(sx + Math.cos(a) * 40 * k - 4, ground - f.h / 2 + Math.sin(a) * 40 * k - 4, 8, 8); } ctx.globalAlpha = 1; });
+  const act = helpers.filter(h => t >= h.from && t < h.to);
+  act.slice(0, 5).forEach((h, i) => helperFig(hx - 50 - i * 32, ground, h.name, i, step));
+  if (pinOn && fireCd <= 0) penguin(hx + 34, ground, .55, Math.sin(step) * .12);
+  hero(hx, ground - hy, w.kg, step, hy === 0, trip > 0);
+  filmStrip(x * .9);
+  $("vYear").textContent = Math.floor(t); $("vScore").textContent = score ?? 0; $("vAge").textContent = Math.floor(t - BIRTH_YEAR);
+  $("vKg").textContent = w.kg; $("vYearN").textContent = w.nYear; $("vProd").textContent = w.prods; $("vHelp").textContent = act.length;
+  $("vJump").textContent = `salto ${Math.round(jumpFactor(w.kg) * 100)}%`;
+}
+
+function finish(){
+  playing = false;
+  $("final").innerHTML = [["Pontos", score], ["Claquetes saltadas", `${nClear} / ${boards.filter(b => b.state !== 5).length}`], ["Tropeções", nHit], ["Salvo por ajudantes", nSaved], ["Derrubadas pelo pinguim", nFired], ["Peso máximo", maxKg + " kg"]]
+    .map(([a, b]) => `<span>${a}</span><b>${b}</b>`).join("");
+  $("end").hidden = false; $("again").focus();
+}
+
+/* ---------- interface ---------- */
+$("intro").textContent = `${TEND - T0} anos de animação, de ${T0} a ${TEND}: ${TODAS.length} obras, do Porto para a RTP. Corra e salte por cima das claquetes.`;
+function paint(){
+  $("pause").setAttribute("aria-label", paused ? "Continuar" : "Pausa"); $("pause").textContent = paused ? "▶" : "II";
+  const sel = $("startYear");
+  if (!sel.options.length) { years.forEach(Y => sel.add(new Option(Y.y, Y.y))); sel.onchange = () => { startYear = +sel.value; store.set("corrida_jr_ano", startYear); reset(); applyStart(); paint(); }; }
+  sel.value = startYear; $("play").textContent = `Começar em ${startYear}`;
+}
+// Começar a meio: o que ficou para trás já pesa, mas não pontua
+function applyStart(){
+  const Y = years.find(q => q.y === startYear) || years[0], t = Y.y; x = Y.x0;
+  boards.forEach(b => { if (b.x < x) b.state = 5; });
+  nextB = boards.findIndex(b => b.state === 0); if (nextB < 0) nextB = boards.length;
+  for (const k in firstRole) shownRole[k] = firstRole[k] < t; for (const k in firstProd) shownProd[k] = firstProd[k] < t;
+  helpers.forEach(h => h.announced = h.from <= t);
+  pinOn = t > PINGUIM_DESDE; $("fire").hidden = !pinOn;
+}
+function start(){ reset(); applyStart(); $("start").hidden = true; $("end").hidden = true; playing = true; paused = false; paint(); cv.focus(); }
+$("play").onclick = start; $("again").onclick = start;
+$("pause").onclick = () => { if (!playing) return; paused = !paused; paint(); };
+addEventListener("keydown", e => {
+  if (e.target.closest("button,a,select")) return;
+  if (e.key === " " || e.key === "ArrowUp" || e.key === "w") { e.preventDefault(); jump(); }
+  else if (e.key === "f" || e.key === "F" || e.key === "ArrowRight") { e.preventDefault(); fire(); }
+  else if (e.key === "p" || e.key === "Escape") { if (playing) { paused = !paused; paint(); } }
+});
+cv.addEventListener("pointerdown", e => { e.preventDefault(); jump(); });
+$("fire").addEventListener("pointerdown", e => { e.preventDefault(); e.stopPropagation(); fire(); });
+$("fire").addEventListener("click", e => { if (e.detail === 0) fire(); });
+
+reset(); applyStart(); paint();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(t => { last = t; frame(t); }));
+</script>
+</body>
+</html>
