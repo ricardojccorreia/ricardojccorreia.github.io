@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Rolling Pinguim · Jorge Ribeiro</title>
+<meta name="description" content="Um Rolling Thunder com o currículo de Jorge Ribeiro: o agente Jorge resgata os filmes raptados, período a período.">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Archivo";src:url("fonts/archivo.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-display:swap}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#14110f;color:#fff;font-family:"Archivo",system-ui,sans-serif;overflow:hidden;-webkit-user-select:none;user-select:none}
+canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}
+.hud{position:fixed;left:0;right:0;top:26px;display:flex;gap:10px;align-items:flex-start;padding:10px max(12px,env(safe-area-inset-left)) 0;pointer-events:none}
+.hud a,.hud button{pointer-events:auto}
+.home{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:3px;background:rgba(20,17,15,.6);color:#fff;text-decoration:none;font:700 .9rem/1 "Archivo",sans-serif}
+.stats{display:flex;flex-wrap:wrap;gap:4px 6px}
+.stats div{background:rgba(20,17,15,.65);padding:6px 9px;border-radius:3px;font:600 .78rem/1.1 "Archivo",sans-serif;display:flex;gap:8px;justify-content:space-between;min-width:96px;align-items:center}
+.stats b{font:700 .9rem/1 "JetBrains Mono",monospace}
+.energy{display:inline-flex;gap:3px}
+.energy i{width:9px;height:14px;background:#7be38a;border-radius:1px}
+.energy i.off{background:rgba(255,255,255,.2)}
+.lvl{margin-left:auto;text-align:right;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.lvl b{display:block;font:800 clamp(1.5rem,4vw,2.4rem)/.9 "Archivo",sans-serif;font-stretch:72%}
+.lvl span{font:600 .8rem/1.2 "JetBrains Mono",monospace}
+.ctlb{min-width:44px;height:44px;margin-left:6px;background:rgba(20,17,15,.6);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:3px;font:700 .82rem/1 "Archivo",sans-serif;cursor:pointer}
+.banner{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);width:min(92vw,760px);text-align:center;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.banner p{margin:0 0 8px;font:800 clamp(1.4rem,3.8vw,2.4rem)/1.1 "Archivo",sans-serif;font-stretch:80%;animation:pop 2.8s ease-out forwards}
+.banner p small{display:block;font:600 .9rem/1.3 "JetBrains Mono",monospace;margin-top:4px}
+@keyframes pop{0%{opacity:0;transform:translateY(10px)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+.ticker{position:fixed;left:50%;bottom:calc(36px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,640px);display:flex;gap:10px;align-items:center;background:rgba(20,17,15,.8);padding:6px 10px;border-radius:3px;font:500 .88rem/1.3 "Archivo",sans-serif;min-height:44px;pointer-events:none}
+.ticker:empty{display:none}
+.ticker img{width:64px;height:36px;object-fit:cover;border-radius:2px;flex:none}
+.ticker b{font-weight:700}
+.ticker .bad{color:#ff9fb1}.ticker .ok{color:#9fe3b0}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,17,15,.62);padding:16px;z-index:4}
+.screen[hidden]{display:none}
+.panel{background:#f7f1e6;color:#14110f;border-radius:4px;padding:24px 26px;max-width:min(94vw,620px);max-height:92vh;overflow:auto}
+.panel h1,.panel h2{margin:0 0 10px;font:800 clamp(1.8rem,5vw,2.6rem)/1 "Archivo",sans-serif;font-stretch:76%}
+.panel p{margin:0 0 10px;font:400 1rem/1.5 Georgia,serif}
+.panel ul{margin:0 0 14px;padding-left:20px;font:400 .96rem/1.5 Georgia,serif}
+.panel li{margin:3px 0}
+.panel b{font-family:"Archivo",sans-serif}
+.panel kbd{font:700 .8rem/1 "JetBrains Mono",monospace;background:#14110f;color:#fff;padding:2px 5px;border-radius:2px}
+.go{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;background:#14110f;color:#fff;border:0;border-radius:3px;font:800 1.05rem/1 "Archivo",sans-serif;cursor:pointer;margin:6px 10px 0 0}
+.panel a{color:#14110f;font:700 1rem/1 "Archivo",sans-serif;display:inline-flex;align-items:center;min-height:44px;margin-right:16px}
+.pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:600 1rem/1.3 "Archivo",sans-serif !important}
+.pick select{min-height:44px;padding:0 10px;font:700 .95rem/1 "JetBrains Mono",monospace;border:1.5px solid #14110f;border-radius:3px;background:#fff;color:#14110f;max-width:100%}
+.score{display:grid;grid-template-columns:1fr auto;gap:4px 18px;margin:0 0 14px;font:500 1rem/1.4 "Archivo",sans-serif}
+.score b{font:700 1rem/1.4 "JetBrains Mono",monospace;text-align:right}
+:focus-visible{outline:2px solid #d2553b;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* comandos de toque */
+.pad{position:fixed;left:0;right:0;bottom:calc(30px + env(safe-area-inset-bottom));display:none;justify-content:space-between;padding:0 max(12px,env(safe-area-inset-left));pointer-events:none;z-index:3}
+.pad div{display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(2,52px);gap:6px;pointer-events:auto}
+.pad button{border:1px solid rgba(255,255,255,.35);background:rgba(20,17,15,.55);color:#fff;border-radius:8px;font:800 1rem/1 "Archivo",sans-serif;touch-action:none}
+.pad .r{grid-template-columns:repeat(2,76px)}
+@media (pointer:coarse){.pad{display:flex}.ticker{bottom:auto;top:150px}}
+@media (max-width:700px){.hud{flex-wrap:wrap}.stats{order:5;width:100%}.stats div{min-width:0;flex:1;font-size:.72rem;padding:5px 7px}.home{font-size:.8rem;padding:0 8px}.ticker img{display:none}}
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<header class="hud">
+  <a class="home" href="jogo.html">← Jogos</a>
+  <div class="stats" aria-hidden="true">
+    <div><span>Pontos</span><b id="vScore">0</b></div>
+    <div><span>Vidas</span><b id="vLives">3</b></div>
+    <div><span>Energia</span><span class="energy" id="vEn"></span></div>
+    <div><span>Lápis</span><b id="vAmmo">30</b></div>
+    <div><span>Obras</span><b id="vObras">0</b></div>
+  </div>
+  <div class="lvl" aria-hidden="true"><b id="vLvl">Missão 1</b><span id="vPer"></span></div>
+  <button class="ctlb" id="pause" type="button" aria-label="Pausa">II</button>
+</header>
+<div class="banner" id="banner" aria-hidden="true"></div>
+<div class="ticker" id="ticker" aria-hidden="true"></div>
+<p class="sr" id="live" aria-live="polite"></p>
+<div class="pad" id="pad" aria-hidden="true">
+  <div><span></span><button data-k="up">▲</button><span></span><button data-k="left">◀</button><button data-k="down">▼</button><button data-k="right">▶</button></div>
+  <div class="r"><button data-k="jump">Saltar</button><button data-k="fire">Lápis</button></div>
+</div>
+<div class="screen" id="start"><div class="panel" role="dialog" aria-labelledby="t1">
+  <h1 id="t1">Rolling Pinguim</h1>
+  <p id="intro"></p>
+  <ul>
+    <li><b>Mover:</b> <kbd>←</kbd> <kbd>→</kbd> · <b>saltar:</b> <kbd>espaço</kbd> (para fugir aos pedidos de alteração) · <b>lançar lápis:</b> <kbd>F</kbd> ou <kbd>Z</kbd>.</li>
+    <li><b>Dois andares:</b> <kbd>↑</kbd> sobe para a varanda; <kbd>↓</kbd> desce para a rua.</li>
+    <li><b>Portas:</b> <kbd>↑</kbd> à frente de uma porta entra e esconde-se. As portas <b>LÁPIS</b> dão mais 20 lápis.</li>
+    <li><b>Inimigos:</b> os encapuzados são os prazos e alterações de última hora dos clientes de cada período. Saem das portas das produtoras.</li>
+    <li><b>Pinguim (a partir de 2016):</b> apanhe-o e os lápis saem em rajada, sem gastar, durante 12 s.</li>
+    <li><b>Missões:</b> sete períodos, cada um com um filme raptado no fim da rua. Na última missão, o fecho de emissão guarda <i>As Sete Caixas</i>.</li>
+  </ul>
+  <p class="pick"><label for="startLvl">Começar na missão</label> <select id="startLvl"></select></p>
+  <button class="go" id="play" type="button">Começar</button>
+  <a href="jogo.html">Outros jogos</a>
+</div></div>
+<div class="screen" id="end" hidden><div class="panel" role="dialog" aria-labelledby="t2">
+  <h2 id="t2"></h2>
+  <div class="score" id="final"></div>
+  <button class="go" id="again" type="button">Jogar outra vez</button>
+  <a href="jogo.html">Escolher outro jogo</a> <a href="filme.html">Ver o filme</a>
+</div></div>
+<script src="data/obras.js"></script>
+<script>
+/* ==========================================================================
+   Rolling Pinguim — Rolling Thunder com o currículo do Jorge Ribeiro.
+   - Missões: os PERIODOS de data/obras.js. No fim da rua de cada missão está
+     o filme raptado desse período (o mais marcante que ele realizou).
+   - Rua de dois andares: chão e varandas; portas com o nome das produtoras
+     do período (de onde saem os encapuzados) e portas LÁPIS (munições).
+   - Encapuzados: os clientes do período; disparam pedidos de alteração
+     à altura do peito (saltar evita-os).
+   - Cartazes na parede: as obras do período, que contam ao passar.
+   - Pinguim (períodos a partir de 2016): rajada de lápis grátis durante 12 s.
+   - Última missão: chefe "Fecho de emissão".
+   ========================================================================== */
+
+const $ = id => document.getElementById(id);
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const esc = s => String(s).replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"})[c]);
+function rnd(s){return()=>(s=s*16807%2147483647)/2147483647}
+const hex = h => { const n = parseInt(h.slice(1), 16); return [n >> 16, n >> 8 & 255, n & 255]; };
+const mixC = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t)), css = c => `rgb(${c})`;
+const imgs = {};
+const imgFor = o => { const u = o && thumb(o); if (!u) return null; if (!imgs[u]) { const im = new Image(); im.src = u; imgs[u] = im; } return imgs[u]; };
+const shortName = n => { n = n.split(",")[0].trim(); if (n.length <= 12) return n; return n.split(/\s+/).filter(w => /^[A-ZÁÉÍÓÚÂÊÔÃÕÇ0-9]/.test(w)).map(w => w[0]).join(""); };
+
+const ORDER = ["Curta Metragem", "Série", "Videoclip", "Videoclip Infantil", "Filme institucional", "Spot Publicitário"];
+const MISSIONS = PERIODOS.map((p, i) => { const to = i < PERIODOS.length - 1 ? PERIODOS[i + 1].de - 1 : 2026;
+  const obras = TODAS.filter(o => o.y >= p.de && o.y <= to);
+  const mine = obras.filter(realizou).sort((a, b) => (thumb(b) ? 1 : 0) - (thumb(a) ? 1 : 0) || ORDER.indexOf(a.tipo) - ORDER.indexOf(b.tipo));
+  const hostage = i === PERIODOS.length - 1 ? (obras.find(o => /Sete Caixas/.test(o.t)) || mine[0]) : (mine[0] || obras[0]);
+  const count = key => { const m = new Map(); obras.forEach(o => { const v = o[key]; if (v && v !== NOME) m.set(v, (m.get(v) || 0) + 1); }); return [...m].sort((a, b) => b[1] - a[1]).map(e => e[0]); };
+  const foes = count("cli"); if (foes.length < 3) foes.push("Prazo", "Alteração", "Última hora");
+  const prods = count("prod"); if (!prods.length) prods.push("Estúdio");
+  return {...p, to, obras, hostage, foes, prods, len: 2600 + obras.length * 90}; });
+
+/* ---------- canvas: vista com altura lógica fixa ---------- */
+const VH = 600, FLOOR = [0, -190];
+const cv = $("c"), ctx = cv.getContext("2d");
+let W, H, DPR, S, VW, GY;
+function resize(){ DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; S = H / VH; VW = W / S; GY = VH * .8; }
+addEventListener("resize", resize); resize();
+
+/* ---------- estado ---------- */
+let mi = 0, M, segs, doors, posters, foes, shots, notes, items, boss, pl, cam, score, lives, nObras, nKills, playing = false, paused = false, T = 0, last = 0, rapid = 0, spawnT = 0, rescueT = 0, keys = {}, ammoMax = 99;
+let startLvl = +(store.get("rt_jr_lvl") || 0); if (!(startLvl >= 0 && startLvl < MISSIONS.length)) startLvl = 0;
+
+function buildMission(i){
+  mi = i; M = MISSIONS[i]; const r = rnd(101 + i * 13), L = M.len, bossLvl = i === MISSIONS.length - 1;
+  segs = []; for (let x = 380; x < L - (bossLvl ? 900 : 420);) { const w = 420 + r() * 520; segs.push({a: x, b: Math.min(x + w, L - (bossLvl ? 900 : 420))}); x += w + 170 + r() * 160; }
+  doors = []; let k = 0;
+  for (let x = 520; x < L - 300; x += 300 + r() * 160) {
+    const up = segs.some(s => x > s.a + 40 && x < s.b - 40) && r() > .45;
+    const ammo = k % 3 === 1; doors.push({x, f: up ? 1 : 0, ammo, name: ammo ? "LÁPIS" : M.prods[k % M.prods.length], cd: 0}); k++; }
+  // cartazes das obras na parede do rés-do-chão, entre as portas
+  posters = M.obras.filter(o => o !== M.hostage).map((o, n, a) => ({o, x: 340 + (L - 700) * (n + .5) / Math.max(1, a.length), seen: false}));
+  posters.forEach(p => doors.forEach(d => { if (d.f === 0 && Math.abs(d.x - p.x) < 70) p.x = d.x + 80; }));
+  posters.forEach(p => imgFor(p.o)); imgFor(M.hostage);   // pré-carregar as imagens da rua
+  items = []; if (M.de >= 2016) items.push({x: L * .45, f: 0, k: "pin", got: false});
+  foes = []; shots = []; notes = [];
+  boss = bossLvl ? {x: L - 330, hp: 30, max: 30, cd: 2, hit: 0} : null;
+  pl = {x: 120, f: 0, hy: 0, vy: 0, climb: 0, dir: 1, en: 5, inv: 0, hide: 0, cd: 0, step: 0, ammo: Math.max(30, pl ? pl.ammo : 30)};
+  cam = 0; rapid = 0; spawnT = 1.5; rescueT = 0;
+  $("vLvl").textContent = `Missão ${i + 1}`; $("vPer").textContent = `${M.de}–${i < MISSIONS.length - 1 ? M.to : "hoje"} · ${M.titulo}`;
+  banner(`Missão ${i + 1} · ${esc(M.titulo)}<small>resgatar «${esc(M.hostage.t)}» (${M.hostage.y})</small>`);
+}
+function banner(html){ const box = $("banner"), p = document.createElement("p"); p.innerHTML = html; box.innerHTML = ""; box.appendChild(p); $("live").textContent = p.textContent; }
+function fit(s, w){ if (ctx.measureText(s).width <= w) return s; while (s.length > 1 && ctx.measureText(s + "…").width > w) s = s.slice(0, -1); return s + "…"; }
+const onBalcony = x => segs.some(s => x > s.a && x < s.b);
+
+/* ---------- ações ---------- */
+function up(){
+  if (pl.climb || pl.hide > 0) return;
+  const d = doors.find(d => d.f === pl.f && Math.abs(d.x - pl.x) < 34 && pl.hy === 0);
+  if (d) { pl.hide = 1; if (d.ammo) { pl.ammo = Math.min(ammoMax, pl.ammo + 20); ticker(`<span class="ok">Porta LÁPIS: +20 lápis</span>`); } return; }
+  if (pl.f === 0 && onBalcony(pl.x) && pl.hy === 0) pl.climb = 1;
+}
+function down(){ if (!pl.climb && pl.f === 1 && pl.hy === 0 && pl.hide <= 0) pl.climb = -1; }
+function jump(){ if (!pl.climb && pl.hy === 0 && pl.hide <= 0) pl.vy = 560; }
+function fire(){
+  if (pl.cd > 0 || pl.hide > 0 || pl.climb) return;
+  if (rapid <= 0) { if (pl.ammo <= 0) { ticker(`<span class="bad">Sem lápis — entre numa porta LÁPIS</span>`); pl.cd = .4; return; } pl.ammo--; }
+  shots.push({x: pl.x + pl.dir * 24, f: pl.f, y: 62 + pl.hy, d: pl.dir, t: 0}); pl.cd = rapid > 0 ? .1 : .26;
+}
+function ticker(html){ $("ticker").innerHTML = html; }
+function tickerObra(o, pre){ const ty = TIPOS[o.tipo] || {c: "#ccc", s: o.tipo}, u = thumb(o);
+  ticker(`${u ? `<img src="${u}" alt="">` : ""}<span>${pre || ""}<b>${esc(o.t)}</b> (${o.y}) · ${ty.s}${o.cli ? " · " + esc(o.cli) : ""}</span>`); }
+function hurt(src){
+  if (pl.inv > 0 || pl.hide > 0) return;
+  pl.en--; pl.inv = 1.1; ticker(`<span class="bad">${esc(src)}</span>`);
+  if (pl.en <= 0) { lives--; if (lives <= 0) return finish(false);
+    banner(`Missão falhada<small>${lives} ${lives === 1 ? "vida" : "vidas"} · recomeça a rua</small>`); const keep = pl.ammo; buildMission(mi); pl.ammo = Math.max(30, keep); }
+}
+
+/* ---------- ciclo ---------- */
+function update(dt){
+  T += dt; rapid = Math.max(0, rapid - dt); pl.cd = Math.max(0, pl.cd - dt); pl.inv = Math.max(0, pl.inv - dt); pl.hide = Math.max(0, pl.hide - dt);
+  if (rescueT > 0) { rescueT -= dt; if (rescueT <= 0) { if (mi < MISSIONS.length - 1) buildMission(mi + 1); else finish(true); } return; }
+  // movimento
+  let mv = 0; if (!pl.climb && pl.hide <= 0) { if (keys.left) mv -= 1; if (keys.right) mv += 1; }
+  if (mv) pl.dir = mv;
+  const bossWall = boss && boss.hp > 0 ? boss.x - 90 : M.len - 40;
+  pl.x = Math.max(40, Math.min(bossWall, pl.x + mv * 230 * dt)); pl.step += mv ? dt * 11 : 0;
+  if (pl.climb) { pl.hy += pl.climb * 520 * dt;
+    if (pl.climb > 0 && pl.hy >= -FLOOR[1]) { pl.f = 1; pl.hy = 0; pl.climb = 0; }
+    else if (pl.climb < 0 && pl.hy <= FLOOR[1]) { pl.f = 0; pl.hy = 0; pl.climb = 0; } }
+  else if (pl.hy > 0 || pl.vy > 0) { pl.vy -= 1700 * dt; pl.hy = Math.max(0, pl.hy + pl.vy * dt); if (pl.hy === 0) pl.vy = 0; }
+  if (pl.f === 1 && !pl.climb && !onBalcony(pl.x)) { pl.climb = -1; pl.hy = 0; }   // acabou a varanda: cai para a rua
+  if (keys.fire) fire();
+  cam += ((pl.x - VW * .36) - cam) * Math.min(1, dt * 6); cam = Math.max(0, Math.min(M.len - VW + 60, cam));
+  // cartazes
+  posters.forEach(p => { if (!p.seen && pl.x > p.x) { p.seen = true; nObras++; score += 50; tickerObra(p.o); } });
+  // pinguim
+  items.forEach(it => { if (!it.got && pl.f === it.f && Math.abs(pl.x - it.x) < 30 && pl.hy < 40) { it.got = true; rapid = 12; banner("O pinguim chegou!<small>rajada de lápis durante 12 s</small>"); } });
+  // inimigos saem das portas próximas
+  spawnT -= dt; doors.forEach(d => d.cd = Math.max(0, d.cd - dt));
+  const maxFoes = 2 + Math.floor(mi / 2);
+  if (spawnT <= 0 && foes.length < maxFoes) {
+    const cand = doors.filter(d => !d.ammo && d.cd <= 0 && Math.abs(d.x - pl.x) > 180 && d.x - cam > -20 && d.x - cam < VW + 80);
+    if (cand.length) { const d = cand[Math.floor(Math.random() * cand.length)], name = M.foes[Math.floor(Math.random() * M.foes.length)];
+      foes.push({x: d.x, f: d.f, dir: pl.x < d.x ? -1 : 1, cd: 1 + Math.random(), name, short: shortName(name), c: ["#b33939", "#3f6fb5", "#3c8d5a", "#a05cc4", "#c27c22"][Math.floor(Math.random() * 5)], step: 0, out: .5});
+      d.cd = 4; spawnT = Math.max(.6, 1.6 - mi * .12); } }
+  foes.forEach(e => {
+    if (e.out > 0) { e.out -= dt; return; }
+    const same = e.f === pl.f && !pl.climb, dist = pl.x - e.x;
+    if (same && Math.abs(dist) < 430) { e.dir = Math.sign(dist) || 1; e.cd -= dt;
+      if (Math.abs(dist) > 150) { e.x += e.dir * 70 * dt; e.step += dt * 8; }
+      if (e.cd <= 0) { notes.push({x: e.x + e.dir * 20, f: e.f, d: e.dir, name: e.name}); e.cd = Math.max(1.1, 2.2 - mi * .12) + Math.random() * .6; } }
+    else { e.x += e.dir * 60 * dt; e.step += dt * 7; if (e.f === 1 && !onBalcony(e.x + e.dir * 20)) e.dir *= -1; if (e.x < 40 || e.x > M.len - 60) e.dir *= -1; }
+    if (same && Math.abs(dist) < 26 && pl.hy < 60) hurt(`Esbarrou no prazo de ${e.name}`);
+  });
+  foes = foes.filter(e => Math.abs(e.x - pl.x) < VW * 1.6);
+  // lápis
+  shots.forEach(s => { s.x += s.d * 760 * dt; s.t += dt;
+    const e = foes.find(e => e.f === s.f && e.out <= 0 && Math.abs(e.x - s.x) < 18);
+    if (e) { s.t = 9; foes.splice(foes.indexOf(e), 1); nKills++; score += 100; ticker(`<span class="ok">Despachou o prazo de</span> <b>${esc(e.name)}</b> · +100`); }
+    else if (boss && boss.hp > 0 && s.f === 0 && Math.abs(s.x - boss.x) < 70) { s.t = 9; boss.hp--; boss.hit = .12; score += 30;
+      if (boss.hp <= 0) { score += 3000; nKills++; banner("Fecho de emissão vencido!<small>+3000</small>"); notes = []; } } });
+  shots = shots.filter(s => s.t < .9);
+  // pedidos de alteração
+  notes.forEach(n => { n.x += n.d * 300 * dt; n.t = (n.t || 0) + dt;
+    if (n.f === pl.f && !pl.climb && Math.abs(n.x - pl.x) < 16 && pl.hy < 46 && pl.hide <= 0) { n.t = 9; hurt(`Pedido de alteração de ${n.name}`); } });
+  notes = notes.filter(n => n.t < 2.4);
+  // chefe
+  if (boss && boss.hp > 0) { boss.hit = Math.max(0, boss.hit - dt); boss.cd -= dt;
+    if (boss.cd <= 0 && boss.x - pl.x < VW) { for (let k = 0; k < 3; k++) setTimeout(() => boss && boss.hp > 0 && notes.push({x: boss.x - 70, f: 0, d: -1, name: "Fecho de emissão"}), k * 260); boss.cd = 2.2; } }
+  // resgate
+  if (pl.f === 0 && pl.x >= M.len - 70 && (!boss || boss.hp <= 0) && rescueT <= 0) {
+    rescueT = 2.4; score += 1000; tickerObra(M.hostage, `<span class="ok">Resgatou</span> `); banner(`Resgatou «${esc(M.hostage.t)}»!<small>+1000</small>`); }
+  paint();
+}
+
+/* ---------- desenho ---------- */
+function draw(){
+  const c = hex(M.cor);
+  ctx.setTransform(DPR * S, 0, 0, DPR * S, 0, 0);
+  const g = ctx.createLinearGradient(0, 0, 0, GY); g.addColorStop(0, css(mixC(c, [12, 10, 26], .7))); g.addColorStop(1, css(mixC(c, [255, 200, 160], .35)));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH);
+  ctx.fillStyle = "rgba(255,246,220,.85)"; ctx.beginPath(); ctx.arc(VW * .82, 90, 26, 0, 7); ctx.fill();
+  // ponte D. Luís ao longe
+  const bx = 300 - (cam * .15) % 1400;
+  ctx.strokeStyle = css(mixC(c, [20, 17, 15], .55)); ctx.lineWidth = 5;
+  for (let x = bx; x < VW + 600; x += 1400) { ctx.beginPath(); ctx.moveTo(x, GY - 330); ctx.quadraticCurveTo(x + 230, GY - 520, x + 460, GY - 330); ctx.stroke(); ctx.fillStyle = ctx.strokeStyle; ctx.fillRect(x - 30, GY - 420, 520, 5); }
+  ctx.save(); ctx.translate(-cam, 0);
+  // fachada contínua: dois andares
+  const wall = css(mixC(c, [40, 30, 26], .62)), wall2 = css(mixC(c, [40, 30, 26], .5));
+  ctx.fillStyle = wall; ctx.fillRect(cam - 10, GY - 190, VW + 20, 190);
+  ctx.fillStyle = wall2; ctx.fillRect(cam - 10, GY - 330, VW + 20, 140);
+  ctx.fillStyle = css(mixC(c, [20, 17, 15], .7)); ctx.fillRect(cam - 10, GY - 338, VW + 20, 8);
+  ctx.fillStyle = "rgba(255,236,190,.22)";
+  for (let x = Math.floor(cam / 120) * 120; x < cam + VW + 120; x += 120) { ctx.fillRect(x + 30, GY - 310, 40, 50); ctx.fillRect(x + 30, GY - 170, 40, 40); }
+  // cartazes das obras
+  posters.forEach(p => { if (p.x < cam - 100 || p.x > cam + VW + 100) return; const ty = TIPOS[p.o.tipo] || {c: "#ccc"}, im = imgFor(p.o);
+    ctx.fillStyle = "#14110f"; ctx.fillRect(p.x - 46, GY - 150, 92, 64); ctx.fillStyle = ty.c; ctx.fillRect(p.x - 43, GY - 147, 86, 52);
+    if (im && im.complete && im.naturalWidth) ctx.drawImage(im, p.x - 43, GY - 147, 86, 49);
+    ctx.fillStyle = "#fff"; ctx.font = "700 9px Archivo, sans-serif"; ctx.textAlign = "center"; ctx.fillText(p.o.t.length > 18 ? p.o.t.slice(0, 17) + "…" : p.o.t, p.x, GY - 90); });
+  // varandas
+  segs.forEach(s => { if (s.b < cam - 50 || s.a > cam + VW + 50) return; const y = GY + FLOOR[1];
+    ctx.fillStyle = "#2a211c"; ctx.fillRect(s.a, y, s.b - s.a, 12);
+    ctx.fillStyle = css(mixC(c, [255, 255, 255], .3)); ctx.fillRect(s.a, y - 46, s.b - s.a, 4);
+    for (let x = s.a + 6; x < s.b; x += 16) ctx.fillRect(x, y - 44, 3, 44); });
+  // portas
+  doors.forEach(d => { if (d.x < cam - 60 || d.x > cam + VW + 60) return; const y = GY + FLOOR[d.f];
+    ctx.fillStyle = d.ammo ? "#6b3e1f" : "#1f1915"; ctx.fillRect(d.x - 24, y - 98, 48, 98);
+    ctx.fillStyle = "rgba(255,255,255,.12)"; ctx.fillRect(d.x - 18, y - 92, 16, 86); ctx.fillRect(d.x + 2, y - 92, 16, 86);
+    ctx.fillStyle = d.ammo ? "#ffd23f" : "#f7f1e6"; ctx.fillRect(d.x - 48, y - 120, 96, 18);
+    ctx.fillStyle = "#14110f"; ctx.font = "800 10px Archivo, sans-serif"; ctx.textAlign = "center"; ctx.fillText(fit(d.name, 90), d.x, y - 107); });
+  // passeio
+  ctx.fillStyle = css(mixC(c, [20, 17, 15], .82)); ctx.fillRect(cam - 10, GY, VW + 20, VH - GY);
+  ctx.fillStyle = css(mixC(c, [255, 255, 255], .25)); ctx.fillRect(cam - 10, GY, VW + 20, 4);
+  ctx.fillStyle = "rgba(255,255,255,.08)"; for (let x = Math.floor(cam / 60) * 60; x < cam + VW + 60; x += 60) ctx.fillRect(x, GY + 4, 2, VH - GY);
+  // filme raptado e chefe
+  hostageCage(M.len - 30);
+  if (boss) drawBoss();
+  items.forEach(it => { if (!it.got) penguin(it.x, GY + FLOOR[it.f], .8, Math.sin(T * 4) * .15); });
+  foes.forEach(e => masker(e));
+  shots.forEach(s => { const y = GY + FLOOR[s.f] - s.y; ctx.save(); ctx.translate(s.x, y); ctx.scale(s.d, 1);
+    ctx.fillStyle = "#ffd23f"; ctx.fillRect(-12, -3, 18, 6); ctx.fillStyle = "#e9c99b"; ctx.beginPath(); ctx.moveTo(6, -3); ctx.lineTo(13, 0); ctx.lineTo(6, 3); ctx.fill(); ctx.restore(); });
+  notes.forEach(n => { const y = GY + FLOOR[n.f] - 64; ctx.save(); ctx.translate(n.x, y); ctx.rotate(T * 6 * n.d);
+    ctx.fillStyle = "#fff"; ctx.fillRect(-8, -10, 16, 20); ctx.fillStyle = "#d2553b"; ctx.fillRect(-5, -6, 10, 2); ctx.fillRect(-5, -1, 10, 2); ctx.fillRect(-5, 4, 6, 2); ctx.restore(); });
+  if (pl.hide <= 0 && !(pl.inv > 0 && Math.sin(T * 40) > 0)) agent(pl.x, GY + FLOOR[pl.f] - pl.hy, pl.dir, pl.step, pl.hy > 0 || pl.climb);
+  if (rapid > 0) penguin(pl.x - pl.dir * 34, GY + FLOOR[pl.f] - pl.hy, .5, Math.sin(T * 10) * .15);
+  ctx.restore();
+  // película
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = "#14110f"; ctx.fillRect(0, 0, W, 26); ctx.fillRect(0, H - 26, W, 26);
+  ctx.fillStyle = "rgba(247,241,230,.85)"; const off = -((cam * S) % 28);
+  for (let x = off; x < W + 28; x += 28) { ctx.fillRect(x, 8, 14, 10); ctx.fillRect(x, H - 18, 14, 10); }
+}
+// o agente Jorge: t-shirt às riscas, barba e lápis gigante em riste
+function agent(x, y, dir, step, air){
+  const sw = air ? .6 : Math.sin(step);
+  ctx.save(); ctx.translate(x, y); ctx.scale(dir, 1); ctx.lineCap = "round";
+  ctx.fillStyle = "rgba(0,0,0,.25)"; ctx.beginPath(); ctx.ellipse(0, 2, 24, 5, 0, 0, 7); ctx.fill();
+  ctx.strokeStyle = "#2b4a78"; ctx.lineWidth = 10;
+  ctx.beginPath(); ctx.moveTo(-5, -50); ctx.lineTo(-5 + sw * 13, -4); ctx.moveTo(5, -50); ctx.lineTo(5 - sw * 13, -4); ctx.stroke();
+  ctx.fillStyle = "#f4f1ea"; ctx.beginPath(); ctx.ellipse(-5 + sw * 13 + 4, -2, 9, 4.5, 0, 0, 7); ctx.ellipse(5 - sw * 13 + 4, -2, 9, 4.5, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#d2553b"; ctx.fillRect(-15, -106, 30, 58);
+  ctx.fillStyle = "#f7f1e6"; for (let k = 0; k < 4; k++) ctx.fillRect(-15, -98 + k * 13, 30, 4);
+  ctx.strokeStyle = "#c04a33"; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(8, -96); ctx.lineTo(26, -64); ctx.stroke();
+  ctx.fillStyle = "#ffd23f"; ctx.fillRect(18, -68, 30, 8); ctx.fillStyle = "#e9c99b"; ctx.beginPath(); ctx.moveTo(48, -68); ctx.lineTo(57, -64); ctx.lineTo(48, -60); ctx.fill();
+  ctx.fillStyle = "#e3b48f"; ctx.beginPath(); ctx.arc(2, -122, 15, 0, 7); ctx.fill();
+  ctx.fillStyle = "#2a211c"; ctx.beginPath(); ctx.arc(1, -126, 15.5, Math.PI * .92, Math.PI * 2.08); ctx.fill();
+  ctx.beginPath(); ctx.arc(2, -118, 15, Math.PI * .1, Math.PI * .9); ctx.lineTo(-7, -116); ctx.quadraticCurveTo(4, -111, 14, -116); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(9, -125, 1.8, 0, 7); ctx.fill();
+  ctx.restore();
+}
+// os encapuzados: o capuz tem o nome do cliente
+function masker(e){
+  const y = GY + FLOOR[e.f], sw = Math.sin(e.step), rise = e.out > 0 ? e.out / .5 : 0;
+  ctx.save(); ctx.translate(e.x, y); ctx.scale(e.dir, 1); ctx.globalAlpha = 1 - rise;
+  ctx.strokeStyle = "#1b1b22"; ctx.lineWidth = 9; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(-4, -46); ctx.lineTo(-4 + sw * 11, -3); ctx.moveTo(4, -46); ctx.lineTo(4 - sw * 11, -3); ctx.stroke();
+  ctx.fillStyle = e.c; ctx.beginPath(); ctx.moveTo(-15, -46); ctx.lineTo(15, -46); ctx.lineTo(12, -100); ctx.lineTo(-12, -100); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-14, -98); ctx.quadraticCurveTo(0, -150, 14, -98); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.ellipse(4, -110, 7, 9, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.fillRect(2, -113, 5, 2); ctx.fillRect(8, -113, 3, 2);
+  ctx.fillStyle = "#f7f1e6"; ctx.fillRect(10, -78, 16, 12);   // prancheta com os pedidos
+  ctx.restore();
+  ctx.fillStyle = "#fff"; ctx.font = "700 10px 'JetBrains Mono', monospace"; ctx.textAlign = "center";
+  ctx.lineWidth = 3; ctx.strokeStyle = "rgba(20,17,15,.85)"; ctx.strokeText(e.short, e.x, y - 140); ctx.fillText(e.short, e.x, y - 140);
+}
+function hostageCage(x){
+  const y = GY, o = M.hostage, im = imgFor(o), free = rescueT > 0;
+  ctx.fillStyle = "#14110f"; ctx.fillRect(x - 80, y - 150, 120, 150);
+  ctx.fillStyle = (TIPOS[o.tipo] || {c: "#ccc"}).c; ctx.fillRect(x - 74, y - 144, 108, 72);
+  if (im && im.complete && im.naturalWidth) ctx.drawImage(im, x - 74, y - 144, 108, 61);
+  ctx.fillStyle = "#fff"; ctx.font = "700 10px Archivo, sans-serif"; ctx.textAlign = "center"; ctx.fillText(o.t.length > 20 ? o.t.slice(0, 19) + "…" : o.t, x - 20, y - 58);
+  ctx.font = "600 9px 'JetBrains Mono', monospace"; ctx.fillText(free ? "RESGATADO" : "RAPTADO", x - 20, y - 44);
+  if (!free) { ctx.strokeStyle = "#c9c9c9"; ctx.lineWidth = 3; for (let k = 0; k < 7; k++) { ctx.beginPath(); ctx.moveTo(x - 76 + k * 18, y - 150); ctx.lineTo(x - 76 + k * 18, y); ctx.stroke(); } }
+}
+// chefe: o fecho de emissão, uma televisão com o padrão de barras e um relógio
+function drawBoss(){
+  const b = boss, y = GY; if (b.hp <= 0) { ctx.globalAlpha = .35; }
+  ctx.fillStyle = b.hit > 0 ? "#fff" : "#2a2a33"; ctx.fillRect(b.x - 80, y - 210, 160, 130);
+  const bars = ["#fff", "#ff0", "#0ff", "#0f0", "#f0f", "#f00", "#00f"]; bars.forEach((cc, k) => { ctx.fillStyle = cc; ctx.fillRect(b.x - 70 + k * 20, y - 200, 20, 80); });
+  ctx.fillStyle = "#14110f"; ctx.fillRect(b.x - 70, y - 120, 140, 30);
+  ctx.fillStyle = "#fff"; ctx.font = "800 13px 'JetBrains Mono', monospace"; ctx.textAlign = "center"; ctx.fillText("FIM DE EMISSÃO", b.x, y - 100);
+  ctx.fillStyle = "#2a2a33"; ctx.fillRect(b.x - 50, y - 80, 12, 80); ctx.fillRect(b.x + 38, y - 80, 12, 80);
+  ctx.globalAlpha = 1;
+  if (b.hp > 0) { ctx.fillStyle = "rgba(0,0,0,.5)"; ctx.fillRect(b.x - 80, y - 230, 160, 10); ctx.fillStyle = "#ff5e5e"; ctx.fillRect(b.x - 80, y - 230, 160 * b.hp / b.max, 10); }
+}
+function penguin(x, y, s, rot){
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.rotate(rot);
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.ellipse(0, -26, 17, 26, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.ellipse(3, -22, 11, 19, 0, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(2, -46, 13, 0, 7); ctx.fill();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(7, -48, 4.5, 0, 7); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(8.5, -48, 2, 0, 7); ctx.fill();
+  ctx.fillStyle = "#ff9f1c"; ctx.beginPath(); ctx.moveTo(12, -45); ctx.lineTo(23, -42); ctx.lineTo(12, -39); ctx.fill();
+  ctx.fillStyle = "#d2553b"; ctx.fillRect(-11, -36, 24, 5);
+  ctx.restore();
+}
+
+function frame(now){ const dt = Math.min(.033, (now - last) / 1000 || 0); last = now; if (playing && !paused) update(dt); draw(); requestAnimationFrame(frame); }
+function paint(){ $("vScore").textContent = score; $("vLives").textContent = lives; $("vAmmo").textContent = rapid > 0 ? "∞" : pl.ammo; $("vObras").textContent = nObras;
+  $("vEn").innerHTML = [0, 1, 2, 3, 4].map(k => `<i class="${k < pl.en ? "" : "off"}"></i>`).join("");
+  $("pause").textContent = paused ? "▶" : "II"; $("pause").setAttribute("aria-label", paused ? "Continuar" : "Pausa"); }
+function finish(won){
+  playing = false;
+  $("t2").textContent = won ? "Todos os filmes resgatados!" : `Fim na missão ${mi + 1}: ${M.titulo}`;
+  $("final").innerHTML = [["Pontos", score], ["Filmes resgatados", won ? MISSIONS.length : mi], ["Prazos despachados", nKills], ["Obras vistas", `${nObras} / ${TODAS.length}`]].map(([a, b]) => `<span>${a}</span><b>${b}</b>`).join("");
+  $("end").hidden = false; $("again").focus();
+}
+function start(){ score = 0; lives = 3; nObras = 0; nKills = 0; pl = null; buildMission(startLvl); $("start").hidden = true; $("end").hidden = true; playing = true; paused = false; $("ticker").innerHTML = ""; paint(); }
+
+/* ---------- controlos ---------- */
+$("intro").textContent = `A Geldra raptou os filmes do Jorge. Em cada período do percurso, o agente Jorge atravessa uma rua do Porto, de varanda em varanda, até ao filme raptado. São ${MISSIONS.length} missões, de ${MISSIONS[0].de} até hoje.`;
+const sel = $("startLvl"); MISSIONS.forEach((m, i) => sel.add(new Option(`${i + 1} · ${m.titulo} — resgatar «${m.hostage.t}»`, i)));
+sel.value = startLvl; sel.onchange = () => { startLvl = +sel.value; store.set("rt_jr_lvl", startLvl); };
+$("play").onclick = start; $("again").onclick = start;
+$("pause").onclick = () => { if (!playing) return; paused = !paused; paint(); };
+const KEYMAP = {ArrowLeft: "left", a: "left", A: "left", ArrowRight: "right", d: "right", D: "right"};
+addEventListener("keydown", e => {
+  if (e.target.closest("button,a,select")) return;
+  if (!playing) return;
+  if (e.key in KEYMAP) { keys[KEYMAP[e.key]] = true; e.preventDefault(); }
+  else if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") { e.preventDefault(); if (!e.repeat) up(); }
+  else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") { e.preventDefault(); if (!e.repeat) down(); }
+  else if (e.key === " ") { e.preventDefault(); jump(); }
+  else if (e.key === "f" || e.key === "F" || e.key === "z" || e.key === "Z") { e.preventDefault(); keys.fire = true; fire(); }
+  else if (e.key === "p" || e.key === "Escape") { paused = !paused; paint(); }
+});
+addEventListener("keyup", e => { if (e.key in KEYMAP) keys[KEYMAP[e.key]] = false; if (/^[fFzZ]$/.test(e.key)) keys.fire = false; });
+addEventListener("blur", () => { keys = {}; if (playing) { paused = true; paint(); } });
+document.querySelectorAll("#pad button").forEach(b => {
+  const k = b.dataset.k;
+  b.addEventListener("pointerdown", e => { e.preventDefault(); if (!playing) return;
+    if (k === "left" || k === "right" || k === "fire") keys[k] = true; if (k === "up") up(); if (k === "down") down(); if (k === "jump") jump(); if (k === "fire") fire(); });
+  const off = () => { if (k === "left" || k === "right" || k === "fire") keys[k] = false; };
+  b.addEventListener("pointerup", off); b.addEventListener("pointercancel", off); b.addEventListener("pointerleave", off);
+});
+
+score = 0; lives = 3; nObras = 0; nKills = 0; pl = null; buildMission(startLvl); $("banner").innerHTML = ""; paint();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(t => { last = t; frame(t); }));
+</script>
+</body>
+</html>

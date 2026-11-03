@@ -53,7 +53,7 @@ canvas:active{cursor:grabbing}
 .watch{position:fixed;display:inline-flex;align-items:center;min-height:44px;padding:0 14px;background:var(--gold);color:var(--ink);border-radius:3px;font:800 .9rem/1 "Archivo",sans-serif;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.4);max-width:min(90vw,420px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .help{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(46px + env(safe-area-inset-bottom));font:500 .78rem/1.3 "Archivo",sans-serif;opacity:.8;text-align:right;max-width:210px}
-@media (max-width:640px){.help{display:none}.log{top:150px;bottom:auto !important}.count{top:auto;bottom:calc(160px + env(safe-area-inset-bottom));grid-template-columns:repeat(3,auto)}.count div{min-width:0}.home{display:none}}
+@media (max-width:640px){.help{display:none}.log{top:150px;bottom:auto !important}.count{top:auto;bottom:calc(160px + env(safe-area-inset-bottom));grid-template-columns:repeat(3,auto)}.count div{min-width:0}.home:not(.cv){display:none}}
 </style>
 </head>
 <body>
@@ -61,6 +61,7 @@ canvas:active{cursor:grabbing}
 <header class="hud">
   <span class="home">Jorge Ribeiro</span>
   <a class="games" href="jogo.html">Jogar os jogos ▸</a>
+  <a class="home cv" href="CV/">Currículo</a>
   <div class="year" aria-hidden="true"><b id="yr">1999</b><span id="per"></span></div>
 </header>
 <div class="count" aria-hidden="true">
@@ -82,7 +83,7 @@ canvas:active{cursor:grabbing}
 <div class="end" id="end" role="dialog" aria-labelledby="endh"><div>
   <h2 id="endh">2026 — e a seguir?</h2>
   <p id="endp"></p>
-  <nav><a href="jogo.html">Escolher um jogo</a><button id="again" type="button">Ver outra vez</button></nav>
+  <nav><a href="jogo.html">Escolher um jogo</a><a href="CV/">Ver o currículo</a><button id="again" type="button">Ver outra vez</button></nav>
 </div></div>
 
 <script src="data/obras.js"></script>
