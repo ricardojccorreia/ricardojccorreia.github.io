@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Pinguim no Porto · Jorge Ribeiro</title>
+<meta name="description" content="Um Pac-Man feito com as obras de Jorge Ribeiro: o pinguim apanha as obras pelas ruas do Porto e foge dos prazos dos clientes.">
+<link rel="preload" href="fonts/archivo.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Archivo";src:url("fonts/archivo.woff2") format("woff2");font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("fonts/jetbrains-mono.woff2") format("woff2");font-weight:100 800;font-display:swap}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#14110f;color:#fff;font-family:"Archivo",system-ui,sans-serif;overflow:hidden;-webkit-user-select:none;user-select:none}
+canvas{display:block;width:100vw;height:100vh;height:100dvh;touch-action:none}
+.hud{position:fixed;left:0;right:0;top:26px;display:flex;gap:10px;align-items:flex-start;padding:10px max(12px,env(safe-area-inset-left)) 0;pointer-events:none}
+.hud a,.hud button{pointer-events:auto}
+.home{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:3px;background:rgba(20,17,15,.6);color:#fff;text-decoration:none;font:700 .9rem/1 "Archivo",sans-serif}
+.stats{display:flex;flex-wrap:wrap;gap:4px 6px}
+.stats div{background:rgba(20,17,15,.6);padding:6px 9px;border-radius:3px;font:600 .78rem/1.1 "Archivo",sans-serif;display:flex;gap:8px;justify-content:space-between;min-width:100px;align-items:center}
+.stats b{font:700 .9rem/1 "JetBrains Mono",monospace}
+.lvl{margin-left:auto;text-align:right;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.lvl b{display:block;font:800 clamp(1.6rem,4vw,2.6rem)/.9 "Archivo",sans-serif;font-stretch:72%}
+.lvl span{font:600 .8rem/1.2 "JetBrains Mono",monospace}
+.ctlb{min-width:44px;height:44px;margin-left:6px;background:rgba(20,17,15,.6);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:3px;font:700 .82rem/1 "Archivo",sans-serif;cursor:pointer}
+.banner{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92vw,720px);text-align:center;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.banner p{margin:0 0 8px;font:800 clamp(1.3rem,3.6vw,2.2rem)/1.1 "Archivo",sans-serif;font-stretch:80%;animation:pop 2.6s ease-out forwards}
+.banner p small{display:block;font:600 .9rem/1.3 "JetBrains Mono",monospace;margin-top:4px}
+@keyframes pop{0%{opacity:0;transform:translateY(10px)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
+.ticker{position:fixed;left:50%;bottom:calc(36px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,640px);display:flex;gap:10px;align-items:center;background:rgba(20,17,15,.8);padding:6px 10px;border-radius:3px;font:500 .88rem/1.3 "Archivo",sans-serif;min-height:44px;pointer-events:none}
+.ticker:empty{display:none}
+.ticker img{width:64px;height:36px;object-fit:cover;border-radius:2px;flex:none}
+.ticker b{font-weight:700}
+.ticker .t{display:inline-block;padding:1px 6px;border-radius:2px;color:#14110f;font:700 .72rem/1.3 "JetBrains Mono",monospace;margin-right:6px;vertical-align:1px}
+.ticker .bad{color:#ff9fb1}
+.screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,17,15,.62);padding:16px}
+.screen[hidden]{display:none}
+.panel{background:#f7f1e6;color:#14110f;border-radius:4px;padding:24px 26px;max-width:min(94vw,600px);max-height:92vh;overflow:auto}
+.panel h1,.panel h2{margin:0 0 10px;font:800 clamp(1.8rem,5vw,2.6rem)/1 "Archivo",sans-serif;font-stretch:76%}
+.panel p{margin:0 0 10px;font:400 1rem/1.5 Georgia,serif}
+.panel ul{margin:0 0 14px;padding-left:20px;font:400 .98rem/1.5 Georgia,serif}
+.panel li{margin:3px 0}
+.panel b{font-family:"Archivo",sans-serif}
+.go{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;background:#14110f;color:#fff;border:0;border-radius:3px;font:800 1.05rem/1 "Archivo",sans-serif;cursor:pointer;margin:6px 10px 0 0}
+.panel a{color:#14110f;font:700 1rem/1 "Archivo",sans-serif;display:inline-flex;align-items:center;min-height:44px;margin-right:16px}
+.pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:600 1rem/1.3 "Archivo",sans-serif !important}
+.pick select{min-height:44px;padding:0 10px;font:700 .95rem/1 "JetBrains Mono",monospace;border:1.5px solid #14110f;border-radius:3px;background:#fff;color:#14110f;max-width:100%}
+.score{display:grid;grid-template-columns:1fr auto;gap:4px 18px;margin:0 0 14px;font:500 1rem/1.4 "Archivo",sans-serif}
+.score b{font:700 1rem/1.4 "JetBrains Mono",monospace;text-align:right}
+:focus-visible{outline:2px solid #d2553b;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:700px){.hud{flex-wrap:wrap}.stats{order:5;width:100%}.stats div{min-width:0;flex:1;font-size:.72rem;padding:5px 7px}.home{font-size:.8rem;padding:0 8px}.ticker img{display:none}}
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<header class="hud">
+  <a class="home" href="jogo.html">← Jogos</a>
+  <div class="stats" aria-hidden="true">
+    <div><span>Pontos</span><b id="vScore">0</b></div>
+    <div><span>Vidas</span><b id="vLives">3</b></div>
+    <div><span>Obras</span><b id="vObras">0</b></div>
+  </div>
+  <div class="lvl" aria-hidden="true"><b id="vLvl">Nível 1</b><span id="vPer"></span></div>
+  <button class="ctlb" id="pause" type="button" aria-label="Pausa">II</button>
+</header>
+<div class="banner" id="banner" aria-hidden="true"></div>
+<div class="ticker" id="ticker" aria-hidden="true"></div>
+<p class="sr" id="live" aria-live="polite"></p>
+<div class="screen" id="start"><div class="panel" role="dialog" aria-labelledby="t1">
+  <h1 id="t1">Pinguim no Porto</h1>
+  <p id="intro"></p>
+  <ul>
+    <li><b>Mover:</b> setas ou WASD; no telemóvel, deslize o dedo no ecrã.</li>
+    <li><b>Obras:</b> as obras do período estão espalhadas pelas ruas, cada uma com a cor do seu tipo; as realizadas por ele (★) valem o dobro.</li>
+    <li><b>Prazos:</b> os fantasmas são os prazos dos clientes desse período (Ministério da Justiça, Câmara de Lisboa…). Se um o apanhar, perde uma vida.</li>
+    <li><b>Lápis:</b> os quatro lápis dos cantos põem os prazos em fuga durante alguns segundos; aí é o pinguim que os apanha.</li>
+    <li><b>Douro:</b> a fila do meio é o rio: atravesse-o para sair do outro lado.</li>
+  </ul>
+  <p class="pick"><label for="startLvl">Começar no nível</label> <select id="startLvl"></select></p>
+  <button class="go" id="play" type="button">Começar</button>
+  <a href="jogo.html">Outros jogos</a>
+</div></div>
+<div class="screen" id="end" hidden><div class="panel" role="dialog" aria-labelledby="t2">
+  <h2 id="t2"></h2>
+  <div class="score" id="final"></div>
+  <button class="go" id="again" type="button">Jogar outra vez</button>
+  <a href="jogo.html">Escolher outro jogo</a> <a href="filme.html">Ver o filme</a>
+</div></div>
+<script src="data/obras.js"></script>
+<script>
+/* ==========================================================================
+   Pinguim no Porto — Pac-Man com o currículo do Jorge Ribeiro.
+   - Níveis: os PERIODOS de data/obras.js. As obras do período ocupam casas
+     do labirinto (cor = tipo; ★ = realizada por ele, vale o dobro).
+   - Fantasmas: os quatro clientes com mais obras no período; se faltarem,
+     entram as produtoras e, por fim, um "Prazo" genérico.
+   - Lápis (4 cantos): os prazos fogem e podem ser apanhados.
+   - A fila do meio é o Douro: túnel de um lado ao outro.
+   Movimento por casas: cada personagem vai de uma casa à seguinte e só
+   decide a direção quando chega ao centro de uma casa.
+   ========================================================================== */
+
+const $ = id => document.getElementById(id);
+const store={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const esc = s => s.replace(/[&<>]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"})[c]);
+
+// # parede · . rua · o lápis · - porta dos prazos · G casa dos prazos · P pinguim · espaço = fora do mapa
+const MAP = [
+  "###################",
+  "#........#........#",
+  "#o##.###.#.###.##o#",
+  "#.................#",
+  "#.##.#.#####.#.##.#",
+  "#....#...#...#....#",
+  "####.###.#.###.####",
+  "   #.#.......#.#   ",
+  "####.#.##-##.#.####",
+  ".......#GGG#.......",
+  "####.#.#####.#.####",
+  "   #.#.......#.#   ",
+  "####.#.#####.#.####",
+  "#........#........#",
+  "#.##.###.#.###.##.#",
+  "#o.#.....P.....#.o#",
+  "##.#.#.#####.#.#.##",
+  "#....#...#...#....#",
+  "#.######.#.######.#",
+  "#.................#",
+  "###################"
+];
+const COLS = MAP[0].length, ROWS = MAP.length, RIVER = 9, DOOR = {x: 9, y: 7};
+const cell = (x, y) => (MAP[y] || "")[((x % COLS) + COLS) % COLS] || " ";
+const open = (x, y) => { if (y === RIVER && (x < 0 || x >= COLS)) return true; const c = cell(x, y); return c === "." || c === "o" || c === "P"; };
+const DIRS = [{x: 0, y: -1}, {x: -1, y: 0}, {x: 0, y: 1}, {x: 1, y: 0}];   // cima, esquerda, baixo, direita (ordem clássica de desempate)
+
+const LEVELS = PERIODOS.map((p, i) => { const to = i < PERIODOS.length - 1 ? PERIODOS[i + 1].de - 1 : 2026;
+  const obras = TODAS.filter(o => o.y >= p.de && o.y <= to);
+  const count = key => { const m = new Map(); obras.forEach(o => { const v = o[key]; if (v && v !== NOME) m.set(v, (m.get(v) || 0) + 1); }); return [...m].sort((a, b) => b[1] - a[1]).map(e => e[0]); };
+  const names = [...count("cli"), ...count("prod").filter(n => !count("cli").includes(n))];
+  while (names.length < 4) names.push("Prazo");
+  return {...p, to, obras, ghosts: names.slice(0, 4)}; });
+const shortName = n => { n = n.split(",")[0].trim(); if (n.length <= 11) return n;
+  return n.split(/\s+/).filter(w => /^[A-ZÁÉÍÓÚÂÊÔÃÕÇ]/.test(w)).map(w => w[0]).join(""); };
+const GHOST_C = ["#ff5e5e", "#ff9fd6", "#5fd8e8", "#ffb347"];
+
+/* ---------- canvas ---------- */
+const cv = $("c"), ctx = cv.getContext("2d");
+let W, H, DPR, TS, OX, OY;
+function resize(){ DPR = Math.min(2, devicePixelRatio || 1); W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR;
+  const top = W < 700 ? 150 : 96, bot = 90; TS = Math.floor(Math.min((W - 24) / COLS, (H - top - bot) / ROWS)); OX = (W - TS * COLS) / 2; OY = top + (H - top - bot - TS * ROWS) / 2; }
+addEventListener("resize", resize); resize();
+const hex = h => { const n = parseInt(h.slice(1), 16); return [n >> 16, n >> 8 & 255, n & 255]; };
+const mixC = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t)), css = c => `rgb(${c})`;
+function rnd(s){return()=>(s=s*16807%2147483647)/2147483647}
+const imgs = {};
+const imgFor = o => { const u = thumb(o); if (!u) return null; if (!imgs[u]) { const im = new Image(); im.src = u; imgs[u] = im; } return imgs[u]; };
+
+/* ---------- estado ---------- */
+let lvl = 0, items, nItems, pl, ghosts, lives, score, nObras, nGhosts, fright = 0, chain = 0, playing = false, paused = false, freeze = 0, T = 0, last = 0, mode = 0;
+let startLvl = +(store.get("pac_jr_lvl") || 0); if (!(startLvl >= 0 && startLvl < LEVELS.length)) startLvl = 0;
+const speedPl = () => 5.6 + lvl * .15, speedGh = () => 4.6 + lvl * .25;
+
+function loadLevel(i){
+  lvl = i; const L = LEVELS[i]; items = {}; nItems = 0;
+  const spots = [];
+  MAP.forEach((row, y) => [...row].forEach((c, x) => { if (c === ".") spots.push(`${x},${y}`); if (c === "o") items[`${x},${y}`] = {k: "o"}; }));
+  spots.forEach(k => items[k] = {k: "."});
+  // obras em casas sorteadas (sempre as mesmas por nível), longe da partida
+  const r = rnd(31 + i * 7), pool = spots.filter(k => { const [x, y] = k.split(",").map(Number); return Math.abs(x - 9) + Math.abs(y - 15) > 3; });
+  for (let a = pool.length - 1; a > 0; a--) { const b = Math.floor(r() * (a + 1)); [pool[a], pool[b]] = [pool[b], pool[a]]; }
+  L.obras.slice(0, pool.length).forEach((o, n) => items[pool[n]] = {k: "w", o});
+  nItems = Object.keys(items).length;
+  $("vLvl").textContent = `Nível ${i + 1}`; $("vPer").textContent = `${L.de}–${i < LEVELS.length - 1 ? L.to : "hoje"} · ${L.titulo}`;
+  resetActors();
+  banner(`Nível ${i + 1} · ${esc(L.titulo)}<small>${L.obras.length} obras · prazos: ${L.ghosts.filter(g => g !== "Prazo").map(esc).join(", ") || "sem clientes conhecidos"}</small>`);
+}
+function resetActors(){
+  pl = {x: 9, y: 15, d: {x: 0, y: 0}, want: {x: -1, y: 0}, p: 0, face: 3, mouth: 0};
+  ghosts = LEVELS[lvl].ghosts.map((name, i) => ({name, short: shortName(name), c: GHOST_C[i], x: DOOR.x, y: DOOR.y, d: {x: i % 2 ? 1 : -1, y: 0}, p: 0, out: i * 2.2, eaten: false, scat: [{x: 17, y: 1}, {x: 1, y: 1}, {x: 17, y: 19}, {x: 1, y: 19}][i]}));
+  fright = 0; chain = 0; freeze = 1.4; mode = 0;
+}
+function banner(html){ const box = $("banner"), p = document.createElement("p"); p.innerHTML = html; box.innerHTML = ""; box.appendChild(p); $("live").textContent = p.textContent; }
+function tickerObra(o){ const ty = TIPOS[o.tipo] || {c: "#ccc", s: o.tipo}, u = thumb(o);
+  $("ticker").innerHTML = `${u ? `<img src="${u}" alt="">` : ""}<span><span class="t" style="background:${ty.c}">${ty.s}</span><b>${esc(o.t)}</b> (${o.y})${o.cli ? " · " + esc(o.cli) : ""}${realizou(o) ? " · ★ realizou" : ""}</span>`; }
+
+/* ---------- movimento por casas ---------- */
+const wrapX = x => (x + COLS) % COLS;
+function stepActor(a, sp, dt, choose){
+  let left = sp * dt;
+  while (left > 0) {
+    if (a.d.x === 0 && a.d.y === 0) { choose(a); if (a.d.x === 0 && a.d.y === 0) return; }
+    const need = 1 - a.p;
+    if (left < need) { a.p += left; return; }
+    left -= need; a.p = 0; a.x = wrapX(a.x + a.d.x); a.y += a.d.y; arrive(a); choose(a);
+  }
+}
+function arrive(a){ if (a !== pl) return; const k = `${a.x},${a.y}`, it = items[k]; if (!it) return;
+  delete items[k];
+  if (it.k === ".") score += 10;
+  else if (it.k === "o") { score += 50; fright = Math.max(3, 8 - lvl * .6); chain = 0; ghosts.forEach(reverse);
+    banner("Lápis na mão!<small>os prazos fogem</small>"); }
+  else { nObras++; score += realizou(it.o) ? 200 : 100; tickerObra(it.o); }
+  if (!Object.keys(items).length) nextLevel();
+}
+// meia-volta a meio do caminho: passa a estar na casa seguinte, a voltar para trás
+function reverse(a){
+  if (a.eaten || a.out > 0 || !(a.d.x || a.d.y)) return;
+  if (a.p > 0) { a.x = wrapX(a.x + a.d.x); a.y += a.d.y; a.p = 1 - a.p; }
+  a.d = {x: -a.d.x, y: -a.d.y};
+}
+function choosePlayer(a){
+  const w = a.want;
+  if ((w.x || w.y) && open(a.x + w.x, a.y + w.y)) a.d = {...w};
+  else if (!open(a.x + a.d.x, a.y + a.d.y)) a.d = {x: 0, y: 0};
+  if (a.d.x || a.d.y) a.face = DIRS.findIndex(q => q.x === a.d.x && q.y === a.d.y);
+}
+function ghostTarget(g, i){
+  if (g.eaten) return DOOR;
+  if (mode === 1) return g.scat;
+  const px = pl.x, py = pl.y, pd = pl.d;
+  if (i === 0) return {x: px, y: py};
+  if (i === 1) return {x: px + pd.x * 4, y: py + pd.y * 4};
+  if (i === 2) { const b = ghosts[0]; return {x: px + (px - b.x), y: py + (py - b.y)}; }
+  return (Math.hypot(g.x - px, g.y - py) > 8) ? {x: px, y: py} : g.scat;
+}
+function chooseGhost(g){
+  const i = ghosts.indexOf(g);
+  const opts = DIRS.filter(d => open(g.x + d.x, g.y + d.y) && !(d.x === -g.d.x && d.y === -g.d.y));
+  const list = opts.length ? opts : DIRS.filter(d => open(g.x + d.x, g.y + d.y));
+  if (!list.length) { g.d = {x: 0, y: 0}; return; }
+  if (fright > 0 && !g.eaten) { g.d = list[Math.floor(Math.random() * list.length)]; return; }
+  const t = ghostTarget(g, i);
+  g.d = list.reduce((best, d) => { const a = (g.x + d.x - t.x) ** 2 + (g.y + d.y - t.y) ** 2, b = (g.x + best.x - t.x) ** 2 + (g.y + best.y - t.y) ** 2; return a < b ? d : best; }, list[0]);
+}
+const posOf = a => ({x: a.x + a.d.x * a.p, y: a.y + a.d.y * a.p});
+
+function update(dt){
+  T += dt;
+  if (freeze > 0) { freeze -= dt; return; }
+  mode = (T % 27) < 7 ? 1 : 0;                         // alterna dispersão / perseguição
+  fright = Math.max(0, fright - dt);
+  // inversão imediata a meio do caminho
+  if (pl.want.x === -pl.d.x && pl.want.y === -pl.d.y && (pl.d.x || pl.d.y)) { reverse(pl); pl.face = DIRS.findIndex(q => q.x === pl.d.x && q.y === pl.d.y); }
+  stepActor(pl, speedPl(), dt, choosePlayer);
+  if (!playing) return;
+  pl.mouth += dt * (pl.d.x || pl.d.y ? 12 : 0);
+  ghosts.forEach(g => {
+    if (g.out > 0) { g.out -= dt; return; }
+    if (g.eaten && g.x === DOOR.x && g.y === DOOR.y && g.p === 0) { g.eaten = false; g.out = 1.5; return; }
+    const sp = g.eaten ? 11 : fright > 0 ? speedGh() * .55 : (g.y === RIVER && (g.x < 3 || g.x > COLS - 4)) ? speedGh() * .5 : speedGh();
+    stepActor(g, sp, dt, chooseGhost);
+  });
+  const P = posOf(pl);
+  for (const g of ghosts) { if (g.out > 0 || g.eaten) continue; const G = posOf(g);
+    let dx = Math.abs(G.x - P.x); dx = Math.min(dx, COLS - dx);
+    if (dx + Math.abs(G.y - P.y) > .7) continue;
+    if (fright > 0) { g.eaten = true; chain++; nGhosts++; const pts = 200 * 2 ** (chain - 1); score += pts;
+      $("ticker").innerHTML = `<span>Apanhou o prazo de <b>${esc(g.name)}</b> · +${pts}</span>`; }
+    else { lives--; $("ticker").innerHTML = `<span class="bad">O prazo de <b>${esc(g.name)}</b> apanhou-o</span>`;
+      if (lives <= 0) return finish(false);
+      banner(`Prazo falhado<small>${lives} ${lives === 1 ? "vida" : "vidas"}</small>`); resetActors(); return; } }
+  paint();
+}
+function nextLevel(){ score += 500; if (lvl < LEVELS.length - 1) loadLevel(lvl + 1); else finish(true); }
+
+/* ---------- desenho ---------- */
+function draw(){
+  const L = LEVELS[lvl], c = hex(L.cor);
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = "#14110f"; ctx.fillRect(0, 0, W, H);
+  ctx.save(); ctx.translate(OX, OY);
+  ctx.fillStyle = css(mixC(c, [14, 12, 22], .82)); ctx.fillRect(0, 0, COLS * TS, ROWS * TS);
+  // o Douro: a fila do túnel
+  ctx.fillStyle = "rgba(90,150,210,.28)"; ctx.fillRect(-OX, RIVER * TS, W, TS);
+  ctx.fillStyle = "rgba(200,230,255,.5)"; for (let x = -OX + ((T * 30) % 40); x < COLS * TS + OX; x += 40) ctx.fillRect(x, RIVER * TS + TS * .55, 14, 2);
+  // paredes: blocos na cor do período com contorno claro
+  const wallF = css(mixC(c, [20, 17, 15], .45)), wallS = css(mixC(c, [255, 255, 255], .35));
+  for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) { const ch = cell(x, y); if (ch !== "#") continue;
+    ctx.fillStyle = wallF; ctx.fillRect(x * TS, y * TS, TS, TS);
+    ctx.strokeStyle = wallS; ctx.lineWidth = Math.max(1.5, TS * .08); ctx.beginPath();
+    const isW = (a, b) => cell(a, b) === "#" || cell(a, b) === " " || b < 0 || b >= ROWS;
+    if (!isW(x, y - 1)) { ctx.moveTo(x * TS, y * TS + 1); ctx.lineTo((x + 1) * TS, y * TS + 1); }
+    if (!isW(x, y + 1)) { ctx.moveTo(x * TS, (y + 1) * TS - 1); ctx.lineTo((x + 1) * TS, (y + 1) * TS - 1); }
+    if (x > 0 && !isW(x - 1, y)) { ctx.moveTo(x * TS + 1, y * TS); ctx.lineTo(x * TS + 1, (y + 1) * TS); }
+    if (x < COLS - 1 && !isW(x + 1, y)) { ctx.moveTo((x + 1) * TS - 1, y * TS); ctx.lineTo((x + 1) * TS - 1, (y + 1) * TS); }
+    ctx.stroke(); }
+  ctx.fillStyle = "#f7f1e6"; ctx.fillRect(9 * TS + 2, 8 * TS + TS * .42, TS - 4, TS * .16);   // porta
+  ctx.fillStyle = "rgba(255,255,255,.75)"; ctx.font = `700 ${Math.round(TS * .38)}px 'JetBrains Mono', monospace`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+  ctx.fillText("DOURO", 9.5 * TS, (RIVER + .5) * TS);
+  // itens
+  for (const k in items) { const [x, y] = k.split(",").map(Number), it = items[k], cx = (x + .5) * TS, cy = (y + .5) * TS;
+    if (it.k === ".") { ctx.fillStyle = "#f7f1e6"; ctx.fillRect(cx - TS * .07, cy - TS * .07, TS * .14, TS * .14); }
+    else if (it.k === "o") pencilIcon(cx, cy, TS * (.8 + .08 * Math.sin(T * 6)));
+    else { const ty = TIPOS[it.o.tipo] || {c: "#ccc"}, s = TS * .72;
+      ctx.fillStyle = ty.c; ctx.fillRect(cx - s / 2, cy - s / 2, s, s * .78);
+      const im = imgFor(it.o); if (im && im.complete && im.naturalWidth) { ctx.save(); ctx.globalAlpha = .55; ctx.drawImage(im, cx - s / 2 + 2, cy - s / 2 + 2, s - 4, s * .78 - 4); ctx.restore(); }
+      ctx.fillStyle = "#14110f"; ctx.fillRect(cx - s / 2, cy + s * .28, s, s * .22);
+      ctx.fillStyle = "#fff"; for (let k2 = 0; k2 < 3; k2++) ctx.fillRect(cx - s / 2 + 2 + k2 * s / 3, cy + s * .33, s / 6, s * .1);
+      if (realizou(it.o)) { ctx.fillStyle = "#ffd23f"; ctx.font = `800 ${Math.round(TS * .5)}px Archivo, sans-serif`; ctx.fillText("★", cx + s * .45, cy - s * .45); } } }
+  ghosts.forEach(g => drawGhost(g));
+  const P = posOf(pl); drawPenguin((P.x + .5) * TS, (P.y + .5) * TS, pl.face, pl.mouth);
+  if (freeze > 0 && playing) { ctx.fillStyle = "#ffd23f"; ctx.font = `800 ${Math.round(TS * .7)}px Archivo, sans-serif`; ctx.fillText("PRONTO!", 9.5 * TS, 11.5 * TS); }
+  ctx.restore();
+  // película nas margens
+  ctx.fillStyle = "#14110f"; ctx.fillRect(0, 0, W, 26); ctx.fillRect(0, H - 26, W, 26);
+  ctx.fillStyle = "rgba(247,241,230,.85)"; const off = -(T * 40 % 28);
+  for (let x = off; x < W + 28; x += 28) { ctx.fillRect(x, 8, 14, 10); ctx.fillRect(x, H - 18, 14, 10); }
+}
+function pencilIcon(cx, cy, s){
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(-.75);
+  ctx.fillStyle = "#ffd23f"; ctx.fillRect(-s * .38, -s * .12, s * .6, s * .24);
+  ctx.fillStyle = "#f2b8a0"; ctx.fillRect(-s * .5, -s * .12, s * .12, s * .24);
+  ctx.fillStyle = "#e9c99b"; ctx.beginPath(); ctx.moveTo(s * .22, -s * .12); ctx.lineTo(s * .5, 0); ctx.lineTo(s * .22, s * .12); ctx.fill();
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.moveTo(s * .4, -s * .05); ctx.lineTo(s * .5, 0); ctx.lineTo(s * .4, s * .05); ctx.fill();
+  ctx.restore();
+}
+// o pinguim visto de frente: o bico abre e fecha como a boca do Pac-Man
+function drawPenguin(cx, cy, face, mouth){
+  const r = TS * .46, open = .15 + .35 * Math.abs(Math.sin(mouth)), ang = [-Math.PI / 2, Math.PI, Math.PI / 2, 0][face];
+  ctx.save(); ctx.translate(cx, cy);
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(0, 0, r, 0, 7); ctx.fill();
+  ctx.strokeStyle = "#f7f1e6"; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(Math.cos(ang) * r * .2, Math.sin(ang) * r * .2, r * .6, 0, 7); ctx.fill();
+  ctx.fillStyle = "#ff9f1c"; ctx.beginPath();
+  ctx.moveTo(Math.cos(ang) * r * .25, Math.sin(ang) * r * .25);
+  ctx.lineTo(Math.cos(ang - open) * r * 1.08, Math.sin(ang - open) * r * 1.08);
+  ctx.lineTo(Math.cos(ang) * r * .6, Math.sin(ang) * r * .6);
+  ctx.lineTo(Math.cos(ang + open) * r * 1.08, Math.sin(ang + open) * r * 1.08); ctx.closePath(); ctx.fill();
+  const ex = Math.cos(ang - 1.2) * r * .45, ey = Math.sin(ang - 1.2) * r * .45, fx = Math.cos(ang + 1.2) * r * .45, fy = Math.sin(ang + 1.2) * r * .45;
+  ctx.fillStyle = "#14110f"; ctx.beginPath(); ctx.arc(ex, ey, r * .12, 0, 7); ctx.arc(fx, fy, r * .12, 0, 7); ctx.fill();
+  ctx.fillStyle = "#d2553b"; ctx.beginPath(); ctx.arc(0, 0, r, Math.PI * .15 + ang + Math.PI * .5, Math.PI * .85 + ang + Math.PI * .5); ctx.lineWidth = r * .22; ctx.strokeStyle = "#d2553b"; ctx.stroke();
+  ctx.restore();
+}
+// o prazo: fantasma com mostrador de relógio e o nome do cliente por cima
+function drawGhost(g){
+  if (g.out > 0 && !g.eaten) { const blink = Math.sin(T * 8) > 0; if (!blink && g.out < 1) return; }
+  const P = posOf(g), cx = (P.x + .5) * TS, cy = (P.y + .5) * TS, r = TS * .45, scared = fright > 0 && !g.eaten;
+  ctx.save(); ctx.translate(cx, cy);
+  if (!g.eaten) {
+    ctx.fillStyle = scared ? (fright < 2 && Math.sin(T * 14) > 0 ? "#f7f1e6" : "#3a5bd9") : g.c;
+    ctx.beginPath(); ctx.arc(0, -r * .1, r, Math.PI, 0); ctx.lineTo(r, r * .9);
+    for (let k = 0; k < 4; k++) ctx.lineTo(r - (k + .5) * r / 2, r * (k % 2 ? .9 : .6) + Math.sin(T * 10) * r * .08), ctx.lineTo(r - (k + 1) * r / 2, r * .9);
+    ctx.closePath(); ctx.fill();
+    // mostrador
+    ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(0, -r * .15, r * .5, 0, 7); ctx.fill();
+    ctx.strokeStyle = "#14110f"; ctx.lineWidth = Math.max(1.4, r * .1); ctx.beginPath();
+    const a = T * (scared ? 1 : 4); ctx.moveTo(0, -r * .15); ctx.lineTo(Math.cos(a) * r * .38, -r * .15 + Math.sin(a) * r * .38);
+    ctx.moveTo(0, -r * .15); ctx.lineTo(0, -r * .5); ctx.stroke();
+  } else { ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(-r * .3, 0, r * .25, 0, 7); ctx.arc(r * .3, 0, r * .25, 0, 7); ctx.fill(); }
+  if (g.name !== "Prazo" || !g.eaten) { ctx.fillStyle = "#fff"; ctx.font = `700 ${Math.max(9, Math.round(TS * .36))}px 'JetBrains Mono', monospace`; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+    ctx.lineWidth = 3; ctx.strokeStyle = "rgba(20,17,15,.85)"; ctx.strokeText(g.short, 0, -r * 1.12); ctx.fillText(g.short, 0, -r * 1.12); }
+  ctx.restore();
+}
+
+function frame(now){ const dt = Math.min(.033, (now - last) / 1000 || 0); last = now; if (playing && !paused) update(dt); draw(); requestAnimationFrame(frame); }
+function paint(){ $("vScore").textContent = score; $("vLives").textContent = lives; $("vObras").textContent = nObras;
+  $("pause").textContent = paused ? "▶" : "II"; $("pause").setAttribute("aria-label", paused ? "Continuar" : "Pausa"); }
+function finish(won){
+  playing = false;
+  $("t2").textContent = won ? "Todas as obras entregues — 2026!" : `Fim no nível ${lvl + 1}: ${LEVELS[lvl].titulo}`;
+  $("final").innerHTML = [["Pontos", score], ["Obras apanhadas", `${nObras} / ${TODAS.length}`], ["Prazos apanhados", nGhosts], ["Nível alcançado", `${lvl + 1} de ${LEVELS.length}`]].map(([a, b]) => `<span>${a}</span><b>${b}</b>`).join("");
+  $("end").hidden = false; $("again").focus();
+}
+function start(){ lives = 3; score = 0; nObras = 0; nGhosts = 0; T = 0; loadLevel(startLvl); $("start").hidden = true; $("end").hidden = true; playing = true; paused = false; $("ticker").innerHTML = ""; paint(); }
+
+/* ---------- controlos ---------- */
+$("intro").textContent = `O pinguim percorre as ruas do Porto e apanha as ${TODAS.length} obras do Jorge, período a período, sem deixar que os prazos dos clientes o apanhem.`;
+const sel = $("startLvl"); LEVELS.forEach((L, i) => sel.add(new Option(`${i + 1} · ${L.titulo} (${L.obras.length} obras)`, i)));
+sel.value = startLvl; sel.onchange = () => { startLvl = +sel.value; store.set("pac_jr_lvl", startLvl); };
+$("play").onclick = start; $("again").onclick = start;
+$("pause").onclick = () => { if (!playing) return; paused = !paused; paint(); };
+const KEYS = {ArrowUp: 0, w: 0, W: 0, ArrowLeft: 1, a: 1, A: 1, ArrowDown: 2, s: 2, S: 2, ArrowRight: 3, d: 3, D: 3};
+addEventListener("keydown", e => {
+  if (e.target.closest("button,a,select")) return;
+  if (e.key in KEYS) { e.preventDefault(); if (playing) pl.want = {...DIRS[KEYS[e.key]]}; }
+  else if (e.key === "p" || e.key === "Escape" || e.key === " ") { e.preventDefault(); if (playing) { paused = !paused; paint(); } }
+});
+let sw = null;
+cv.addEventListener("pointerdown", e => { sw = {x: e.clientX, y: e.clientY}; });
+cv.addEventListener("pointermove", e => { if (!sw || !playing) return; const dx = e.clientX - sw.x, dy = e.clientY - sw.y;
+  if (Math.hypot(dx, dy) < 24) return; pl.want = Math.abs(dx) > Math.abs(dy) ? {x: Math.sign(dx), y: 0} : {x: 0, y: Math.sign(dy)}; sw = {x: e.clientX, y: e.clientY}; });
+addEventListener("pointerup", () => { sw = null; });
+addEventListener("blur", () => { if (playing) { paused = true; paint(); } });
+
+lives = 3; score = 0; nObras = 0; nGhosts = 0; loadLevel(startLvl); $("banner").innerHTML = "";
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(t => { last = t; frame(t); }));
+</script>
+</body>
+</html>
