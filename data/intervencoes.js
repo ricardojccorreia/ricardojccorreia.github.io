@@ -22,6 +22,19 @@ const INTERVENTION_TAGS_EN = {"Interoperabilidade":"Interoperability","Colabora�
 
 const INTERVENTIONS = [
   {
+    id: "u-porto-admin-2026-11",
+    date: "2026-11-13",
+    type: "workshop",
+    title: "IA no Trabalho Administrativo — 2.ª edição (6 e 13 nov)",
+    title_en: "AI in Administrative Work — 2nd edition (6 and 13 Nov)",
+    event: "Reitoria da Universidade do Porto",
+    event_en: "Rectorate of the University of Porto",
+    place: "Porto",
+    tags: ["GenAI", "Formação"],
+    access: "public",
+    url: "GenAI/workshops.html"
+  },
+  {
     id: "ufg-uporto-2026-09-29",
     date: "2026-09-29",
     type: "talk",
